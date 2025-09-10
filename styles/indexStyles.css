@@ -1,0 +1,14 @@
+.play-button {
+  background-color: var(--light-green);
+  color: var(--dark-green);
+  padding: 20px 40px;
+  font-size: 2rem;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.play-button:hover {
+  background-color: var(--light-green-hover);
+}
