@@ -3,14 +3,16 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Origin Guesser - Game</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <link rel="stylesheet" href="styles/main.css" />
+    <link rel="stylesheet" href="guessStyles.css" />
   </head>
   <body>
     <h1 class="header-text">ORIGINGUESSR</h1>
     <div class="guessBox"></div>
     <div class="mapBox">
-      <div class="inner-box"></div>
+      <div class="inner-box" id="map"></div>
       <div class="slider-container">
         <div class="slider-handle"></div>
       </div>
@@ -20,5 +22,8 @@
     </div>
 
     <div class="footer-bar"></div>
+    
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="map.js"></script>
   </body>
 </html>

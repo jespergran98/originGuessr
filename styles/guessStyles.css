@@ -46,9 +46,16 @@ body {
 }
 
 .inner-box {
-  background-color: #215c63;
   flex-grow: 1;
   border-radius: 1vh;
+  position: relative; /* Added for proper map positioning */
+}
+
+#map {
+  height: 100%;
+  width: 100%;
+  border-radius: 1vh;
+  background-color: #215c63;
 }
 
 .slider-container {

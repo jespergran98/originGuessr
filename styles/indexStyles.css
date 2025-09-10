@@ -1,3 +1,8 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 .play-button {
   background-color: var(--light-green);
   color: var(--dark-green);
