@@ -1,0 +1,82 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #3d7b3d;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+.header-text {
+  color: #153715;
+  position: absolute;
+  top: 2vw;
+  left: 2vw;
+  font-size: 4.5rem;
+}
+.footer-bar {
+    background-color: hsl(120, 45%, 15%); 
+    height: 15vh;
+    margin-top: auto;
+}
+.mapBox {
+  position: absolute;
+  right: 20px;
+  bottom: 17vh;
+  background: hsl(120, 45%, 15%);
+  padding: 8px;
+  border-radius: 1vh;
+  width: 20vw;
+  height: 35vh;
+  transition: all 0.2s ease-in-out;
+  display: flex;
+  flex-direction: column;
+}
+
+.mapBox:hover {
+  width: 50vw;
+  height: 70vh;
+  right: 20px;
+  bottom: 17vh;
+}
+
+.inner-box {
+  background-color: #215c63;
+  flex-grow: 1;
+  border-radius: 1vh;
+}
+
+.slider-container {
+  height: 10px;
+  background-color: #3d7b3d;
+  border-radius: 5px;
+  margin: 2vh 0;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.slider-handle {
+  width: 20px;
+  height: 20px;
+  background-color: #3d7b3d;
+  border: 3px solid hsl(120, 45%, 15%);
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.guessBox {
+    position: absolute;
+    left: 2vw;
+    bottom: 22vh;
+    width: 800px;
+    height: 60vh;
+    background-color: #3d7b3d;
+    border: 5px solid #153715;
+}
