@@ -3,14 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Origin Guesser</title>
+    <title>Origin Guesser - Game</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <link rel="stylesheet" href="styles/main.css" />
   </head>
   <body>
-    <div class="home-screen">
-      <button class="play-button" onclick="window.location.href='guessScreen.html'">
-        Play
-      </button>
+
+      <h1 class="front-page-text">ORIGINGUESSR</h1>
+      <div class="centered-container">
+          <button id="play-button" class="play-button" onclick="window.location.href='guessScreen.html'">Play</button>
+          <div class="timer-options">
+              <button class="timer-button selected">No Timer</button>
+              <button class="timer-button">Time Limit</button>
+          </div>
+      </div>
     </div>
   </body>
 </html>

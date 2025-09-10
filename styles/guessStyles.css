@@ -48,7 +48,6 @@ body {
 .inner-box {
   flex-grow: 1;
   border-radius: 1vh;
-  position: relative;
 }
 
 #map {
