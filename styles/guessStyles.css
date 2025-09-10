@@ -22,6 +22,7 @@ body {
     background-color: var(--advertisement-green);
     height: 15vh;
     margin-top: auto;
+    width: 100%;
 }
 .mapBox {
   position: absolute;

@@ -14,8 +14,9 @@ body {
 
 h1.front-page-text {
   font-size: 12rem;
-  margin-bottom: 12rem;
+  margin-bottom: 8rem;
   color: var(--light-green);
+  font-family: var(--font-family);
 }
 
 .centered-container {
@@ -33,6 +34,7 @@ h1.front-page-text {
   border-radius: 16px;
   cursor: pointer;
   transition: background-color 0.3s ease;
+  font-family: var(--font-family);
 }
 
 #play-button {
@@ -59,6 +61,8 @@ h1.front-page-text {
   background-color: var(--dark-green);
   color: var(--light-green);
   border: 3px solid var(--light-green);
+  font-family: var(--font-family);
+  font-size: 1.5rem;
 }
 
 .timer-button.selected {

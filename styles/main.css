@@ -1,9 +1,11 @@
 @import url("./indexStyles.css");
 @import url("./guessStyles.css");
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap');
 
 :root {
   --dark-green: #112211;
   --advertisement-green: #223322;
   --light-green: #99EE99;
   --light-green-hover: #7ac47a;
+  --font-family: 'Cinzel', serif;
   }
