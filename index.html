@@ -7,53 +7,117 @@
     <link rel="stylesheet" href="styles/main.css">
 </head>
 <body>
+    <!-- Animated Background Elements -->
+    <div class="background-animation">
+        <div class="floating-orb orb-1"></div>
+        <div class="floating-orb orb-2"></div>
+        <div class="floating-orb orb-3"></div>
+        <div class="grid-overlay"></div>
+    </div>
+
     <main class="main-container">
-        <header>
-            <h1 class="game-title">ORIGINGUESSR</h1>
+        <header class="header-section">
+            <div class="title-container">
+                <h1 class="game-title">
+                    <span class="title-letter" data-letter="O">O</span>
+                    <span class="title-letter" data-letter="R">R</span>
+                    <span class="title-letter" data-letter="I">I</span>
+                    <span class="title-letter" data-letter="G">G</span>
+                    <span class="title-letter" data-letter="I">I</span>
+                    <span class="title-letter" data-letter="N">N</span>
+                    <span class="title-separator"></span>
+                    <span class="title-letter" data-letter="G">G</span>
+                    <span class="title-letter" data-letter="U">U</span>
+                    <span class="title-letter" data-letter="E">E</span>
+                    <span class="title-letter" data-letter="S">S</span>
+                    <span class="title-letter" data-letter="S">S</span>
+                    <span class="title-letter" data-letter="R">R</span>
+                </h1>
+                <div class="title-underline"></div>
+            </div>
         </header>
 
         <div class="game-options">
-            <button class="play-btn" onclick="window.location.href='guessScreen.html'">
-                Play Game
-            </button>
+            <div class="play-section">
+                <button class="play-btn" onclick="window.location.href='guessScreen.html'">
+                    <span class="btn-text">Play Game</span>
+                    <span class="btn-icon">→</span>
+                    <div class="btn-ripple"></div>
+                </button>
+            </div>
 
-            <section class="option-group">
-                <h2 class="option-title">Timer Settings</h2>
-                <div class="button-group">
-                    <button class="option-btn active" data-timer="no">No Timer</button>
-                    <button class="option-btn" data-timer="yes">With Timer</button>
-                </div>
-                
-                <div class="slider-section hidden" id="timeSlider">
-                    <div class="slider-wrapper">
-                        <input type="range" id="timeRange" class="slider" min="5" max="300" value="60" step="5">
-                        <div class="slider-track"></div>
-                        <div class="slider-fill" id="timerFill"></div>
+            <div class="options-container">
+                <section class="option-group glass-card">
+                    <div class="option-header">
+                        <div class="option-icon timer-icon"></div>
+                        <h2 class="option-title">Timer Settings</h2>
                     </div>
-                    <span class="slider-label" id="timeLabel">60 seconds</span>
-                </div>
-            </section>
+                    
+                    <div class="button-group">
+                        <button class="option-btn active" data-timer="no">
+                            <span class="btn-content">No Timer</span>
+                        </button>
+                        <button class="option-btn" data-timer="yes">
+                            <span class="btn-content">With Timer</span>
+                        </button>
+                    </div>
+                    
+                    <div class="slider-section hidden" id="timeSlider">
+                        <div class="slider-wrapper">
+                            <div class="slider-container">
+                                <input type="range" id="timeRange" class="slider" min="5" max="300" value="60" step="5">
+                                <div class="slider-track"></div>
+                                <div class="slider-fill" id="timerFill"></div>
+                                <div class="slider-glow" id="timerGlow"></div>
+                            </div>
+                        </div>
+                        <div class="slider-label-container">
+                            <span class="slider-label" id="timeLabel">60 seconds</span>
+                            <div class="label-accent"></div>
+                        </div>
+                    </div>
+                </section>
 
-            <section class="option-group">
-                <h2 class="option-title">Time Period</h2>
-                <div class="button-group">
-                    <button class="option-btn active" data-timeframe="unspecified">Any Period</button>
-                    <button class="option-btn" data-timeframe="flexible">Custom Range</button>
-                </div>
-                
-                <div class="slider-section hidden" id="timeframeSlider">
-                    <div class="dual-slider-wrapper">
-                        <input type="range" id="timeframeMin" class="dual-slider" min="1" max="100" value="25">
-                        <input type="range" id="timeframeMax" class="dual-slider" min="1" max="100" value="75">
-                        <div class="dual-track"></div>
-                        <div class="dual-fill" id="timeframeFill"></div>
+                <section class="option-group glass-card">
+                    <div class="option-header">
+                        <div class="option-icon period-icon"></div>
+                        <h2 class="option-title">Time Period</h2>
                     </div>
-                    <span class="slider-label" id="timeframeLabel">25 - 75 years</span>
-                </div>
-            </section>
+                    
+                    <div class="button-group">
+                        <button class="option-btn active" data-timeframe="unspecified">
+                            <span class="btn-content">Any Period</span>
+                        </button>
+                        <button class="option-btn" data-timeframe="flexible">
+                            <span class="btn-content">Custom Range</span>
+                        </button>
+                    </div>
+                    
+                    <div class="slider-section hidden" id="timeframeSlider">
+                        <div class="dual-slider-wrapper">
+                            <div class="dual-slider-container">
+                                <input type="range" id="timeframeMin" class="dual-slider" min="1" max="100" value="25">
+                                <input type="range" id="timeframeMax" class="dual-slider" min="1" max="100" value="75">
+                                <div class="dual-track"></div>
+                                <div class="dual-fill" id="timeframeFill"></div>
+                                <div class="dual-glow" id="timeframeGlow"></div>
+                            </div>
+                        </div>
+                        <div class="slider-label-container">
+                            <span class="slider-label" id="timeframeLabel">25 - 75 years</span>
+                            <div class="label-accent"></div>
+                        </div>
+                    </div>
+                </section>
+            </div>
         </div>
     </main>
 
+    <!-- Particle System Canvas -->
+    <canvas id="particleCanvas" class="particle-canvas"></canvas>
+
     <script src="index.js"></script>
+</body>
+</html>
 </body>
 </html>
