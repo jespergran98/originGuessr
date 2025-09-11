@@ -4,12 +4,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const timeSlider = document.getElementById('timeSlider');
     const timeRange = document.getElementById('timeRange');
     const timeLabel = document.getElementById('timeLabel');
+    const timerFill = document.getElementById('timerFill');
 
     // Timeframe buttons functionality
     const timeframeButtons = document.querySelectorAll('.timeframe-button');
     const timeframeSlider = document.getElementById('timeframeSlider');
-    const timeframeRange = document.getElementById('timeframeRange');
+    const timeframeMinRange = document.getElementById('timeframeMinRange');
+    const timeframeMaxRange = document.getElementById('timeframeMaxRange');
     const timeframeLabel = document.getElementById('timeframeLabel');
+    const timeframeFill = document.getElementById('timeframeFill');
 
     // Handle timer button clicks
     timerButtons.forEach((button, index) => {
@@ -49,15 +52,66 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Update time slider label
-    timeRange.addEventListener('input', function() {
-        const value = parseInt(this.value);
+    // Update timer slider and fill
+    function updateTimerSlider() {
+        const value = parseInt(timeRange.value);
+        const max = parseInt(timeRange.max);
+        const min = parseInt(timeRange.min);
+        const percentage = ((value - min) / (max - min)) * 100;
+        
+        timerFill.style.width = percentage + '%';
         timeLabel.textContent = value + ' seconds';
-    });
+    }
 
-    // Update timeframe slider label
-    timeframeRange.addEventListener('input', function() {
-        const value = parseInt(this.value);
-        timeframeLabel.textContent = value + ' years';
-    });
+    timeRange.addEventListener('input', updateTimerSlider);
+    
+    // Initialize timer slider
+    updateTimerSlider();
+
+    // Dual range slider functionality for timeframe
+    let minVal = 1;
+    let maxVal = 100;
+
+    function updateTimeframeSlider() {
+        const minPercent = ((minVal - 1) / (100 - 1)) * 100;
+        const maxPercent = ((maxVal - 1) / (100 - 1)) * 100;
+        
+        timeframeFill.style.left = minPercent + '%';
+        timeframeFill.style.width = (maxPercent - minPercent) + '%';
+        
+        if (minVal === maxVal) {
+            timeframeLabel.textContent = minVal + ' years';
+        } else {
+            timeframeLabel.textContent = minVal + ' - ' + maxVal + ' years';
+        }
+    }
+
+    if (timeframeMinRange && timeframeMaxRange) {
+        timeframeMinRange.addEventListener('input', function() {
+            const value = parseInt(this.value);
+            if (value >= maxVal) {
+                minVal = maxVal - 1;
+                this.value = minVal;
+            } else {
+                minVal = value;
+            }
+            updateTimeframeSlider();
+        });
+
+        timeframeMaxRange.addEventListener('input', function() {
+            const value = parseInt(this.value);
+            if (value <= minVal) {
+                maxVal = minVal + 1;
+                this.value = maxVal;
+            } else {
+                maxVal = value;
+            }
+            updateTimeframeSlider();
+        });
+
+        // Initialize timeframe slider
+        minVal = parseInt(timeframeMinRange.value);
+        maxVal = parseInt(timeframeMaxRange.value);
+        updateTimeframeSlider();
+    }
 });

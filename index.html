@@ -7,6 +7,13 @@
     <link rel="stylesheet" href="styles/main.css" />
   </head>
   <body>
+    <div class="pyramid-line">
+        <svg width="100%" height="100%">
+            <line x1="0%" y1="100%" x2="50%" y2="45%" stroke="var(--light-green)" stroke-width="2" />
+            <line x1="100%" y1="100%" x2="50%" y2="45%" stroke="var(--light-green)" stroke-width="2" />
+        </svg>
+    </div>
+    <div class="pyramid-line"></div>
     <div class="main-content-container">
       <h1 class="front-page-text">ORIGINGUESSR</h1>
       <div class="centered-container">
@@ -17,8 +24,11 @@
               <button class="timer-button" data-timer="yes">Time Limit</button>
           </div>
           
-          <div id="timeSlider" class="slider-container-main hidden">
-              <input type="range" id="timeRange" class="sliderMain" min="5" max="300" value="60" step="5">
+          <div id="timeSlider" class="slider-container-main timer-slider hidden">
+              <div class="timer-slider-wrapper">
+                  <div id="timerFill" class="timer-slider-fill"></div>
+                  <input type="range" id="timeRange" class="sliderMain" min="5" max="300" value="60" step="5">
+              </div>
               <div class="slider-label-main" id="timeLabel">60 seconds</div>
           </div>
           
@@ -27,9 +37,14 @@
               <button class="timeframe-button" data-timeframe="flexible">Flexible Timeframe</button>
           </div>
           
-          <div id="timeframeSlider" class="slider-container-main hidden">
-              <input type="range" id="timeframeRange" class="sliderMain" min="1" max="100" value="50" step="1">
-              <div class="slider-label-main" id="timeframeLabel">50 years</div>
+          <div id="timeframeSlider" class="slider-container-main timeframe-slider hidden">
+              <div class="dual-range-container">
+                  <div class="dual-range-track"></div>
+                  <div id="timeframeFill" class="dual-range-fill"></div>
+                  <input type="range" id="timeframeMinRange" class="dual-range-slider" min="1" max="100" value="25" step="1">
+                  <input type="range" id="timeframeMaxRange" class="dual-range-slider" min="1" max="100" value="75" step="1">
+              </div>
+              <div class="slider-label-main" id="timeframeLabel">25 - 75 years</div>
           </div>
       </div>
     </div>
