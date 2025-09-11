@@ -1,3 +1,10 @@
+:root {
+  --light-green: #90EE90;
+  --light-green-hover: #7FDD7F;
+  --dark-green: #006400;
+  --font-family: Arial, sans-serif;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -10,63 +17,74 @@ body {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+  padding: clamp(1rem, 2vw, 2rem);
+  font-family: var(--font-family);
 }
 
-h1.front-page-text {
-  font-size: 12rem;
-  margin-bottom: 8rem;
+.main-content-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 160rem;
+}
+
+.front-page-text {
+  font-size: clamp(4rem, 7vw, 12rem);
+  margin-bottom: clamp(5rem, 8vh, 10rem);
   color: var(--light-green);
-  font-family: var(--font-family);
+  background-color: brown;
+  text-align: center;
+  width: 100%;
 }
 
 .centered-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 3rem;
-  margin-bottom: 15vh;
+  gap: clamp(2rem, 5vh, 3rem);
+  background-color: rgb(165, 142, 42);
+  width: 100%;
 }
 
 .play-button {
-  padding: 25px 50px;
-  font-size: 2rem;
+  padding: clamp(0.5rem, 2.5vw, 1rem) clamp(2rem, 6vw, 2.5rem);
+  font-size: clamp(1rem, 3.5vw, 2rem);
+  background-color: var(--light-green);
+  color: var(--dark-green);
   border: none;
   border-radius: 16px;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  font-family: var(--font-family);
+  font-family: inherit;
 }
 
-#play-button {
-  background-color: var(--light-green);
-  color: var(--dark-green);
-}
-
-#play-button:hover {
+.play-button:hover {
   background-color: var(--light-green-hover);
 }
 
 .timer-options-horizontal {
   display: flex;
-  flex-direction: row;
-  gap: 1vw;
+  gap: clamp(1rem, 3vw, 2rem);
+  justify-content: center;
+  width: 100%;
 }
 
 .timer-button {
-  padding: 16px 32px;
-  font-size: 1.2rem;
-  border-radius: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  padding: clamp(0.25rem, 2vw, 0.75rem) clamp(1.25rem, 5vw, 1.75rem);
+  font-size: clamp(0.75rem, 3vw, 1.5rem);
+  min-width: clamp(10rem, 20vw, 15rem);
   background-color: var(--dark-green);
   color: var(--light-green);
   border: 3px solid var(--light-green);
-  font-family: var(--font-family);
-  font-size: 1.5rem;
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
 }
 
 .timer-button.selected {
   background-color: var(--light-green);
   color: var(--dark-green);
-  border: 2px solid var(--light-green);
+  border-width: 2px;
 }
