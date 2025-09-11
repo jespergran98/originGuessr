@@ -11,11 +11,28 @@
       <h1 class="front-page-text">ORIGINGUESSR</h1>
       <div class="centered-container">
           <button id="play-button" class="play-button" onclick="window.location.href='guessScreen.html'">Play</button>
+          
           <div class="timer-options-horizontal">
-              <button class="timer-button selected">No Timer</button>
-              <button class="timer-button">Time Limit</button>
+              <button class="timer-button selected" data-timer="no">No Timer</button>
+              <button class="timer-button" data-timer="yes">Time Limit</button>
+          </div>
+          
+          <div id="timeSlider" class="slider-container-main hidden">
+              <input type="range" id="timeRange" class="sliderMain" min="5" max="300" value="60" step="5">
+              <div class="slider-label-main" id="timeLabel">60 seconds</div>
+          </div>
+          
+          <div class="timeframe-options-horizontal">
+              <button class="timeframe-button selected" data-timeframe="unspecified">Unspecified Timeframe</button>
+              <button class="timeframe-button" data-timeframe="flexible">Flexible Timeframe</button>
+          </div>
+          
+          <div id="timeframeSlider" class="slider-container-main hidden">
+              <input type="range" id="timeframeRange" class="sliderMain" min="1" max="100" value="50" step="1">
+              <div class="slider-label-main" id="timeframeLabel">50 years</div>
           </div>
       </div>
     </div>
+    <script src="index.js"></script>
   </body>
 </html>
