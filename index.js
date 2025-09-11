@@ -1,6 +1,7 @@
 class GameSettings {
     constructor() {
         this.initializeElements();
+        this.setDefaultStates();
         this.bindEvents();
         this.initializeSliders();
         this.initializeAnimations();
@@ -23,6 +24,43 @@ class GameSettings {
         this.timeframeGlow = document.getElementById('timeframeGlow');
         this.playBtn = document.querySelector('.play-btn');
         this.titleLetters = document.querySelectorAll('.title-letter');
+    }
+
+    setDefaultStates() {
+        // Ensure timer buttons have proper default state
+        const activeTimerBtn = Array.from(this.timerButtons).find(btn => btn.classList.contains('active'));
+        if (!activeTimerBtn) {
+            // If no button is active, set "No Timer" as default
+            const noTimerBtn = document.querySelector('[data-timer="no"]');
+            if (noTimerBtn) {
+                noTimerBtn.classList.add('active');
+            }
+        }
+
+        // Ensure timeframe buttons have proper default state
+        const activeTimeframeBtn = Array.from(this.timeframeButtons).find(btn => btn.classList.contains('active'));
+        if (!activeTimeframeBtn) {
+            // If no button is active, set "Any Period" as default
+            const anyPeriodBtn = document.querySelector('[data-timeframe="unspecified"]');
+            if (anyPeriodBtn) {
+                anyPeriodBtn.classList.add('active');
+            }
+        }
+
+        // Set initial slider visibility based on active buttons
+        const activeTimer = document.querySelector('[data-timer].active');
+        if (activeTimer && activeTimer.dataset.timer === 'yes') {
+            this.showSlider(this.timeSlider);
+        } else {
+            this.hideSlider(this.timeSlider);
+        }
+
+        const activeTimeframe = document.querySelector('[data-timeframe].active');
+        if (activeTimeframe && activeTimeframe.dataset.timeframe === 'flexible') {
+            this.showSlider(this.timeframeSlider);
+        } else {
+            this.hideSlider(this.timeframeSlider);
+        }
     }
 
     bindEvents() {
@@ -56,7 +94,12 @@ class GameSettings {
 
     handleTimerToggle(e) {
         e.preventDefault();
-        const button = e.target;
+        const button = e.currentTarget;
+        
+        // Don't toggle if already active
+        if (button.classList.contains('active')) {
+            return;
+        }
         
         this.setActiveButton(this.timerButtons, button);
         
@@ -71,7 +114,12 @@ class GameSettings {
 
     handleTimeframeToggle(e) {
         e.preventDefault();
-        const button = e.target;
+        const button = e.currentTarget;
+        
+        // Don't toggle if already active
+        if (button.classList.contains('active')) {
+            return;
+        }
         
         this.setActiveButton(this.timeframeButtons, button);
         
@@ -340,10 +388,14 @@ class GameSettings {
         this.ctx = this.canvas.getContext('2d');
         this.particles = [];
         this.particleCount = window.innerWidth < 768 ? 30 : 50;
+        this.particlesActive = true;
         
         this.resizeParticleCanvas();
         this.createParticles();
         this.animateParticles();
+
+        // Store instance globally for visibility change handler
+        window.gameSettingsInstance = this;
     }
 
     resizeParticleCanvas() {
@@ -370,7 +422,7 @@ class GameSettings {
     }
 
     animateParticles() {
-        if (!this.ctx) return;
+        if (!this.ctx || !this.particlesActive) return;
 
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         
@@ -412,7 +464,9 @@ class GameSettings {
             });
         });
         
-        requestAnimationFrame(() => this.animateParticles());
+        if (this.particlesActive) {
+            requestAnimationFrame(() => this.animateParticles());
+        }
     }
 }
 
