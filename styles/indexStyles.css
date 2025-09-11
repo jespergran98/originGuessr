@@ -73,7 +73,6 @@ body {
 .timer-button {
   padding: clamp(0.25rem, 2vw, 0.75rem) clamp(1.25rem, 5vw, 1.75rem);
   font-size: clamp(0.75rem, 3vw, 1.5rem);
-  min-width: clamp(10rem, 20vw, 15rem);
   background-color: var(--dark-green);
   color: var(--light-green);
   border: 3px solid var(--light-green);
