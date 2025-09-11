@@ -1,117 +1,127 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // Timer buttons functionality
-    const timerButtons = document.querySelectorAll('.timer-button');
-    const timeSlider = document.getElementById('timeSlider');
-    const timeRange = document.getElementById('timeRange');
-    const timeLabel = document.getElementById('timeLabel');
-    const timerFill = document.getElementById('timerFill');
-
-    // Timeframe buttons functionality
-    const timeframeButtons = document.querySelectorAll('.timeframe-button');
-    const timeframeSlider = document.getElementById('timeframeSlider');
-    const timeframeMinRange = document.getElementById('timeframeMinRange');
-    const timeframeMaxRange = document.getElementById('timeframeMaxRange');
-    const timeframeLabel = document.getElementById('timeframeLabel');
-    const timeframeFill = document.getElementById('timeframeFill');
-
-    // Handle timer button clicks
-    timerButtons.forEach((button, index) => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            console.log(`Timer button ${index} clicked:`, this.dataset.timer);
-            
-            timerButtons.forEach(btn => btn.classList.remove('selected'));
-            this.classList.add('selected');
-
-            if (this.dataset.timer === 'yes') {
-                console.log('Showing time slider');
-                timeSlider.classList.remove('hidden');
-            } else {
-                console.log('Hiding time slider');
-                timeSlider.classList.add('hidden');
-            }
-        });
-    });
-
-    // Handle timeframe button clicks
-    timeframeButtons.forEach((button, index) => {
-        button.addEventListener('click', function(e) {
-            e.preventDefault();
-            console.log(`Timeframe button ${index} clicked:`, this.dataset.timeframe);
-            
-            timeframeButtons.forEach(btn => btn.classList.remove('selected'));
-            this.classList.add('selected');
-
-            if (this.dataset.timeframe === 'flexible') {
-                console.log('Showing timeframe slider');
-                timeframeSlider.classList.remove('hidden');
-            } else {
-                console.log('Hiding timeframe slider');
-                timeframeSlider.classList.add('hidden');
-            }
-        });
-    });
-
-    // Update timer slider and fill
-    function updateTimerSlider() {
-        const value = parseInt(timeRange.value);
-        const max = parseInt(timeRange.max);
-        const min = parseInt(timeRange.min);
-        const percentage = ((value - min) / (max - min)) * 100;
-        
-        timerFill.style.width = percentage + '%';
-        timeLabel.textContent = value + ' seconds';
+class GameSettings {
+    constructor() {
+        this.initializeElements();
+        this.bindEvents();
+        this.initializeSliders();
     }
 
-    timeRange.addEventListener('input', updateTimerSlider);
-    
-    // Initialize timer slider
-    updateTimerSlider();
+    initializeElements() {
+        this.timerButtons = document.querySelectorAll('[data-timer]');
+        this.timeframeButtons = document.querySelectorAll('[data-timeframe]');
+        this.timeSlider = document.getElementById('timeSlider');
+        this.timeframeSlider = document.getElementById('timeframeSlider');
+        this.timeRange = document.getElementById('timeRange');
+        this.timeLabel = document.getElementById('timeLabel');
+        this.timerFill = document.getElementById('timerFill');
+        this.timeframeMin = document.getElementById('timeframeMin');
+        this.timeframeMax = document.getElementById('timeframeMax');
+        this.timeframeLabel = document.getElementById('timeframeLabel');
+        this.timeframeFill = document.getElementById('timeframeFill');
+    }
 
-    // Dual range slider functionality for timeframe
-    let minVal = 1;
-    let maxVal = 100;
+    bindEvents() {
+        this.timerButtons.forEach(btn => {
+            btn.addEventListener('click', (e) => this.handleTimerToggle(e));
+        });
 
-    function updateTimeframeSlider() {
-        const minPercent = ((minVal - 1) / (100 - 1)) * 100;
-        const maxPercent = ((maxVal - 1) / (100 - 1)) * 100;
+        this.timeframeButtons.forEach(btn => {
+            btn.addEventListener('click', (e) => this.handleTimeframeToggle(e));
+        });
+
+        this.timeRange?.addEventListener('input', () => this.updateTimerSlider());
+        this.timeframeMin?.addEventListener('input', () => this.updateTimeframeSlider());
+        this.timeframeMax?.addEventListener('input', () => this.updateTimeframeSlider());
+    }
+
+    handleTimerToggle(e) {
+        e.preventDefault();
+        const button = e.target;
         
-        timeframeFill.style.left = minPercent + '%';
-        timeframeFill.style.width = (maxPercent - minPercent) + '%';
+        this.setActiveButton(this.timerButtons, button);
         
-        if (minVal === maxVal) {
-            timeframeLabel.textContent = minVal + ' years';
+        if (button.dataset.timer === 'yes') {
+            this.showSlider(this.timeSlider);
         } else {
-            timeframeLabel.textContent = minVal + ' - ' + maxVal + ' years';
+            this.hideSlider(this.timeSlider);
         }
     }
 
-    if (timeframeMinRange && timeframeMaxRange) {
-        timeframeMinRange.addEventListener('input', function() {
-            const value = parseInt(this.value);
-            if (value >= maxVal) {
-                minVal = maxVal - 1;
-                this.value = minVal;
-            } else {
-                minVal = value;
-            }
-            updateTimeframeSlider();
-        });
-
-        timeframeMaxRange.addEventListener('input', function() {
-            const value = parseInt(this.value);
-            if (value <= minVal) {
-                maxVal = minVal + 1;
-                this.value = maxVal;
-            } else {
-                maxVal = value;
-            }
-            updateTimeframeSlider();
-        });
-
-        // Initialize timeframe slider
-        minVal = parseInt(timeframeMinRange.value);
-        maxVal = parseInt(timeframeMaxRange.value);
-        updateTimeframeSlider();
+    handleTimeframeToggle(e) {
+        e.preventDefault();
+        const button = e.target;
+        
+        this.setActiveButton(this.timeframeButtons, button);
+        
+        if (button.dataset.timeframe === 'flexible') {
+            this.showSlider(this.timeframeSlider);
+        } else {
+            this.hideSlider(this.timeframeSlider);
+        }
     }
+
+    setActiveButton(buttons, activeButton) {
+        buttons.forEach(btn => btn.classList.remove('active'));
+        activeButton.classList.add('active');
+    }
+
+    showSlider(slider) {
+        slider?.classList.remove('hidden');
+        setTimeout(() => slider?.classList.add('visible'), 10);
+    }
+
+    hideSlider(slider) {
+        slider?.classList.remove('visible');
+        setTimeout(() => slider?.classList.add('hidden'), 300);
+    }
+
+    updateTimerSlider() {
+        if (!this.timeRange || !this.timerFill || !this.timeLabel) return;
+
+        const value = parseInt(this.timeRange.value);
+        const min = parseInt(this.timeRange.min);
+        const max = parseInt(this.timeRange.max);
+        const percentage = ((value - min) / (max - min)) * 100;
+        
+        this.timerFill.style.width = `${percentage}%`;
+        this.timeLabel.textContent = `${value} seconds`;
+    }
+
+    updateTimeframeSlider() {
+        if (!this.timeframeMin || !this.timeframeMax || !this.timeframeFill || !this.timeframeLabel) return;
+
+        let minVal = parseInt(this.timeframeMin.value);
+        let maxVal = parseInt(this.timeframeMax.value);
+
+        // Ensure min doesn't exceed max
+        if (minVal >= maxVal) {
+            minVal = Math.max(1, maxVal - 1);
+            this.timeframeMin.value = minVal;
+        }
+
+        // Ensure max doesn't go below min
+        if (maxVal <= minVal) {
+            maxVal = Math.min(100, minVal + 1);
+            this.timeframeMax.value = maxVal;
+        }
+
+        const minPercent = ((minVal - 1) / 99) * 100;
+        const maxPercent = ((maxVal - 1) / 99) * 100;
+        
+        this.timeframeFill.style.left = `${minPercent}%`;
+        this.timeframeFill.style.width = `${maxPercent - minPercent}%`;
+        
+        this.timeframeLabel.textContent = minVal === maxVal ? 
+            `${minVal} years` : 
+            `${minVal} - ${maxVal} years`;
+    }
+
+    initializeSliders() {
+        this.updateTimerSlider();
+        this.updateTimeframeSlider();
+    }
+}
+
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    new GameSettings();
 });

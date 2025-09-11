@@ -1,53 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Origin Guesser - Game</title>
-    <link rel="stylesheet" href="styles/main.css" />
-  </head>
-  <body>
-    <div class="pyramid-line">
-        <svg width="100%" height="100%">
-            <line x1="0%" y1="100%" x2="50%" y2="45%" stroke="var(--light-green)" stroke-width="2" />
-            <line x1="100%" y1="100%" x2="50%" y2="45%" stroke="var(--light-green)" stroke-width="2" />
-        </svg>
-    </div>
-    <div class="pyramid-line"></div>
-    <div class="main-content-container">
-      <h1 class="front-page-text">ORIGINGUESSR</h1>
-      <div class="centered-container">
-          <button id="play-button" class="play-button" onclick="window.location.href='guessScreen.html'">Play</button>
-          
-          <div class="timer-options-horizontal">
-              <button class="timer-button selected" data-timer="no">No Timer</button>
-              <button class="timer-button" data-timer="yes">Time Limit</button>
-          </div>
-          
-          <div id="timeSlider" class="slider-container-main timer-slider hidden">
-              <div class="timer-slider-wrapper">
-                  <div id="timerFill" class="timer-slider-fill"></div>
-                  <input type="range" id="timeRange" class="sliderMain" min="5" max="300" value="60" step="5">
-              </div>
-              <div class="slider-label-main" id="timeLabel">60 seconds</div>
-          </div>
-          
-          <div class="timeframe-options-horizontal">
-              <button class="timeframe-button selected" data-timeframe="unspecified">Unspecified Timeframe</button>
-              <button class="timeframe-button" data-timeframe="flexible">Flexible Timeframe</button>
-          </div>
-          
-          <div id="timeframeSlider" class="slider-container-main timeframe-slider hidden">
-              <div class="dual-range-container">
-                  <div class="dual-range-track"></div>
-                  <div id="timeframeFill" class="dual-range-fill"></div>
-                  <input type="range" id="timeframeMinRange" class="dual-range-slider" min="1" max="100" value="25" step="1">
-                  <input type="range" id="timeframeMaxRange" class="dual-range-slider" min="1" max="100" value="75" step="1">
-              </div>
-              <div class="slider-label-main" id="timeframeLabel">25 - 75 years</div>
-          </div>
-      </div>
-    </div>
+    <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+    <main class="main-container">
+        <header>
+            <h1 class="game-title">ORIGINGUESSR</h1>
+        </header>
+
+        <div class="game-options">
+            <button class="play-btn" onclick="window.location.href='guessScreen.html'">
+                Play Game
+            </button>
+
+            <section class="option-group">
+                <h2 class="option-title">Timer Settings</h2>
+                <div class="button-group">
+                    <button class="option-btn active" data-timer="no">No Timer</button>
+                    <button class="option-btn" data-timer="yes">With Timer</button>
+                </div>
+                
+                <div class="slider-section hidden" id="timeSlider">
+                    <div class="slider-wrapper">
+                        <input type="range" id="timeRange" class="slider" min="5" max="300" value="60" step="5">
+                        <div class="slider-track"></div>
+                        <div class="slider-fill" id="timerFill"></div>
+                    </div>
+                    <span class="slider-label" id="timeLabel">60 seconds</span>
+                </div>
+            </section>
+
+            <section class="option-group">
+                <h2 class="option-title">Time Period</h2>
+                <div class="button-group">
+                    <button class="option-btn active" data-timeframe="unspecified">Any Period</button>
+                    <button class="option-btn" data-timeframe="flexible">Custom Range</button>
+                </div>
+                
+                <div class="slider-section hidden" id="timeframeSlider">
+                    <div class="dual-slider-wrapper">
+                        <input type="range" id="timeframeMin" class="dual-slider" min="1" max="100" value="25">
+                        <input type="range" id="timeframeMax" class="dual-slider" min="1" max="100" value="75">
+                        <div class="dual-track"></div>
+                        <div class="dual-fill" id="timeframeFill"></div>
+                    </div>
+                    <span class="slider-label" id="timeframeLabel">25 - 75 years</span>
+                </div>
+            </section>
+        </div>
+    </main>
+
     <script src="index.js"></script>
-  </body>
+</body>
 </html>
