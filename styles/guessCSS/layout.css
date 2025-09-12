@@ -18,8 +18,18 @@ body {
 .guessBox {
     position: absolute;
     left: 2vw;
-    bottom: 17vh;
-    width: 65vw;
-    height: 68vh;
+    bottom: 22vh;
+    width: 66vw;
+    height: 66vh;
     border: 1px solid var(--light-green);
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.guessBox img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
 }
