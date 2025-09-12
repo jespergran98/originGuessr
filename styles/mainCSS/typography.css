@@ -2,8 +2,8 @@
 .header-text {
   color: var(--light-green);
   position: absolute;
-  top: 2vw;
-  left: 4vw;
+  top: 1vw;
+  left: 2vw;
   font-size: 4.5rem;
 }
 

@@ -40,7 +40,7 @@ class MarkerManager {
             html: markerHTML,
             className: '', // No extra classes needed on the wrapper
             iconSize: [32, 48],
-            iconAnchor: [38, 48] // Anchor at the very bottom tip to ensure it's at the click location
+            iconAnchor: [38, 52] // Anchor at the very bottom tip to ensure it's at the click location
         });
 
         this.currentMarker = L.marker([lat, lng], { icon: markerIcon }).addTo(map);
