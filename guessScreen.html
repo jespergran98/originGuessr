@@ -9,7 +9,27 @@
   </head>
   <body>
     
+    <!-- Animated Background Elements -->
+    <div class="background-animation">
+        <div class="floating-orb orb-1"></div>
+        <div class="floating-orb orb-2"></div>
+        <div class="floating-orb orb-3"></div>
+        <div class="grid-overlay"></div>
+    </div>
+    
     <h1 class="header-text">ORIGINGUESSR</h1>
+
+    <!-- Game Stats UI -->
+    <div class="game-stats">
+        <div class="stat-item">
+            <div class="stat-label">ROUND</div>
+            <div class="stat-value">1/5</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-label">SCORE</div>
+            <div class="stat-value">13337</div>
+        </div>
+    </div>
 
     <div class="guessBox"></div>
 
@@ -24,8 +44,12 @@
     </div>
 
     <div class="footer-bar"></div>
+
+    <!-- Particle System Canvas -->
+    <canvas id="particleCanvas" class="particle-canvas"></canvas>
     
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="map.js"></script>
+    <script src="index.js"></script>
   </body>
 </html>
