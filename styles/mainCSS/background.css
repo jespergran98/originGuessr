@@ -1,0 +1,113 @@
+/* Background Animation Elements */
+.background-animation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+}
+
+.floating-orb {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, rgba(153, 238, 153, 0.15), rgba(153, 238, 153, 0.05));
+    filter: blur(1px);
+    animation: float 20s infinite linear;
+}
+
+.orb-1 {
+    width: 200px;
+    height: 200px;
+    top: 20%;
+    left: -100px;
+    animation-duration: 25s;
+}
+
+.orb-2 {
+    width: 150px;
+    height: 150px;
+    top: 60%;
+    right: -75px;
+    animation-duration: 30s;
+    animation-direction: reverse;
+}
+
+.orb-3 {
+    width: 100px;
+    height: 100px;
+    top: 80%;
+    left: 20%;
+    animation-duration: 35s;
+}
+
+.grid-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: 
+        linear-gradient(rgba(153, 238, 153, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(153, 238, 153, 0.03) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: gridMove 60s linear infinite;
+}
+
+@keyframes float {
+    0% { transform: translateX(0) translateY(0) rotate(0deg); }
+    33% { transform: translateX(100px) translateY(-50px) rotate(120deg); }
+    66% { transform: translateX(-50px) translateY(100px) rotate(240deg); }
+    100% { transform: translateX(0) translateY(0) rotate(360deg); }
+}
+
+@keyframes gridMove {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(50px, 50px); }
+}
+
+/* Background responsive adjustments */
+@media (max-width: 768px) {
+    .floating-orb {
+        opacity: 0.7;
+    }
+    
+    .orb-1 {
+        width: 120px;
+        height: 120px;
+    }
+    
+    .orb-2 {
+        width: 100px;
+        height: 100px;
+    }
+    
+    .orb-3 {
+        width: 80px;
+        height: 80px;
+    }
+}
+
+/* Landscape orientation adjustments */
+@media (max-height: 600px) and (orientation: landscape) {
+    .floating-orb {
+        opacity: 0.4;
+    }
+}
+
+/* Dark mode enhancement */
+@media (prefers-color-scheme: dark) {
+    .floating-orb {
+        opacity: 0.8;
+    }
+}
+
+/* Reduced motion accessibility */
+@media (prefers-reduced-motion: reduce) {
+    .floating-orb,
+    .grid-overlay {
+        animation: none;
+    }
+}

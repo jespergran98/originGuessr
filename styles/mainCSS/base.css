@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&display=swap');
+
+/* CSS Variables */
+:root {
+  --dark-green: #112211;
+  --dark-green-hover: #0d1a0d;
+  --ad-green: #223322;
+  --light-green: #99EE99;
+  --light-green-hover: #7ac47a;
+  --light-green-rgb: 153, 238, 153;
+  --font-family: 'Cinzel', serif;
+}
+
+/* Reset and Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-family);
+  background: radial-gradient(ellipse at center, var(--dark-green-hover) 0%, var(--dark-green) 70%);
+  color: var(--light-green);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow-x: hidden;
+  background-attachment: fixed;
+}

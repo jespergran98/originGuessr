@@ -1,0 +1,27 @@
+/* Typography Styles Used Across Pages */
+.header-text {
+  color: var(--light-green);
+  position: absolute;
+  top: 2vw;
+  left: 4vw;
+  font-size: 4.5rem;
+}
+
+/* Common text styles */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--light-green);
+  font-family: var(--font-family);
+}
+
+/* Text glow effects */
+.text-glow {
+  text-shadow: 
+    0 0 10px rgba(153, 238, 153, 0.3),
+    0 0 20px rgba(153, 238, 153, 0.2);
+}
+
+.text-glow-strong {
+  text-shadow: 
+    0 0 20px rgba(153, 238, 153, 0.6),
+    0 0 30px rgba(153, 238, 153, 0.4);
+}

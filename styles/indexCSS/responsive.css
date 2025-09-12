@@ -1,0 +1,113 @@
+/* Index Page Responsive Design */
+@media (max-width: 768px) {
+    body {
+        padding: clamp(0.5rem, 1.5vh, 1rem);
+    }
+    
+    .main-container {
+        padding-top: clamp(1rem, 4vh, 3rem);
+        justify-content: flex-start;
+    }
+    
+    .header-section {
+        margin-bottom: clamp(1.5rem, 4vh, 3rem);
+    }
+    
+    .game-options {
+        gap: clamp(1.5rem, 3vh, 2.5rem);
+    }
+    
+    .button-group {
+        flex-direction: column;
+        width: 100%;
+        max-width: 350px;
+        gap: clamp(0.75rem, 1.5vh, 1.25rem);
+    }
+    
+    .option-btn {
+        width: 100%;
+        padding: clamp(0.875rem, 2vh, 1.25rem) clamp(1.5rem, 3vw, 2rem);
+    }
+    
+    .glass-card {
+        padding: clamp(1.25rem, 2.5vh, 2rem);
+    }
+    
+    .slider-wrapper,
+    .dual-slider-wrapper {
+        max-width: 85vw;
+    }
+}
+
+/* Very small screens (portrait phones) */
+@media (max-width: 480px) {
+    .main-container {
+        padding-top: clamp(0.5rem, 2vh, 1.5rem);
+    }
+    
+    .header-section {
+        margin-bottom: clamp(1rem, 3vh, 2rem);
+    }
+    
+    .game-options {
+        gap: clamp(1rem, 2vh, 1.5rem);
+        padding-bottom: clamp(1rem, 2vh, 1.5rem);
+    }
+    
+    .option-group {
+        gap: clamp(1rem, 2vh, 1.25rem);
+    }
+    
+    .play-btn {
+        padding: clamp(0.875rem, 2vh, 1.25rem) clamp(2rem, 4vw, 3rem);
+        font-size: clamp(1.1rem, 2.2vw, 1.6rem);
+    }
+    
+    .slider-section.visible {
+        max-height: clamp(120px, 18vh, 180px);
+    }
+}
+
+/* Landscape orientation adjustments */
+@media (max-height: 600px) and (orientation: landscape) {
+    .main-container {
+        padding-top: clamp(0.5rem, 1.5vh, 1rem);
+        justify-content: flex-start;
+    }
+    
+    .header-section {
+        margin-bottom: clamp(0.5rem, 2vh, 1.5rem);
+    }
+    
+    .game-options {
+        gap: clamp(0.75rem, 1.5vh, 1.25rem);
+        padding-bottom: clamp(0.5rem, 1vh, 1rem);
+    }
+    
+    .option-group {
+        gap: clamp(0.75rem, 1.5vh, 1rem);
+    }
+    
+    .slider-section.visible {
+        max-height: clamp(100px, 15vh, 140px);
+    }
+    
+    .glass-card {
+        padding: clamp(1rem, 2vh, 1.5rem);
+    }
+}
+
+/* High-resolution displays */
+@media (min-resolution: 2dppx) {
+    .glass-card {
+        backdrop-filter: blur(15px);
+    }
+}
+
+/* Dark mode enhancement */
+@media (prefers-color-scheme: dark) {
+    .glass-card {
+        background: rgba(153, 238, 153, 0.02);
+        border-color: rgba(153, 238, 153, 0.08);
+    }
+}

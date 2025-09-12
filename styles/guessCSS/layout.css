@@ -1,0 +1,25 @@
+/* Guess Page Layout */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--dark-green);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.footer-bar {
+    background-color: var(--ad-green);
+    height: 15vh;
+    margin-top: auto;
+    width: 100%;
+}
+
+.guessBox {
+    position: absolute;
+    left: 2vw;
+    bottom: 17vh;
+    width: 65vw;
+    height: 68vh;
+    border: 1px solid var(--light-green);
+}

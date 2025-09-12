@@ -1,0 +1,35 @@
+/* Map Container */
+.mapBox {
+  position: absolute;
+  right: 2vw;
+  bottom: 17vh;
+  background: var(--dark-green);
+  padding: 1vh;
+  border-radius: 1vh;
+  width: 25vw;
+  height: 35vh;
+  transition: all 0.2s ease-in-out;
+  display: flex;
+  flex-direction: column;
+  border: var(--light-green) 3px solid;
+  z-index: 100;
+}
+
+.mapBox:hover {
+  width: 50vw;
+  height: 70vh;
+  right: 2vw;
+  bottom: 17vh;
+}
+
+.inner-box {
+  flex-grow: 1;
+  border-radius: 1vh;
+}
+
+#map {
+  height: 100%;
+  width: 100%;
+  border-radius: 1vh;
+  background-color: #215c63;
+}
