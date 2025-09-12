@@ -40,7 +40,7 @@
 
 .stat-label {
   color: var(--light-green);
-  font-size: 0.9rem;
+  font-size: 1.2rem;
   font-weight: 700;
   letter-spacing: 0.1em;
   margin-bottom: 0.3rem;
@@ -49,7 +49,7 @@
 
 .stat-value {
   color: var(--light-green);
-  font-size: 1.8rem;
+  font-size: 4rem;
   font-weight: 900;
   text-shadow: 0 0 15px rgba(var(--light-green-rgb), 0.7);
   filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));

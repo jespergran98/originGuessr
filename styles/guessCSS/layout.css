@@ -13,6 +13,15 @@ body {
     height: 15vh;
     margin-top: auto;
     width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ad-text {
+    color: var(--dark-green);
+    font-size: 1.5em;
+    font-weight: bold;
 }
 
 .guessBox {
@@ -21,7 +30,6 @@ body {
     bottom: 22vh;
     width: 66vw;
     height: 66vh;
-    border: 1px solid var(--light-green);
     display: flex;
     align-items: center;
     justify-content: flex-start;
@@ -32,4 +40,27 @@ body {
     height: 100%;
     object-fit: contain;
     object-position: center;
+}
+
+.attributionBox {
+    position: absolute;
+    left: 2vw;
+    bottom: 19vh;
+    width: 66vw;
+    height: 2vh;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    color: var(--ad-green);
+    font-size: 1.8em;
+    justify-content: center;
+}
+
+.attributionBox a {
+    color: var(--ad-green);
+    text-decoration: none;
+}
+
+.attributionBox a:hover {
+    text-decoration: underline;
 }

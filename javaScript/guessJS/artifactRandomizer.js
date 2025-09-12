@@ -13,6 +13,9 @@ document.addEventListener('DOMContentLoaded', function() {
             img.alt = randomArtifact.title;
             
             guessBox.appendChild(img);
+            
+            // Update attribution box
+            updateAttribution(randomArtifact);
         })
         .catch(error => {
             console.error('Error loading artifacts:', error);

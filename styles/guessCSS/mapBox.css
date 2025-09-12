@@ -5,7 +5,7 @@
   bottom: 17vh;
   background: var(--dark-green);
   padding: 1vh;
-  border-radius: 1vh;
+  border-radius: 0.5vh;
   width: 25vw;
   height: 35vh;
   transition: all 0.2s ease-in-out;
@@ -32,4 +32,26 @@
   width: 100%;
   border-radius: 1vh;
   background-color: #215c63;
+}
+/* Game Control Elements */
+.slider-container {
+  height: 1.5vh;
+  background-color: var(--dark-green);
+  border-radius: 10px;
+  margin: 2vh 0;
+  position: relative;
+  flex-shrink: 0;
+  border: var(--light-green) 3px solid;
+}
+
+.slider-handle {
+  width: 30px;
+  height: 30px;
+  background-color: var(--light-green);
+  border: 3px solid var(--dark-green);
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
 }

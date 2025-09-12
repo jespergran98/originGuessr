@@ -2,12 +2,16 @@
 class ParticleSystem {
     constructor(canvasId = 'particleCanvas') {
         this.canvas = document.getElementById(canvasId);
-        if (!this.canvas) return;
+        if (!this.canvas) {
+            console.warn('Particle canvas not found');
+            return;
+        }
 
         this.ctx = this.canvas.getContext('2d');
         this.particles = [];
         this.particleCount = window.innerWidth < 768 ? 30 : 50;
         this.particlesActive = true;
+        this.animationId = null;
         
         this.init();
     }
@@ -18,7 +22,8 @@ class ParticleSystem {
         this.animate();
         
         // Add resize listener
-        window.addEventListener('resize', () => this.resizeCanvas());
+        this.resizeHandler = () => this.resizeCanvas();
+        window.addEventListener('resize', this.resizeHandler);
         
         // Store instance globally for visibility change handler
         window.particleSystemInstance = this;
@@ -51,7 +56,7 @@ class ParticleSystem {
     }
 
     animate() {
-        if (!this.ctx || !this.particlesActive) return;
+        if (!this.ctx || !this.particlesActive || !this.canvas) return;
 
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
         
@@ -94,12 +99,16 @@ class ParticleSystem {
         });
         
         if (this.particlesActive) {
-            requestAnimationFrame(() => this.animate());
+            this.animationId = requestAnimationFrame(() => this.animate());
         }
     }
 
     pause() {
         this.particlesActive = false;
+        if (this.animationId) {
+            cancelAnimationFrame(this.animationId);
+            this.animationId = null;
+        }
     }
 
     resume() {
@@ -108,7 +117,35 @@ class ParticleSystem {
             this.animate();
         }
     }
+
+    destroy() {
+        this.pause();
+        if (this.resizeHandler) {
+            window.removeEventListener('resize', this.resizeHandler);
+        }
+        this.particles = [];
+        this.canvas = null;
+        this.ctx = null;
+        
+        // Clear global reference if it's this instance
+        if (window.particleSystemInstance === this) {
+            window.particleSystemInstance = null;
+        }
+    }
 }
+
+// Clean up any existing particle system before creating a new one
+if (window.particleSystemInstance) {
+    window.particleSystemInstance.destroy();
+}
+
+// Initialize particle system when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    // Small delay to ensure canvas is properly rendered
+    setTimeout(() => {
+        new ParticleSystem();
+    }, 100);
+});
 
 // Performance optimization: Pause particles when tab is not visible
 document.addEventListener('visibilitychange', () => {
@@ -119,5 +156,12 @@ document.addEventListener('visibilitychange', () => {
         } else {
             particleSystem.resume();
         }
+    }
+});
+
+// Clean up when page unloads
+window.addEventListener('beforeunload', () => {
+    if (window.particleSystemInstance) {
+        window.particleSystemInstance.destroy();
     }
 });
