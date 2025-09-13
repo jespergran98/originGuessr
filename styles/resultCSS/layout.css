@@ -1,4 +1,4 @@
-/* Result Page Layout - Streamlined Structure */
+/* Result Page Layout - Dynamic Description Box */
 
 /* Base Layout */
 body {
@@ -40,9 +40,46 @@ body {
 
 /* Left Column Elements */
 .descriptionBox {
-    height: 150px;
+    min-height: 80px;      /* Minimum height for short descriptions */
+    max-height: 300px;     /* Maximum height to prevent excessive growth */
     background-color: var(--dark-green-hover);
-    flex-shrink: 0;
+    flex-shrink: 0;       /* Add padding for better text spacing */
+    box-sizing: border-box;
+    
+    /* Handle overflow if content exceeds max-height */
+    overflow-y: auto;
+    
+    /* Smooth height transitions */
+    transition: height 0.3s ease;
+}
+
+/* Alternative approach using auto height with constraints */
+.descriptionBox.auto-height {
+    height: auto;
+    min-height: 80px;
+    max-height: 300px;
+    box-sizing: border-box;
+}
+
+/* For very long descriptions, add scrolling */
+.descriptionBox.scrollable {
+    height: 200px;        /* Fixed height for scrollable version */
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+/* Ensure text content respects the box constraints */
+.descriptionBox .result-content {
+    height: auto;
+    min-height: unset;
+    justify-content: flex-start;
+}
+
+.descriptionBox .artifact-description {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    hyphens: auto;
+    line-height: 1.4;
 }
 
 .year-container {
@@ -54,7 +91,8 @@ body {
 
 .correctYearBox {
     background-color: var(--dark-green-hover);
-    width: 20%;
+    width: auto;
+    flex-shrink: 0;
 }
 
 .yearOffBox {
@@ -87,9 +125,9 @@ body {
 }
 
 .rightResultContainer {
-    height: 180px;
+    height: 120px;
     display: flex;
-    gap: 32px;
+    gap: 24px;
     flex-shrink: 0;
 }
 
@@ -133,3 +171,5 @@ body {
     font-size: 1.5em;
     font-weight: bold;
 }
+
+/* No responsive height restrictions - always fit content */
