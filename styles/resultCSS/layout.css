@@ -85,7 +85,7 @@ body {
 .year-container {
     height: 70px;
     display: flex;
-    gap: 8px;
+    gap: 16px;
     flex-shrink: 0;
 }
 
@@ -119,7 +119,7 @@ body {
 }
 
 .attributeBox {
-    height: 40px;
+    height: 24px;
     background-color: var(--dark-green-hover);
     flex-shrink: 0;
 }
