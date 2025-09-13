@@ -45,7 +45,7 @@
 }
 
 .year-off-text {
-    font-size: 1.5em;
+    font-size: 1.4em;
     color: var(--light-green);
     line-height: 1.4;
 }
@@ -66,7 +66,7 @@
 }
 
 .distance-text {
-    font-size: 1.5em;
+    font-size: 1.4em;
     color: var(--light-green);
     line-height: 1.4;
 }
@@ -79,12 +79,6 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-}
-
-.distance-value {
-    font-size: 1.6em;
-    font-weight: bold;
-    color: var(--light-green);
 }
 
 /* Image Box Styling */
