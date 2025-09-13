@@ -41,7 +41,7 @@ body {
 /* Left Column Elements */
 .descriptionBox {
     height: 150px;
-    background-color: blue;
+    background-color: var(--dark-green-hover);
     flex-shrink: 0;
 }
 
@@ -53,37 +53,37 @@ body {
 }
 
 .yearBox {
-    width: 30%;
-    background-color: orange;
+    width: 25%;
+    background-color: var(--dark-green-hover);
 }
 
 .yearOffBox {
-    width: 68%;
-    background-color: purple;
+    width: 73%;
+    background-color: var(--dark-green-hover);
 }
 
 .mapResultBox {
     flex: 1;
-    background-color: brown;
+    background-color: var(--dark-green-hover);
     min-height: 50px;
 }
 
 .distanceOffBox {
     height: 80px;
-    background-color: green;
+    background-color: var(--dark-green-hover);
     flex-shrink: 0;
 }
 
 /* Right Column Elements */
 .imageResultBox {
     flex: 1;
-    background-color: turquoise;
+    background-color: var(--dark-green-hover);
     min-height: 200px;
 }
 
 .attributeBox {
     height: 80px;
-    background-color: #F39C12;
+    background-color: var(--dark-green-hover);
     flex-shrink: 0;
 }
 
@@ -96,22 +96,22 @@ body {
 
 .yearResultBox {
     flex: 1;
-    background-color: #FF6B6B;
+    background-color: var(--dark-green-hover);
 }
 
 .locationBox {
     flex: 1;
-    background-color: #4ECDC4;
+    background-color: var(--dark-green-hover);
 }
 
 .totalBox {
     flex: 1;
-    background-color: #45B7D1;
+    background-color: var(--dark-green-hover);
 }
 
 .nextBox {
     flex: 1;
-    background-color: #96CEB4;
+    background-color: var(--dark-green-hover);
 }
 
 /* Footer */

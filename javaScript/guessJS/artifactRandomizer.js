@@ -7,6 +7,9 @@ document.addEventListener('DOMContentLoaded', function() {
             const randomIndex = Math.floor(Math.random() * artifacts.length);
             const randomArtifact = artifacts[randomIndex];
             
+            // Store artifact globally for easy access
+            window.currentArtifact = randomArtifact;
+            
             const guessBox = document.querySelector('.guessBox');
             const img = document.createElement('img');
             img.src = randomArtifact.image;
@@ -16,6 +19,13 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Update attribution box
             updateAttribution(randomArtifact);
+            
+            // Dispatch event with artifact data
+            document.dispatchEvent(new CustomEvent('artifactLoaded', {
+                detail: { artifact: randomArtifact }
+            }));
+            
+            console.log('Loaded artifact:', randomArtifact.title);
         })
         .catch(error => {
             console.error('Error loading artifacts:', error);

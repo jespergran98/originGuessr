@@ -8,21 +8,19 @@ class MarkerManager {
         this.initializeButton();
     }
 
-initializeButton() {
-    this.makeGuessButton = document.getElementById('makeGuess-button');
-    if (!this.makeGuessButton) {
-        setTimeout(() => this.initializeButton(), 100);
-        return;
-    }
-    
-    // Add click event listener for the button
-    this.makeGuessButton.addEventListener('click', () => {
-        if (this.hasMarker()) {
-            // Only redirect if a marker has been placed
-            window.location.href = 'result.html';
+    initializeButton() {
+        this.makeGuessButton = document.getElementById('makeGuess-button');
+        if (!this.makeGuessButton) {
+            setTimeout(() => this.initializeButton(), 100);
+            return;
         }
-    });
-}
+        
+        this.makeGuessButton.addEventListener('click', () => {
+            if (this.hasMarker()) {
+                this.navigateToResult();
+            }
+        });
+    }
 
     initializeMarkerPlacement() {
         if (typeof map === 'undefined') {
@@ -31,6 +29,26 @@ initializeButton() {
         }
 
         map.on('click', (e) => this.placeMarker(e));
+    }
+
+    navigateToResult() {
+        // Get artifact from global scope or wait for it
+        const artifact = window.currentArtifact;
+        
+        if (!artifact || !this.guessCoordinates) {
+            console.error('Missing artifact or guess data');
+            // Still navigate but with error handling on result page
+            window.location.href = 'result.html';
+            return;
+        }
+
+        const params = new URLSearchParams();
+        params.append('artifact', encodeURIComponent(JSON.stringify(artifact)));
+        params.append('guessLat', this.guessCoordinates.lat.toString());
+        params.append('guessLng', this.guessCoordinates.lng.toString());
+        
+        console.log('Navigating with artifact:', artifact.title);
+        window.location.href = `result.html?${params.toString()}`;
     }
 
     updateButtonState() {
@@ -52,7 +70,6 @@ initializeButton() {
             map.removeLayer(this.currentMarker);
         }
 
-        // Updated to only include 4 splat elements.
         const markerHTML = `
           <div class="custom-marker">
             <svg viewBox="0 0 32 48" class="marker-svg">
@@ -68,15 +85,14 @@ initializeButton() {
 
         const markerIcon = L.divIcon({
             html: markerHTML,
-            className: '', // No extra classes needed on the wrapper
+            className: '',
             iconSize: [32, 48],
-            iconAnchor: [38, 52] // Anchor at the very bottom tip to ensure it's at the click location
+            iconAnchor: [38, 52]
         });
 
         this.currentMarker = L.marker([lat, lng], { icon: markerIcon }).addTo(map);
         this.guessCoordinates = { lat, lng };
 
-        // Update button state after placing marker
         this.updateButtonState();
 
         document.dispatchEvent(new CustomEvent('markerPlaced', {
@@ -101,26 +117,6 @@ initializeButton() {
 
     hasMarker() {
         return this.currentMarker !== null;
-    }
-
-    calculateDistance(actualLat, actualLng) {
-        if (!this.guessCoordinates) return null;
-
-        const R = 6371;
-        const dLat = this.toRadians(actualLat - this.guessCoordinates.lat);
-        const dLng = this.toRadians(actualLng - this.guessCoordinates.lng);
-
-        const a = Math.sin(dLat / 2) ** 2 +
-            Math.cos(this.toRadians(this.guessCoordinates.lat)) *
-            Math.cos(this.toRadians(actualLat)) *
-            Math.sin(dLng / 2) ** 2;
-
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        return R * c;
-    }
-
-    toRadians(degrees) {
-        return degrees * (Math.PI / 180);
     }
 }
 
