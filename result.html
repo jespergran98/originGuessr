@@ -18,48 +18,40 @@
         <div class="grid-overlay"></div>
     </div>
 
-    <!-- Main content container -->
-    <div class="main-content">
-        <!-- Fixed height content -->
-        <div class="fixed-content">
+    <!-- Main Layout Container -->
+    <div class="layout-container">
+        <!-- Left Column -->
+        <div class="left-column">
             <div class="descriptionBox"></div>
-
-            <!-- New horizontal container for year boxes -->
+            
             <div class="year-container">
                 <div class="yearBox"></div>
                 <div class="yearOffBox"></div>
             </div>
-        </div>
-
-        <!-- Flexible map container -->
-        <div class="flexible-content">
+            
             <div class="mapResultBox"></div>
+            <div class="distanceOffBox"></div>
         </div>
 
-        <!-- Fixed height distance box -->
-        <div class="distanceOffBox"></div>
-    </div>
-
-    <!-- Right side flexible container -->
-    <div class="right-side-container">
-        <!-- Image result box - now flexible -->
-        <div class="imageResultBox"></div>
-
-        <!-- Attribute box below imageResultBox -->
-        <div class="attributeBox"></div>
-
-        <!-- New horizontal boxes below attributeBox -->
-        <div class="rightResultContainer">
-            <div class="yearResultBox"></div>
-            <div class="locationBox"></div>
-            <div class="totalBox"></div>
-            <div class="nextBox"></div>
+        <!-- Right Column -->
+        <div class="right-column">
+            <div class="imageResultBox"></div>
+            <div class="attributeBox"></div>
+            
+            <div class="rightResultContainer">
+                <div class="yearResultBox"></div>
+                <div class="locationBox"></div>
+                <div class="totalBox"></div>
+                <div class="nextBox"></div>
+            </div>
         </div>
     </div>
 
+    <!-- Footer -->
     <div class="footer-bar">
-      <p class="ad-text">Advertisement</p>
+        <p class="ad-text">Advertisement</p>
     </div>
+
     <!-- Particle System Canvas -->
     <canvas id="particleCanvas" class="particle-canvas"></canvas>
     

@@ -1,4 +1,6 @@
-/* TODO: result Page Layout - Improved Stacking */
+/* Result Page Layout - Streamlined Structure */
+
+/* Base Layout */
 body {
     margin: 0;
     padding: 0;
@@ -7,147 +9,112 @@ body {
     display: flex;
     flex-direction: column;
     position: relative;
-    overflow: hidden; /* Prevent scrolling */
+    overflow: hidden;
 }
 
-.main-content {
+/* Main Layout Container */
+.layout-container {
     flex: 1;
     display: flex;
-    flex-direction: column;
-    padding-bottom: 160px; /* Account for footer height */
-    overflow: hidden;
-    min-height: 0; /* Allow shrinking */
+    gap: 2vw;
+    padding: 5vh 2vw 180px 2vw; /* Top, Right, Bottom (footer space), Left */
+    min-height: 0;
 }
 
-.fixed-content {
-    flex-shrink: 0; /* Don't shrink these elements */
-}
-
-.descriptionBox {
-    margin-left: 2vw;
+/* Column Layout */
+.left-column {
     width: 45vw;
+    display: flex;
+    flex-direction: column;
+    gap: 2vh;
+    min-height: 0;
+}
+
+.right-column {
+    width: 50vw;
+    display: flex;
+    flex-direction: column;
+    gap: 2vh;
+    min-height: 0;
+}
+
+/* Left Column Elements */
+.descriptionBox {
     height: 150px;
     background-color: blue;
-    margin-bottom: 2vh;
-    margin-top: 5vh;
     flex-shrink: 0;
 }
 
-/* Right side flexible container */
-.right-side-container {
-    position: absolute;
-    right: 2vw;
-    top: 5vh;
-    width: 50vw;
-    height: calc(100vh - 5vh - 160px - 2vh); /* Full height minus top margin, footer, and bottom margin */
-    display: flex;
-    flex-direction: column;
-    min-height: 0; /* Allow shrinking */
-}
-
-.imageResultBox {
-    width: 100%;
-    flex: 1; /* Take all available space in right-side-container */
-    background-color: turquoise;
-    min-height: 200px; /* Minimum height to prevent it from getting too small */
-    margin-bottom: 1vh; /* Gap before attributeBox */
-}
-
-/* Attribute box below imageResultBox */
-.attributeBox {
-    width: 100%;
-    height: 80px;
-    background-color: #F39C12; /* Orange */
-    flex-shrink: 0;
-    margin-bottom: 2vh; /* Gap before image-result-boxes */
-}
-
-/* New horizontal boxes below attributeBox */
-.rightResultContainer {
-    width: 100%;
-    height: 180px;
-    display: flex;
-    flex-direction: row;
-    gap: 1vw;
-    flex-shrink: 0;
-    margin-bottom: 0; /* No bottom margin needed - container handles spacing */
-}
-
-.yearResultBox {
-    flex: 1;
-    height: 100%;
-    background-color: #FF6B6B; /* Red-ish */
-}
-
-.locationBox {
-    flex: 1;
-    height: 100%;
-    background-color: #4ECDC4; /* Teal */
-}
-
-.totalBox {
-    flex: 1;
-    height: 100%;
-    background-color: #45B7D1; /* Blue */
-    margin-right: 2vw; /* Gap before nextBox */
-}
-
-.nextBox {
-    flex: 1;
-    height: 100%;
-    background-color: #96CEB4; /* Green */
-}
-
-/* horizontal container for yearBox and yearOffBox */
 .year-container {
-    margin-left: 2vw;
-    width: 45vw;
     height: 80px;
     display: flex;
     gap: 2vw;
-    margin-bottom: 2vh;
     flex-shrink: 0;
 }
 
 .yearBox {
     width: 30%;
-    height: 100%;
     background-color: orange;
 }
 
 .yearOffBox {
     width: 68%;
-    height: 100%;
     background-color: purple;
 }
 
-.flexible-content {
-    flex: 1; /* Take up remaining space */
-    display: flex;
-    flex-direction: column;
-    min-height: calc(50px + 2vh + 80px); /* Map min-height + margin + distance box height */
-    /* This ensures there's always enough space for both elements */
-}
-
 .mapResultBox {
-    margin-left: 2vw;
-    width: 45vw;
-    flex: 1; /* Take all available space in flexible-content */
+    flex: 1;
     background-color: brown;
-    min-height: 50px; /* Minimum height to prevent it from getting too small */
-    margin-bottom: 2vh; /* Move margin here to maintain gap */
+    min-height: 50px;
 }
 
 .distanceOffBox {
-    margin-left: 2vw;
-    width: 45vw;
     height: 80px;
     background-color: green;
     flex-shrink: 0;
-    margin-bottom: 2vh;
 }
 
+/* Right Column Elements */
+.imageResultBox {
+    flex: 1;
+    background-color: turquoise;
+    min-height: 200px;
+}
 
+.attributeBox {
+    height: 80px;
+    background-color: #F39C12;
+    flex-shrink: 0;
+}
+
+.rightResultContainer {
+    height: 180px;
+    display: flex;
+    gap: 1vw;
+    flex-shrink: 0;
+}
+
+.yearResultBox {
+    flex: 1;
+    background-color: #FF6B6B;
+}
+
+.locationBox {
+    flex: 1;
+    background-color: #4ECDC4;
+}
+
+.totalBox {
+    flex: 1;
+    background-color: #45B7D1;
+}
+
+.nextBox {
+    flex: 1;
+    background-color: #96CEB4;
+}
+
+/* Footer */
 .footer-bar {
     background-color: var(--ad-green);
     height: 160px;
