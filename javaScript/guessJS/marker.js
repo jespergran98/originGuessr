@@ -3,7 +3,17 @@ class MarkerManager {
     constructor() {
         this.currentMarker = null;
         this.guessCoordinates = null;
+        this.makeGuessButton = null;
         this.initializeMarkerPlacement();
+        this.initializeButton();
+    }
+
+    initializeButton() {
+        this.makeGuessButton = document.getElementById('makeGuess-button');
+        if (!this.makeGuessButton) {
+            setTimeout(() => this.initializeButton(), 100);
+            return;
+        }
     }
 
     initializeMarkerPlacement() {
@@ -13,6 +23,18 @@ class MarkerManager {
         }
 
         map.on('click', (e) => this.placeMarker(e));
+    }
+
+    updateButtonState() {
+        if (!this.makeGuessButton) return;
+
+        if (this.currentMarker) {
+            this.makeGuessButton.classList.add('active');
+            this.makeGuessButton.textContent = 'Make Guess';
+        } else {
+            this.makeGuessButton.classList.remove('active');
+            this.makeGuessButton.textContent = 'Guess the Artifact Age & Origin';
+        }
     }
 
     placeMarker(event) {
@@ -46,6 +68,9 @@ class MarkerManager {
         this.currentMarker = L.marker([lat, lng], { icon: markerIcon }).addTo(map);
         this.guessCoordinates = { lat, lng };
 
+        // Update button state after placing marker
+        this.updateButtonState();
+
         document.dispatchEvent(new CustomEvent('markerPlaced', {
             detail: { coordinates: this.guessCoordinates }
         }));
@@ -58,6 +83,7 @@ class MarkerManager {
             map.removeLayer(this.currentMarker);
             this.currentMarker = null;
             this.guessCoordinates = null;
+            this.updateButtonState();
         }
     }
 
