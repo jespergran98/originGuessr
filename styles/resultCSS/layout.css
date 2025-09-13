@@ -52,8 +52,9 @@ body {
     flex-shrink: 0;
 }
 
-.yearBox {
+.correctYearBox {
     background-color: var(--dark-green-hover);
+    width: 20%;
 }
 
 .yearOffBox {
@@ -92,17 +93,17 @@ body {
     flex-shrink: 0;
 }
 
-.yearBox {
+.yearScoreBox {
     flex: 1;
     background-color: var(--dark-green-hover);
 }
 
-.locationBox {
+.locationScoreBox {
     flex: 1;
     background-color: var(--dark-green-hover);
 }
 
-.totalBox {
+.totalScoreBox {
     flex: 1;
     background-color: var(--dark-green-hover);
 }

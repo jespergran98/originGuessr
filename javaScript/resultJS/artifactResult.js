@@ -87,10 +87,10 @@ class ArtifactResultHandler {
     }
 
     populateYear() {
-        const yearBox = document.querySelector('.yearBox');
-        if (yearBox && this.artifactData.year !== undefined) {
+        const correctYearBox = document.querySelector('.correctYearBox');
+        if (correctYearBox && this.artifactData.year !== undefined) {
             const formattedYear = this.formatYear(this.artifactData.year);
-            yearBox.innerHTML = `
+            correctYearBox.innerHTML = `
                 <div class="result-content year-content">
                     <div class="year-value">${formattedYear}</div>
                 </div>

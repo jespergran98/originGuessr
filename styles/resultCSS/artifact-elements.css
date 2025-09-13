@@ -128,6 +128,50 @@
     text-decoration: underline;
 }
 
+/* Score Box Styling (yearBox, locationBox, totalBox in right column) */
+.score-content {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.score-label {
+    font-size: 1.1em;
+    color: var(--light-green);
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.score-value-container {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: 2px;
+}
+
+.score-value {
+    font-size: 2.2em;
+    font-weight: bold;
+    text-shadow: 0 0 8px rgba(255, 255, 0, 0.3);
+    background: linear-gradient(45deg, #ffff00, #ffd700);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+}
+
+.score-total {
+    font-size: 1.1em;
+    color: var(--light-green);
+    font-weight: 400;
+    line-height: 1;
+}
+
 /* Error Styling */
 .error-content h3 {
     color: #ff6b6b;
