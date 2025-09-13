@@ -33,6 +33,71 @@ body {
     flex-shrink: 0;
 }
 
+/* Right side flexible container */
+.right-side-container {
+    position: absolute;
+    right: 2vw;
+    top: 5vh;
+    width: 50vw;
+    height: calc(100vh - 5vh - 160px - 2vh); /* Full height minus top margin, footer, and bottom margin */
+    display: flex;
+    flex-direction: column;
+    min-height: 0; /* Allow shrinking */
+}
+
+.imageResultBox {
+    width: 100%;
+    flex: 1; /* Take all available space in right-side-container */
+    background-color: turquoise;
+    min-height: 200px; /* Minimum height to prevent it from getting too small */
+    margin-bottom: 1vh; /* Gap before attributeBox */
+}
+
+/* Attribute box below imageResultBox */
+.attributeBox {
+    width: 100%;
+    height: 80px;
+    background-color: #F39C12; /* Orange */
+    flex-shrink: 0;
+    margin-bottom: 2vh; /* Gap before image-result-boxes */
+}
+
+/* New horizontal boxes below attributeBox */
+.rightResultContainer {
+    width: 100%;
+    height: 180px;
+    display: flex;
+    flex-direction: row;
+    gap: 1vw;
+    flex-shrink: 0;
+    margin-bottom: 0; /* No bottom margin needed - container handles spacing */
+}
+
+.yearResultBox {
+    flex: 1;
+    height: 100%;
+    background-color: #FF6B6B; /* Red-ish */
+}
+
+.locationBox {
+    flex: 1;
+    height: 100%;
+    background-color: #4ECDC4; /* Teal */
+}
+
+.totalBox {
+    flex: 1;
+    height: 100%;
+    background-color: #45B7D1; /* Blue */
+    margin-right: 2vw; /* Gap before nextBox */
+}
+
+.nextBox {
+    flex: 1;
+    height: 100%;
+    background-color: #96CEB4; /* Green */
+}
+
 /* horizontal container for yearBox and yearOffBox */
 .year-container {
     margin-left: 2vw;
