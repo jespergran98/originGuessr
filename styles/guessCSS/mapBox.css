@@ -30,18 +30,19 @@
 }
 /* Game Control Elements */
 .slider-container {
-  height: 1.5vh;
+  height: 1.25vh;
   background-color: var(--dark-green);
   border-radius: 10px;
-  margin: 1vh 0;
+  margin-top: 0.5vh;
+  margin-bottom: 0.25vh;
   position: relative;
   flex-shrink: 0;
   border: var(--light-green) 3px solid;
 }
 
 .slider-handle {
-  width: 30px;
-  height: 30px;
+  width: 45px;
+  height: 45px;
   background-color: var(--light-green);
   border: 3px solid var(--dark-green);
   border-radius: 50%;
@@ -49,4 +50,34 @@
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
+  z-index: 500;
+}
+
+/* Year Display */
+.year-display {
+  color: var(--light-green);
+  font-weight: bold;
+  font-size: 2.5vh;
+  text-align: center;
+  flex-shrink: 0;
+  margin-bottom: 0.25vh;
+}
+
+/* Make Guess Button */
+.makeGuess-button {
+  height: 2vh;
+  background-color: var(--light-green);
+  border: var(--light-green) 3px solid;
+  border-radius: 10px;
+  flex-shrink: 0;
+  cursor: pointer;
+  color: var(--dark-green);
+  font-weight: bold;
+  font-family: inherit;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  transition: all 0.2s ease-in-out;
+  font-size: 1.75vh;
 }
