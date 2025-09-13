@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Origin Guesser - Result</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="styles/mainCSS/main.css">
+    <link rel="stylesheet" href="styles/resultCSS/result.css">
+  </head>
+  <body>
+
+    <!-- Animated Background Elements -->
+    <div class="background-animation">
+        <div class="floating-orb orb-1"></div>
+        <div class="floating-orb orb-2"></div>
+        <div class="floating-orb orb-3"></div>
+        <div class="grid-overlay"></div>
+    </div>
+
+    <div class="descriptionBox"></div>
+
+    <div class="mapResultBox"></div>
+
+    <div class="footer-bar">
+      <p class="ad-text">Advertisement</p>
+    </div>
+    <!-- Particle System Canvas -->
+    <canvas id="particleCanvas" class="particle-canvas"></canvas>
+    
+    <!-- Load scripts -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="javaScript/mainJS/map.js"></script>
+    <script src="javaScript/mainJS/particles.js"></script>
+  </body>
+</html>

@@ -8,13 +8,21 @@ class MarkerManager {
         this.initializeButton();
     }
 
-    initializeButton() {
-        this.makeGuessButton = document.getElementById('makeGuess-button');
-        if (!this.makeGuessButton) {
-            setTimeout(() => this.initializeButton(), 100);
-            return;
-        }
+initializeButton() {
+    this.makeGuessButton = document.getElementById('makeGuess-button');
+    if (!this.makeGuessButton) {
+        setTimeout(() => this.initializeButton(), 100);
+        return;
     }
+    
+    // Add click event listener for the button
+    this.makeGuessButton.addEventListener('click', () => {
+        if (this.hasMarker()) {
+            // Only redirect if a marker has been placed
+            window.location.href = 'result.html';
+        }
+    });
+}
 
     initializeMarkerPlacement() {
         if (typeof map === 'undefined') {

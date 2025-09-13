@@ -1,39 +1,33 @@
-/* Guess Page Layout */
+/* Guess Page Layout - Improved Stacking */
 body {
     margin: 0;
     padding: 0;
     background-color: var(--dark-green);
-    min-height: 100vh;
+    height: 100vh;
     display: flex;
     flex-direction: column;
+    position: relative;
 }
 
-.footer-bar {
-    background-color: var(--ad-green);
-    height: 150px;
-    margin-top: auto;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-}
-
-.ad-text {
-    color: var(--dark-green);
-    font-size: 1.5em;
-    font-weight: bold;
+.header-text {
+    color: var(--light-green);
+    font-size: 4.5rem;
+    margin: 0;
+    padding: 1vh 0 0 2vw;
+    z-index: 1001;
+    flex-shrink: 0;
 }
 
 .guessBox {
-    position: absolute;
-    left: 2vw;
-    bottom: 17.5vh;
+    margin-left: 2vw;
     width: 66vw;
-    height: 73vh;
+    flex: 1;
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    min-height: 0;
+    background-color: brown;
+    margin-bottom: 10px;
 }
 
 .guessBox img {
@@ -41,20 +35,21 @@ body {
     height: 100%;
     object-fit: contain;
     object-position: left;
+    
 }
 
 .attributionBox {
-    position: absolute;
-    left: 2vw;
-    bottom: 14vh;
+    margin-left: 2vw;
     width: 66vw;
     height: 2vh;
+    min-height: 30px; /* Ensure minimum readable height */
     display: flex;
     align-items: center;
     justify-content: flex-start;
     color: var(--ad-green);
     font-size: 1.8em;
-    justify-content: left;
+    padding-bottom: 10px;
+    flex-shrink: 0;
 }
 
 .attributionBox a {
@@ -64,4 +59,53 @@ body {
 
 .attributionBox a:hover {
     text-decoration: underline;
+}
+
+.footer-bar {
+    background-color: var(--ad-green);
+    height: 160px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.ad-text {
+    color: var(--dark-green);
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+.game-stats {
+  position: absolute;
+  top: 2vw;
+  right: 4vw;
+  display: flex;
+  gap: 2rem;
+  z-index: 100;
+}
+
+.stat-item {
+  background-color: rgba(var(--light-green-rgb), 0.1);
+  border: 2px solid var(--light-green);
+  border-radius: 1rem;
+  padding: 2rem 3rem;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.stat-label {
+  color: var(--light-green);
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.3rem;
+}
+
+.stat-value {
+  color: var(--light-green);
+  font-size: 4rem;
+  font-weight: 900;
 }

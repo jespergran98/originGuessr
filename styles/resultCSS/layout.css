@@ -1,0 +1,45 @@
+/* TODO: result Page Layout - Improved Stacking */
+body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--dark-green);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+
+.descriptionBox {
+    margin-left: 2vw;
+    width: 45vw;
+    height: 150px;
+    background-color: blue;
+    margin-bottom: 2vh;
+    margin-top: 5vh
+}
+
+.mapResultBox {
+    margin-left: 2vw;
+    width: 45vw;
+    height: 50vh;
+    background-color: brown;
+}
+
+.footer-bar {
+    background-color: var(--ad-green);
+    height: 160px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+}
+.ad-text {
+    color: var(--dark-green);
+    font-size: 1.5em;
+    font-weight: bold;
+}

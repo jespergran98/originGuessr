@@ -1,11 +1,5 @@
 /* Typography Styles Used Across Pages */
-.header-text {
-  color: var(--light-green);
-  position: absolute;
-  top: 1vh;
-  left: 2vw;
-  font-size: 4.5rem;
-}
+
 
 /* Common text styles */
 h1, h2, h3, h4, h5, h6 {
