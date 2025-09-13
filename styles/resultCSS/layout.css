@@ -92,7 +92,7 @@ body {
     flex-shrink: 0;
 }
 
-.yearResultBox {
+.yearBox {
     flex: 1;
     background-color: var(--dark-green-hover);
 }
