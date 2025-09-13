@@ -106,7 +106,7 @@ class ArtifactResultHandler {
             
             yearOffBox.innerHTML = `
                 <div class="result-content year-off-content">
-                    <div class="year-off-text">You were <span class="year-off-highlight">${formattedDifference} years</span> off</div>
+                    <div class="year-off-text">You were  <span class="year-off-highlight">${formattedDifference}</span>  years off</div>
                 </div>
             `;
         }
@@ -182,9 +182,9 @@ class ArtifactResultHandler {
         if (distanceKm < 1) {
             return `${Math.round(distanceKm * 1000)}m`;
         } else if (distanceKm < 100) {
-            return `${distanceKm.toFixed(1)}km`;
+            return `${distanceKm.toFixed(1)} km`;
         } else {
-            return `${Math.round(distanceKm)}km`;
+            return `${Math.round(distanceKm)} km`;
         }
     }
 

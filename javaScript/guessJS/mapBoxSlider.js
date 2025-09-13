@@ -127,27 +127,20 @@ class TimelineSlider {
     this.sliderHandle.style.left = `${percentage * 100}%`;
   }
 
-  updateYearDisplay() {
+updateYearDisplay() {
     const year = this.timeline[this.currentIndex];
     let displayText;
 
     if (year < 0) {
       const absYear = Math.abs(year);
-      if (absYear >= 1000000) {
-        const millions = (absYear / 1000000).toFixed(1);
-        displayText = `${millions}M BC`;
-      } else if (absYear >= 1000) {
-        const thousands = Math.round(absYear / 1000);
-        displayText = `${thousands},000 BC`;
-      } else {
-        displayText = `${absYear.toLocaleString()} BC`;
-      }
+      // Display the exact value for BC years without rounding
+      displayText = `${absYear.toLocaleString()} BC`;
     } else {
       displayText = `${year.toLocaleString()} AD`;
     }
 
     this.yearDisplay.textContent = displayText;
-  }
+}
 
   // Public method to get current year
   getCurrentYear() {

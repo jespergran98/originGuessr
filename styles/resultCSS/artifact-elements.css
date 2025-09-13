@@ -10,9 +10,8 @@
 
 /* Description Box Styling */
 .artifact-title {
-    font-size: 2em;
+    font-size: 2rem;
     font-weight: bold;
-    color: #ffff00;
     text-shadow: 0 0 8px rgba(255, 255, 0, 0.3);
     background: linear-gradient(45deg, #ffff00, #ffd700);
     -webkit-background-clip: text;
@@ -21,7 +20,7 @@
 }
 
 .artifact-description {
-    font-size: 1.8em;
+    font-size: 1.8rem;
     line-height: 1.4;
     margin: 0;
 }
@@ -34,7 +33,6 @@
 .year-value {
     font-size: 3em;
     font-weight: bold;
-    color: #ffff00;
     text-shadow: 0 0 8px rgba(255, 255, 0, 0.3);
     background: linear-gradient(45deg, #ffff00, #ffd700);
     -webkit-background-clip: text;
@@ -44,7 +42,7 @@
 
 /* Year Off Box Styling */
 .year-off-content {
-    text-align: center;
+    text-align: left;
 }
 
 .year-off-text {
@@ -56,7 +54,6 @@
 .year-off-highlight {
     font-size: 1.2em;
     font-weight: bold;
-    color: #ffff00;
     text-shadow: 0 0 8px rgba(255, 255, 0, 0.3);
     background: linear-gradient(45deg, #ffff00, #ffd700);
     -webkit-background-clip: text;
@@ -78,7 +75,6 @@
 .distance-highlight {
     font-size: 1.4em;
     font-weight: bold;
-    color: #ffff00;
     text-shadow: 0 0 8px rgba(255, 255, 0, 0.3);
     background: linear-gradient(45deg, #ffff00, #ffd700);
     -webkit-background-clip: text;

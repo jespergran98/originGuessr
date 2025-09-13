@@ -26,7 +26,7 @@ body {
     width: 45vw;
     display: flex;
     flex-direction: column;
-    gap: 2vh;
+    gap: 8px;
     min-height: 0;
 }
 
@@ -34,7 +34,7 @@ body {
     width: 50vw;
     display: flex;
     flex-direction: column;
-    gap: 2vh;
+    gap: 8px;
     min-height: 0;
 }
 
@@ -46,19 +46,17 @@ body {
 }
 
 .year-container {
-    height: 80px;
+    height: 70px;
     display: flex;
-    gap: 2vw;
+    gap: 8px;
     flex-shrink: 0;
 }
 
 .yearBox {
-    width: 25%;
     background-color: var(--dark-green-hover);
 }
 
 .yearOffBox {
-    width: 73%;
     background-color: var(--dark-green-hover);
 }
 
@@ -69,7 +67,7 @@ body {
 }
 
 .distanceOffBox {
-    height: 80px;
+    height: 50px;
     background-color: var(--dark-green-hover);
     flex-shrink: 0;
 }
@@ -90,7 +88,7 @@ body {
 .rightResultContainer {
     height: 180px;
     display: flex;
-    gap: 1vw;
+    gap: 8px;
     flex-shrink: 0;
 }
 
