@@ -3,6 +3,7 @@ class ArtifactResultHandler {
     constructor() {
         this.artifactData = null;
         this.guessCoordinates = null;
+        this.guessYear = null;
         this.initialize();
     }
 
@@ -19,8 +20,9 @@ class ArtifactResultHandler {
         const artifactParam = urlParams.get('artifact');
         const guessLat = urlParams.get('guessLat');
         const guessLng = urlParams.get('guessLng');
+        const guessYearParam = urlParams.get('guessYear');
 
-        if (!artifactParam || !guessLat || !guessLng) {
+        if (!artifactParam || !guessLat || !guessLng || !guessYearParam) {
             console.error('Missing URL parameters');
             this.showError('Missing required data from guess page');
             return;
@@ -32,9 +34,11 @@ class ArtifactResultHandler {
                 lat: parseFloat(guessLat),
                 lng: parseFloat(guessLng)
             };
+            this.guessYear = parseInt(guessYearParam);
 
             console.log('Processing result for:', this.artifactData.title);
             console.log('Guess coordinates:', this.guessCoordinates);
+            console.log('Guess year:', this.guessYear);
 
             if (!this.validateArtifactData()) {
                 this.showError('Invalid artifact data received');
@@ -62,6 +66,7 @@ class ArtifactResultHandler {
 
         this.populateDescription();
         this.populateYear();
+        this.populateYearOff();
         this.populateImage();
         this.populateDistance();
         this.populateAttribution();
@@ -88,6 +93,20 @@ class ArtifactResultHandler {
             yearBox.innerHTML = `
                 <div class="result-content year-content">
                     <div class="year-value">${formattedYear}</div>
+                </div>
+            `;
+        }
+    }
+
+    populateYearOff() {
+        const yearOffBox = document.querySelector('.yearOffBox');
+        if (yearOffBox && this.artifactData.year !== undefined && this.guessYear !== null) {
+            const yearDifference = Math.abs(this.guessYear - this.artifactData.year);
+            const formattedDifference = yearDifference.toLocaleString();
+            
+            yearOffBox.innerHTML = `
+                <div class="result-content year-off-content">
+                    <div class="year-off-text">You were <span class="year-off-highlight">${formattedDifference} years</span> off</div>
                 </div>
             `;
         }
@@ -120,7 +139,7 @@ class ArtifactResultHandler {
             
             distanceOffBox.innerHTML = `
                 <div class="result-content distance-content">
-                    <div class="distance-value">${formattedDistance}</div>
+                    <div class="distance-text">You were  <span class="distance-highlight">${formattedDistance}</span>  away from the correct location</div>
                 </div>
             `;
         }
@@ -212,7 +231,7 @@ class ArtifactResultHandler {
         }
 
         // Clear other boxes on error
-        const boxes = ['.yearBox', '.imageResultBox', '.distanceOffBox', '.attributeBox'];
+        const boxes = ['.yearBox', '.yearOffBox', '.imageResultBox', '.distanceOffBox', '.attributeBox'];
         boxes.forEach(selector => {
             const box = document.querySelector(selector);
             if (box) {

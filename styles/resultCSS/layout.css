@@ -82,7 +82,7 @@ body {
 }
 
 .attributeBox {
-    height: 80px;
+    height: 40px;
     background-color: var(--dark-green-hover);
     flex-shrink: 0;
 }

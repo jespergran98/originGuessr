@@ -10,10 +10,14 @@
 
 /* Description Box Styling */
 .artifact-title {
-    font-size: 1.8em;
+    font-size: 2em;
     font-weight: bold;
-    margin-bottom: 10px;
-    color: var(--light-green);
+    color: #ffff00;
+    text-shadow: 0 0 8px rgba(255, 255, 0, 0.3);
+    background: linear-gradient(45deg, #ffff00, #ffd700);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .artifact-description {
@@ -30,12 +34,56 @@
 .year-value {
     font-size: 3em;
     font-weight: bold;
+    color: #ffff00;
+    text-shadow: 0 0 8px rgba(255, 255, 0, 0.3);
+    background: linear-gradient(45deg, #ffff00, #ffd700);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Year Off Box Styling */
+.year-off-content {
+    text-align: center;
+}
+
+.year-off-text {
+    font-size: 1.4em;
     color: var(--light-green);
+    line-height: 1.4;
+}
+
+.year-off-highlight {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #ffff00;
+    text-shadow: 0 0 8px rgba(255, 255, 0, 0.3);
+    background: linear-gradient(45deg, #ffff00, #ffd700);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 /* Distance Box Styling */
 .distance-content {
     text-align: center;
+}
+
+.distance-text {
+    font-size: 1.2em;
+    color: var(--light-green);
+    line-height: 1.4;
+}
+
+.distance-highlight {
+    font-size: 1.4em;
+    font-weight: bold;
+    color: #ffff00;
+    text-shadow: 0 0 8px rgba(255, 255, 0, 0.3);
+    background: linear-gradient(45deg, #ffff00, #ffd700);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .distance-value {

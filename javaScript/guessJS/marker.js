@@ -42,12 +42,20 @@ class MarkerManager {
             return;
         }
 
+        // Get the current year from the timeline slider
+        let guessYear = 1337; // Default fallback
+        if (window.timelineSlider && typeof window.timelineSlider.getCurrentYear === 'function') {
+            guessYear = window.timelineSlider.getCurrentYear();
+        }
+
         const params = new URLSearchParams();
         params.append('artifact', encodeURIComponent(JSON.stringify(artifact)));
         params.append('guessLat', this.guessCoordinates.lat.toString());
         params.append('guessLng', this.guessCoordinates.lng.toString());
+        params.append('guessYear', guessYear.toString());
         
         console.log('Navigating with artifact:', artifact.title);
+        console.log('Guessed year:', guessYear);
         window.location.href = `result.html?${params.toString()}`;
     }
 
