@@ -4,6 +4,7 @@ class ArtifactResultHandler {
         this.artifactData = null;
         this.guessCoordinates = null;
         this.guessYear = null;
+        this.scores = null;
         this.initialize();
     }
 
@@ -21,6 +22,13 @@ class ArtifactResultHandler {
         const guessLat = urlParams.get('guessLat');
         const guessLng = urlParams.get('guessLng');
         const guessYearParam = urlParams.get('guessYear');
+
+        console.log('URL Parameters:', {
+            artifact: artifactParam ? 'present' : 'missing',
+            guessLat,
+            guessLng,
+            guessYear: guessYearParam
+        });
 
         if (!artifactParam || !guessLat || !guessLng || !guessYearParam) {
             console.error('Missing URL parameters');
@@ -41,35 +49,77 @@ class ArtifactResultHandler {
             console.log('Guess year:', this.guessYear);
 
             if (!this.validateArtifactData()) {
+                console.error('Invalid artifact data:', this.artifactData);
                 this.showError('Invalid artifact data received');
                 return;
             }
 
+            // Calculate all scores
+            this.calculateScores();
             this.populateResultElements();
+            this.initializeMap();
         } catch (error) {
             console.error('Error processing result data:', error);
-            this.showError('Error processing guess result');
+            this.showError('Error processing guess result: ' + error.message);
         }
     }
 
     validateArtifactData() {
-        return this.artifactData && 
+        const isValid = this.artifactData && 
                this.artifactData.title && 
                this.artifactData.description &&
                typeof this.artifactData.lat === 'number' &&
                typeof this.artifactData.lng === 'number' &&
                typeof this.artifactData.year === 'number';
+        
+        console.log('Validation result:', isValid);
+        if (!isValid) {
+            console.log('Artifact data structure:', this.artifactData);
+        }
+        
+        return isValid;
+    }
+
+    calculateScores() {
+        if (!window.resultCalculation) {
+            console.error('ResultCalculation not available');
+            // Try to create it if it doesn't exist
+            try {
+                window.resultCalculation = new ResultCalculation();
+            } catch (e) {
+                console.error('Could not create ResultCalculation:', e);
+                return;
+            }
+        }
+
+        this.scores = window.resultCalculation.calculateAllScores({
+            correctLat: this.artifactData.lat,
+            correctLng: this.artifactData.lng,
+            guessLat: this.guessCoordinates.lat,
+            guessLng: this.guessCoordinates.lng,
+            correctYear: this.artifactData.year,
+            guessedYear: this.guessYear
+        });
+
+        console.log('Calculated scores:', this.scores);
     }
 
     populateResultElements() {
-        if (!this.artifactData) return;
+        if (!this.artifactData) {
+            console.error('No artifact data available');
+            return;
+        }
 
+        console.log('Populating result elements...');
+        
         this.populateDescription();
         this.populateYear();
         this.populateYearOff();
         this.populateImage();
         this.populateDistance();
         this.populateAttribution();
+        this.populateScores();
+        this.populateNextButton();
 
         console.log('Result page populated successfully');
     }
@@ -83,6 +133,9 @@ class ArtifactResultHandler {
                     <p class="artifact-description">${this.escapeHtml(this.artifactData.description)}</p>
                 </div>
             `;
+            console.log('Description populated');
+        } else {
+            console.warn('Description box not found or no description data');
         }
     }
 
@@ -95,6 +148,9 @@ class ArtifactResultHandler {
                     <div class="year-value">${formattedYear}</div>
                 </div>
             `;
+            console.log('Year populated:', formattedYear);
+        } else {
+            console.warn('Year box not found or no year data');
         }
     }
 
@@ -106,9 +162,12 @@ class ArtifactResultHandler {
             
             yearOffBox.innerHTML = `
                 <div class="result-content year-off-content">
-                    <div class="year-off-text">You were  <span class="year-off-highlight">${formattedDifference}</span>  years off</div>
+                    <div class="year-off-text">You were <span class="year-off-highlight">${formattedDifference}</span> years off</div>
                 </div>
             `;
+            console.log('Year difference populated:', formattedDifference);
+        } else {
+            console.warn('Year off box not found or missing data');
         }
     }
 
@@ -120,8 +179,13 @@ class ArtifactResultHandler {
                     <img src="${this.escapeHtml(this.artifactData.image)}" 
                          alt="${this.escapeHtml(this.artifactData.title)}" 
                          class="artifact-result-image"
+                         onload="console.log('Image loaded successfully')"
+                         onerror="console.error('Image failed to load:', this.src)">
                 </div>
             `;
+            console.log('Image populated');
+        } else {
+            console.warn('Image box not found or no image data');
         }
     }
 
@@ -139,9 +203,12 @@ class ArtifactResultHandler {
             
             distanceOffBox.innerHTML = `
                 <div class="result-content distance-content">
-                    <div class="distance-text">You were  <span class="distance-highlight">${formattedDistance}</span>  away from the correct location</div>
+                    <div class="distance-text">You were <span class="distance-highlight">${formattedDistance}</span> away from the correct location</div>
                 </div>
             `;
+            console.log('Distance populated:', formattedDistance);
+        } else {
+            console.warn('Distance box not found or missing coordinate data');
         }
     }
 
@@ -167,6 +234,141 @@ class ArtifactResultHandler {
                     <span class="attribution-text">${attributionText}</span>
                 </div>
             `;
+            console.log('Attribution populated');
+        } else {
+            console.warn('Attribution box not found');
+        }
+    }
+
+    populateScores() {
+        if (!this.scores) {
+            console.warn('No scores calculated, skipping score population');
+            return;
+        }
+
+        console.log('Populating scores with:', this.scores);
+
+        // Populate Year Score Box
+        const yearScoreBox = document.querySelector('.yearScoreBox');
+        if (yearScoreBox) {
+            yearScoreBox.innerHTML = `
+                <div class="score-content">
+                    <div class="score-label">Year</div>
+                    <div class="score-value-container">
+                        <span class="score-value">${this.scores.yearScore.toLocaleString()}</span>
+                        <span class="score-total">/5000</span>
+                    </div>
+                </div>
+            `;
+            console.log('Year score populated:', this.scores.yearScore);
+        } else {
+            console.warn('Year score box not found');
+        }
+
+        // Populate Location Score Box
+        const locationScoreBox = document.querySelector('.locationScoreBox');
+        if (locationScoreBox) {
+            locationScoreBox.innerHTML = `
+                <div class="score-content">
+                    <div class="score-label">Location</div>
+                    <div class="score-value-container">
+                        <span class="score-value">${this.scores.locationScore.toLocaleString()}</span>
+                        <span class="score-total">/5000</span>
+                    </div>
+                </div>
+            `;
+            console.log('Location score populated:', this.scores.locationScore);
+        } else {
+            console.warn('Location score box not found');
+        }
+
+        // Populate Total Score Box
+        const totalScoreBox = document.querySelector('.totalScoreBox');
+        if (totalScoreBox) {
+            totalScoreBox.innerHTML = `
+                <div class="score-content">
+                    <div class="score-label">Total</div>
+                    <div class="score-value-container">
+                        <span class="score-value">${this.scores.totalScore.toLocaleString()}</span>
+                        <span class="score-total">/10000</span>
+                    </div>
+                </div>
+            `;
+            console.log('Total score populated:', this.scores.totalScore);
+        } else {
+            console.warn('Total score box not found');
+        }
+    }
+
+    populateNextButton() {
+        const nextBox = document.querySelector('.nextBox');
+        if (nextBox) {
+            nextBox.innerHTML = `
+                <div class="next-round-content">
+                    <button class="next-round-button" onclick="this.startNextRound()">
+                        Next Round
+                    </button>
+                </div>
+            `;
+            console.log('Next button populated');
+        } else {
+            console.warn('Next box not found');
+        }
+    }
+
+    startNextRound() {
+        // Navigate back to the main game page for another round
+        window.location.href = 'index.html';
+    }
+
+    initializeMap() {
+        // Initialize the map showing both guess and correct locations
+        if (typeof L === 'undefined') {
+            console.warn('Leaflet not loaded, skipping map initialization');
+            return;
+        }
+
+        try {
+            const mapElement = document.getElementById('map');
+            if (!mapElement) {
+                console.warn('Map element not found');
+                return;
+            }
+
+            const map = L.map('map', {
+                zoomControl: true,
+                scrollWheelZoom: true,
+                doubleClickZoom: true,
+                touchZoom: true
+            });
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+            // Add marker for correct location (green)
+            const correctMarker = L.marker([this.artifactData.lat, this.artifactData.lng])
+                .addTo(map)
+                .bindPopup(`<b>Correct Location</b><br>${this.artifactData.title}`);
+
+            // Add marker for guessed location (red)
+            const guessMarker = L.marker([this.guessCoordinates.lat, this.guessCoordinates.lng])
+                .addTo(map)
+                .bindPopup('<b>Your Guess</b>');
+
+            // Add line connecting the two points
+            const line = L.polyline([
+                [this.artifactData.lat, this.artifactData.lng],
+                [this.guessCoordinates.lat, this.guessCoordinates.lng]
+            ], {color: 'yellow', weight: 3}).addTo(map);
+
+            // Fit map to show both markers
+            const group = new L.featureGroup([correctMarker, guessMarker, line]);
+            map.fitBounds(group.getBounds().pad(0.1));
+
+            console.log('Map initialized successfully');
+        } catch (error) {
+            console.error('Error initializing map:', error);
         }
     }
 
@@ -231,7 +433,7 @@ class ArtifactResultHandler {
         }
 
         // Clear other boxes on error
-        const boxes = ['.yearBox', '.yearOffBox', '.imageResultBox', '.distanceOffBox', '.attributeBox'];
+        const boxes = ['.yearScoreBox', '.yearOffBox', '.imageResultBox', '.distanceOffBox', '.attributeBox', '.locationScoreBox', '.totalScoreBox', '.correctYearBox'];
         boxes.forEach(selector => {
             const box = document.querySelector(selector);
             if (box) {
