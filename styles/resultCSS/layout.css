@@ -7,6 +7,20 @@ body {
     display: flex;
     flex-direction: column;
     position: relative;
+    overflow: hidden; /* Prevent scrolling */
+}
+
+.main-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 160px; /* Account for footer height */
+    overflow: hidden;
+    min-height: 0; /* Allow shrinking */
+}
+
+.fixed-content {
+    flex-shrink: 0; /* Don't shrink these elements */
 }
 
 .descriptionBox {
@@ -15,15 +29,59 @@ body {
     height: 150px;
     background-color: blue;
     margin-bottom: 2vh;
-    margin-top: 5vh
+    margin-top: 5vh;
+    flex-shrink: 0;
+}
+
+/* horizontal container for yearBox and yearOffBox */
+.year-container {
+    margin-left: 2vw;
+    width: 45vw;
+    height: 80px;
+    display: flex;
+    gap: 2vw;
+    margin-bottom: 2vh;
+    flex-shrink: 0;
+}
+
+.yearBox {
+    width: 30%;
+    height: 100%;
+    background-color: orange;
+}
+
+.yearOffBox {
+    width: 68%;
+    height: 100%;
+    background-color: purple;
+}
+
+.flexible-content {
+    flex: 1; /* Take up remaining space */
+    display: flex;
+    flex-direction: column;
+    min-height: calc(50px + 2vh + 80px); /* Map min-height + margin + distance box height */
+    /* This ensures there's always enough space for both elements */
 }
 
 .mapResultBox {
     margin-left: 2vw;
     width: 45vw;
-    height: 50vh;
+    flex: 1; /* Take all available space in flexible-content */
     background-color: brown;
+    min-height: 50px; /* Minimum height to prevent it from getting too small */
+    margin-bottom: 2vh; /* Move margin here to maintain gap */
 }
+
+.distanceOffBox {
+    margin-left: 2vw;
+    width: 45vw;
+    height: 80px;
+    background-color: green;
+    flex-shrink: 0;
+    margin-bottom: 2vh;
+}
+
 
 .footer-bar {
     background-color: var(--ad-green);
@@ -38,6 +96,7 @@ body {
     bottom: 0;
     left: 0;
 }
+
 .ad-text {
     color: var(--dark-green);
     font-size: 1.5em;
