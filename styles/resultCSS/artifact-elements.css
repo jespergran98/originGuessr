@@ -70,7 +70,6 @@
     color: var(--light-green);
     line-height: 1.4;
 }
-
 .distance-highlight {
     font-size: 1.5em;
     font-weight: bold;
@@ -79,6 +78,12 @@
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+}
+
+.distance-value {
+    font-size: 1.6em;
+    font-weight: bold;
+    color: var(--light-green);
 }
 
 /* Image Box Styling */
