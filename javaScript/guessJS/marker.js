@@ -87,10 +87,11 @@ class MarkerManager {
         }
 
         const markerHTML = `
-          <div class="custom-marker">
-            <svg viewBox="0 0 32 48" class="marker-svg">
-              <path class="marker-body" d="M16 1C24 1 31 8 31 16C31 24 16 47 16 47C16 47 1 24 1 16C1 8 8 1 16 1Z"/>
-              <circle class="marker-pin" cx="16" cy="12" r="4"/>
+                    <div class="custom-marker">
+                        <svg viewBox="0 0 32 48" class="marker-svg">
+                            <path class="marker-body" d="M16 2C23 2 29 8 29 16C29 24 16 46 16 46C16 46 3 24 3 16C3 8 9 2 16 2Z"/>
+                            <circle class="marker-pin" cx="16" cy="16" r="5"/>
+
             </svg>
             <div class="splat splat-1"><svg viewBox="0 0 32 48"><path d="M16 1C24 1 31 8 31 16C31 24 16 47 16 47C16 47 1 24 1 16C1 8 8 1 16 1Z"/></svg></div>
             <div class="splat splat-2"><svg viewBox="0 0 32 48"><path d="M16 1C24 1 31 8 31 16C31 24 16 47 16 47C16 47 1 24 1 16C1 8 8 1 16 1Z"/></svg></div>
@@ -103,7 +104,7 @@ class MarkerManager {
             html: markerHTML,
             className: '',
             iconSize: [32, 48],
-            iconAnchor: [38, 52]
+            iconAnchor: [16, 48]
         });
 
         this.currentMarker = L.marker([lat, lng], { icon: markerIcon }).addTo(map);

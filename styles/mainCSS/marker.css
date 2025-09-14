@@ -1,15 +1,13 @@
-/* Optimized marker styles with streamlined animations */
+/* Streamlined marker styles with snappier animations */
 .custom-marker {
   position: relative;
-  width: 3vw;
-  height: 4vh;
+  width: 32px;
+  height: 48px;
   cursor: pointer;
   z-index: 1000;
   transform-origin: 50% 100%;
-  filter: drop-shadow(2px 3px 4px rgba(0,0,0,0.25));
-  will-change: transform, opacity;
-  backface-visibility: hidden;
-  animation: grow-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3));
+  animation: marker-appear 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
 }
 
 .marker-svg {
@@ -19,31 +17,222 @@
 }
 
 .marker-body {
-  fill: var(--light-green, #4ade80);
-  stroke: var(--dark-green, #16a34a);
+  fill: var(--light-green, #10b981);
+  stroke: var(--dark-green, #059669);
   stroke-width: 2;
 }
 
 .marker-pin {
-  fill: var(--dark-green, #16a34a);
+  fill: var(--dark-green, #059669);
 }
 
-@keyframes grow-in {
+@keyframes marker-appear {
   0% {
-    transform: scaleY(0.3) scaleX(0.5);
+    transform: scale(0) translateY(-20px);
     opacity: 0;
   }
-  60% {
-    transform: scaleY(1.1) scaleX(1.05);
+  70% {
+    transform: scale(1.15) translateY(2px);
     opacity: 1;
   }
   100% {
-    transform: scaleY(1) scaleX(1);
+    transform: scale(1) translateY(0);
     opacity: 1;
   }
 }
 
-/* Simplified splat animations */
+/* Snappy splat animation */
+.marker-splat {
+  animation: marker-splat 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes marker-splat {
+  0% {
+    transform: scale(0) rotate(-10deg);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.2) rotate(5deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+/* Correct location flag with simplified design */
+.correct-location-marker {
+  position: relative;
+  width: 36px;
+  height: 48px;
+  cursor: pointer;
+  z-index: 2000;
+  transform-origin: 50% 100%;
+  filter: drop-shadow(0 3px 10px rgba(0,0,0,0.4));
+}
+
+.flag-entrance {
+  animation: flag-drop 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes flag-drop {
+  0% {
+    transform: translateY(-40px) scale(0.8);
+    opacity: 0;
+  }
+  50% {
+    transform: translateY(5px) scale(1.05);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+.flag-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.flag-pole {
+  fill: #8B4513;
+  stroke: #654321;
+  stroke-width: 0.5;
+}
+
+.flag-fabric {
+  fill: #ef4444;
+  stroke: #dc2626;
+  stroke-width: 1;
+  transform-origin: 8px center;
+  animation: flag-flutter 2s ease-in-out infinite;
+}
+
+@keyframes flag-flutter {
+  0%, 100% { 
+    transform: scaleX(1); 
+  }
+  50% { 
+    transform: scaleX(0.95) skewX(-2deg); 
+  }
+}
+
+.flag-fabric:hover {
+  animation: flag-flutter-fast 0.8s ease-in-out infinite;
+}
+
+@keyframes flag-flutter-fast {
+  0%, 100% { 
+    transform: scaleX(1); 
+  }
+  25% { 
+    transform: scaleX(0.9) skewX(-3deg); 
+  }
+  75% { 
+    transform: scaleX(1.05) skewX(2deg); 
+  }
+}
+
+/* Connecting line styles - LOWER Z-INDEX */
+.stippled-line-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 500; /* Lower than markers */
+}
+
+.line-svg {
+  width: 100%;
+  height: 100%;
+}
+
+.stippled-path {
+  fill: none;
+  stroke: #374151;
+  stroke-width: 3;
+  stroke-opacity: 0.85;
+  stroke-dasharray: 6 8;
+  stroke-linecap: round;
+  filter: drop-shadow(0 1px 3px rgba(0,0,0,0.2));
+}
+
+/* Container cleanup with enforced z-index */
+.guess-marker-container {
+  background: none !important;
+  border: none !important;
+  z-index: 1000 !important;
+}
+
+.correct-marker-container {
+  background: none !important;
+  border: none !important;
+  z-index: 2000 !important;
+}
+
+/* Leaflet marker pane z-index override */
+.leaflet-marker-pane {
+  z-index: 600 !important; /* Above line overlay but below controls */
+}
+
+.leaflet-marker-pane .leaflet-marker-icon {
+  z-index: inherit;
+}
+
+/* Ensure guess markers are above lines */
+.leaflet-marker-pane .guess-marker-container {
+  z-index: 1000 !important;
+}
+
+/* Ensure correct markers are above guess markers */
+.leaflet-marker-pane .correct-marker-container {
+  z-index: 2000 !important;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .custom-marker {
+    width: 28px;
+    height: 42px;
+  }
+  
+  .correct-location-marker {
+    width: 32px;
+    height: 42px;
+  }
+  
+  .flag-pulse-ring {
+    width: 32px;
+    height: 32px;
+    margin-left: -16px;
+    margin-bottom: -16px;
+  }
+  
+  .stippled-path {
+    stroke-width: 2;
+  }
+}
+
+/* Accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .flag-entrance,
+  .marker-appear,
+  .marker-splat,
+  .flag-pulse-ring {
+    animation-duration: 0.2s !important;
+    animation-iteration-count: 1 !important;
+  }
+  
+  .flag-fabric {
+    animation: none !important;
+  }
+}
+
 .splat {
   position: absolute;
   bottom: 0;
@@ -97,177 +286,4 @@
   --x: 8px;
   --y: -20px;
   --r: 12deg;
-}
-
-/* Correct Location Flag Styling */
-.correct-location-marker {
-  position: relative;
-  width: 40px;
-  height: 50px;
-  cursor: pointer;
-  z-index: 2000;
-  transform-origin: 50% 100%;
-  filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.3));
-  will-change: transform, opacity;
-  backface-visibility: hidden;
-}
-
-.flag-entrance {
-  animation: flag-entrance 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-}
-
-@keyframes flag-entrance {
-  0% {
-    transform: translateY(-60px) scaleY(0.3) scaleX(0.9);
-    opacity: 0;
-  }
-  70% {
-    transform: translateY(5px) scaleY(1.05) scaleX(1.02);
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(0) scaleY(1) scaleX(1);
-    opacity: 1;
-  }
-}
-
-.flag-svg {
-  width: 100%;
-  height: 100%;
-  overflow: visible;
-}
-
-.flag-pole {
-  fill: #8B4513;
-  stroke: #654321;
-  stroke-width: 0.5;
-  filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.3));
-}
-
-.flag-fabric {
-  fill: #FF6B6B;
-  stroke: #E53E3E;
-  stroke-width: 1;
-  transform-origin: 8px center;
-  filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));
-  animation: flag-wave 2.5s ease-in-out infinite;
-}
-
-@keyframes flag-wave {
-  0%, 100% { transform: scaleX(1); }
-  25% { transform: scaleX(0.98); }
-  50% { transform: scaleX(0.95); }
-  75% { transform: scaleX(0.98); }
-}
-
-.flag-fabric:hover {
-  animation: flag-wave-fast 1.2s ease-in-out infinite;
-}
-
-@keyframes flag-wave-fast {
-  0%, 100% { transform: scaleX(1); }
-  20% { transform: scaleX(0.92); }
-  40% { transform: scaleX(1.03); }
-  60% { transform: scaleX(0.95); }
-  80% { transform: scaleX(1.02); }
-}
-
-/* Pulse ring effects */
-.flag-pulse-ring,
-.flag-pulse-ring-delayed {
-  position: absolute;
-  bottom: 5px;
-  left: 50%;
-  border: 2px solid #FF6B6B;
-  border-radius: 50%;
-  opacity: 0;
-  will-change: transform, opacity;
-  backface-visibility: hidden;
-}
-
-.flag-pulse-ring {
-  width: 50px;
-  height: 50px;
-  margin-left: -25px;
-  margin-bottom: -25px;
-  animation: flag-pulse 2.5s infinite 1s;
-}
-
-.flag-pulse-ring-delayed {
-  width: 70px;
-  height: 70px;
-  margin-left: -35px;
-  margin-bottom: -35px;
-  animation: flag-pulse 2.5s infinite 1.4s;
-}
-
-@keyframes flag-pulse {
-  0% {
-    transform: scale(0.4);
-    opacity: 0.8;
-  }
-  70% {
-    transform: scale(1);
-    opacity: 0.3;
-  }
-  100% {
-    transform: scale(1.2);
-    opacity: 0;
-  }
-}
-
-/* Connecting line styles */
-.connecting-line,
-.connecting-line-glow {
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.connecting-line {
-  transition: opacity 0.2s ease;
-}
-
-/* Container styles */
-.guess-marker-container,
-.correct-marker-container {
-  background: none !important;
-  border: none !important;
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .custom-marker {
-    width: 6vw;
-    height: 6vh;
-  }
-  
-  .flag-pulse-ring {
-    width: 40px;
-    height: 40px;
-    margin-left: -20px;
-    margin-bottom: -20px;
-  }
-  
-  .flag-pulse-ring-delayed {
-    width: 55px;
-    height: 55px;
-    margin-left: -27.5px;
-    margin-bottom: -27.5px;
-  }
-}
-
-/* Accessibility - Reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .flag-entrance,
-  .custom-marker,
-  .flag-pulse-ring,
-  .flag-pulse-ring-delayed,
-  .splat {
-    animation-duration: 0.1s !important;
-    animation-iteration-count: 1 !important;
-  }
-  
-  .flag-fabric {
-    animation: none !important;
-  }
 }
