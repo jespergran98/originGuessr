@@ -1,40 +1,15 @@
+/* Optimized marker styles with streamlined animations */
 .custom-marker {
   position: relative;
   width: 3vw;
   height: 4vh;
   cursor: pointer;
   z-index: 1000;
-}
-
-.marker-svg {
-  width: 100%;
-  height: 100%;
-}
-
-.marker-body {
-  fill: var(--light-green);
-  stroke: var(--dark-green);
-  stroke-width: 2;
-}
-
-.custom-marker {
   transform-origin: 50% 100%;
-  animation: grow-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-}
-
-@keyframes grow-in {
-  0% {
-    transform: scaleY(0.3) scaleX(0.5);
-    opacity: 0;
-  }
-  70% {
-    transform: scaleY(1.1) scaleX(1.1);
-    opacity: 1;
-  }
-  100% {
-    transform: scaleY(1) scaleX(1);
-    opacity: 1;
-  }
+  filter: drop-shadow(2px 3px 4px rgba(0,0,0,0.25));
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  animation: grow-in 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
 .marker-svg {
@@ -44,15 +19,31 @@
 }
 
 .marker-body {
-  fill: var(--light-green);
-  stroke: var(--dark-green);
+  fill: var(--light-green, #4ade80);
+  stroke: var(--dark-green, #16a34a);
   stroke-width: 2;
 }
 
 .marker-pin {
-  fill: var(--dark-green);
+  fill: var(--dark-green, #16a34a);
 }
 
+@keyframes grow-in {
+  0% {
+    transform: scaleY(0.3) scaleX(0.5);
+    opacity: 0;
+  }
+  60% {
+    transform: scaleY(1.1) scaleX(1.05);
+    opacity: 1;
+  }
+  100% {
+    transform: scaleY(1) scaleX(1);
+    opacity: 1;
+  }
+}
+
+/* Simplified splat animations */
 .splat {
   position: absolute;
   bottom: 0;
@@ -62,15 +53,16 @@
   margin-left: -7.5px;
   opacity: 0;
   pointer-events: none;
+  animation: splat-out 0.5s ease-out forwards;
 }
 
 .splat svg path {
-  fill: var(--dark-green);
+  fill: var(--dark-green, #16a34a);
 }
 
 @keyframes splat-out {
   0% {
-    transform: translate(0, 0) scale(1) rotate(0deg);
+    transform: translate(0, 0) scale(1);
     opacity: 1;
   }
   100% {
@@ -80,34 +72,31 @@
 }
 
 .splat-1 {
-  animation: splat-out 0.5s ease-out forwards;
-  --x: -25px;
-  --y: -10px;
-  --r: -30deg;
+  animation-delay: 0.25s;
+  --x: -20px;
+  --y: -8px;
+  --r: -25deg;
 }
 
 .splat-2 {
-  animation: splat-out 0.5s ease-out forwards;
-  animation-delay: 0.05s;
-  --x: 25px;
-  --y: -10px;
-  --r: 30deg;
+  animation-delay: 0.3s;
+  --x: 20px;
+  --y: -8px;
+  --r: 25deg;
 }
 
 .splat-3 {
-  animation: splat-out 0.5s ease-out forwards;
-  animation-delay: 0.02s;
-  --x: -10px;
-  --y: -25px;
-  --r: -15deg;
+  animation-delay: 0.27s;
+  --x: -8px;
+  --y: -20px;
+  --r: -12deg;
 }
 
 .splat-4 {
-  animation: splat-out 0.5s ease-out forwards;
-  animation-delay: 0.08s;
-  --x: 10px;
-  --y: -25px;
-  --r: 15deg;
+  animation-delay: 0.32s;
+  --x: 8px;
+  --y: -20px;
+  --r: 12deg;
 }
 
 /* Correct Location Flag Styling */
@@ -118,20 +107,26 @@
   cursor: pointer;
   z-index: 2000;
   transform-origin: 50% 100%;
-  animation: flag-wave-in 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+  filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.3));
+  will-change: transform, opacity;
+  backface-visibility: hidden;
 }
 
-@keyframes flag-wave-in {
+.flag-entrance {
+  animation: flag-entrance 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes flag-entrance {
   0% {
-    transform: scaleY(0.2) scaleX(0.8);
+    transform: translateY(-60px) scaleY(0.3) scaleX(0.9);
     opacity: 0;
   }
-  50% {
-    transform: scaleY(1.1) scaleX(1.05);
-    opacity: 0.8;
+  70% {
+    transform: translateY(5px) scaleY(1.05) scaleX(1.02);
+    opacity: 1;
   }
   100% {
-    transform: scaleY(1) scaleX(1);
+    transform: translateY(0) scaleY(1) scaleX(1);
     opacity: 1;
   }
 }
@@ -146,73 +141,69 @@
   fill: #8B4513;
   stroke: #654321;
   stroke-width: 0.5;
+  filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.3));
 }
 
 .flag-fabric {
   fill: #FF6B6B;
   stroke: #E53E3E;
   stroke-width: 1;
-  animation: flag-wave 2s ease-in-out infinite;
   transform-origin: 8px center;
+  filter: drop-shadow(2px 2px 4px rgba(0,0,0,0.2));
+  animation: flag-wave 2.5s ease-in-out infinite;
 }
 
 @keyframes flag-wave {
-  0%, 100% {
-    transform: scaleX(1);
-  }
-  50% {
-    transform: scaleX(0.95);
-  }
+  0%, 100% { transform: scaleX(1); }
+  25% { transform: scaleX(0.98); }
+  50% { transform: scaleX(0.95); }
+  75% { transform: scaleX(0.98); }
 }
 
 .flag-fabric:hover {
-  animation: flag-wave-fast 1s ease-in-out infinite;
+  animation: flag-wave-fast 1.2s ease-in-out infinite;
 }
 
 @keyframes flag-wave-fast {
-  0%, 100% {
-    transform: scaleX(1);
-  }
-  25% {
-    transform: scaleX(0.9);
-  }
-  75% {
-    transform: scaleX(1.05);
-  }
+  0%, 100% { transform: scaleX(1); }
+  20% { transform: scaleX(0.92); }
+  40% { transform: scaleX(1.03); }
+  60% { transform: scaleX(0.95); }
+  80% { transform: scaleX(1.02); }
 }
 
-/* Flag pulse ring effects */
-.flag-pulse-ring {
-  position: absolute;
-  bottom: 5px;
-  left: 50%;
-  width: 60px;
-  height: 60px;
-  margin-left: -30px;
-  margin-bottom: -30px;
-  border: 3px solid #FF6B6B;
-  border-radius: 50%;
-  opacity: 0;
-  animation: flag-pulse 2s infinite;
-}
-
+/* Pulse ring effects */
+.flag-pulse-ring,
 .flag-pulse-ring-delayed {
   position: absolute;
   bottom: 5px;
   left: 50%;
-  width: 80px;
-  height: 80px;
-  margin-left: -40px;
-  margin-bottom: -40px;
   border: 2px solid #FF6B6B;
   border-radius: 50%;
   opacity: 0;
-  animation: flag-pulse 2s infinite 0.5s;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+}
+
+.flag-pulse-ring {
+  width: 50px;
+  height: 50px;
+  margin-left: -25px;
+  margin-bottom: -25px;
+  animation: flag-pulse 2.5s infinite 1s;
+}
+
+.flag-pulse-ring-delayed {
+  width: 70px;
+  height: 70px;
+  margin-left: -35px;
+  margin-bottom: -35px;
+  animation: flag-pulse 2.5s infinite 1.4s;
 }
 
 @keyframes flag-pulse {
   0% {
-    transform: scale(0.3);
+    transform: scale(0.4);
     opacity: 0.8;
   }
   70% {
@@ -225,44 +216,58 @@
   }
 }
 
-/* Connecting Line Styles */
-.connecting-line {
-  stroke-dasharray: 8, 12;
-  stroke-linecap: round;
-  stroke: #333333 !important;
-  opacity: 0.8 !important;
-  animation: line-draw 1.5s ease-out forwards;
-}
-
+/* Connecting line styles */
+.connecting-line,
 .connecting-line-glow {
-  stroke: #333333 !important;
-  opacity: 0.1 !important;
   stroke-linecap: round;
-  animation: line-draw 1.5s ease-out forwards;
+  stroke-linejoin: round;
 }
 
-@keyframes line-draw {
-  0% {
-    stroke-dashoffset: 100;
-    opacity: 0;
-  }
-  50% {
-    opacity: 0.4;
-  }
-  100% {
-    stroke-dashoffset: 0;
-    opacity: 0.8;
-  }
+.connecting-line {
+  transition: opacity 0.2s ease;
 }
 
-/* Marker container styles */
-.guess-marker-container {
-  background: none !important;
-  border: none !important;
-}
-
+/* Container styles */
+.guess-marker-container,
 .correct-marker-container {
   background: none !important;
   border: none !important;
 }
 
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .custom-marker {
+    width: 6vw;
+    height: 6vh;
+  }
+  
+  .flag-pulse-ring {
+    width: 40px;
+    height: 40px;
+    margin-left: -20px;
+    margin-bottom: -20px;
+  }
+  
+  .flag-pulse-ring-delayed {
+    width: 55px;
+    height: 55px;
+    margin-left: -27.5px;
+    margin-bottom: -27.5px;
+  }
+}
+
+/* Accessibility - Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  .flag-entrance,
+  .custom-marker,
+  .flag-pulse-ring,
+  .flag-pulse-ring-delayed,
+  .splat {
+    animation-duration: 0.1s !important;
+    animation-iteration-count: 1 !important;
+  }
+  
+  .flag-fabric {
+    animation: none !important;
+  }
+}
