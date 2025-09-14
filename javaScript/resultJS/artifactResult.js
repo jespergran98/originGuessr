@@ -326,7 +326,7 @@ class ArtifactResultHandler {
     }
 
     initializeMap() {
-        // Initialize the map showing both guess and correct locations
+        // Initialize the map with basic tile layer only
         if (typeof L === 'undefined') {
             console.warn('Leaflet not loaded, skipping map initialization');
             return;
@@ -347,28 +347,11 @@ class ArtifactResultHandler {
             });
 
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors'
+                attribution: 'Â© OpenStreetMap contributors'
             }).addTo(map);
 
-            // Add marker for correct location (green)
-            const correctMarker = L.marker([this.artifactData.lat, this.artifactData.lng])
-                .addTo(map)
-                .bindPopup(`<b>Correct Location</b><br>${this.artifactData.title}`);
-
-            // Add marker for guessed location (red)
-            const guessMarker = L.marker([this.guessCoordinates.lat, this.guessCoordinates.lng])
-                .addTo(map)
-                .bindPopup('<b>Your Guess</b>');
-
-            // Add line connecting the two points
-            const line = L.polyline([
-                [this.artifactData.lat, this.artifactData.lng],
-                [this.guessCoordinates.lat, this.guessCoordinates.lng]
-            ], {color: 'yellow', weight: 3}).addTo(map);
-
-            // Fit map to show both markers
-            const group = new L.featureGroup([correctMarker, guessMarker, line]);
-            map.fitBounds(group.getBounds().pad(0.1));
+            // Set a default view (can be customized as needed)
+            map.setView([0, 0], 2);
 
             console.log('Map initialized successfully');
         } catch (error) {
