@@ -35,3 +35,137 @@ html, body {
       rgba(5, 30, 20, 0.9) 100%
     );
 }
+
+/* Final Score Display Container */
+.scoreDisplay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  pointer-events: all;
+  text-align: center;
+  color: #ffffff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+.scoreDisplay .score-line {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.2rem;
+  margin: 1rem 0 2rem 0;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+
+.scoreDisplay .final-score-value {
+  font-size: clamp(6rem, 20vw, 16rem);
+  font-weight: 900;
+  background: linear-gradient(45deg, #ffff00, #ffd700, #ffff00, #ffffff);
+  background-size: 200% 200%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: none;
+  filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.6)) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.8));
+  line-height: 1;
+  flex-shrink: 0;
+  animation: scoreShimmer 3s ease-in-out infinite;
+}
+
+.scoreDisplay .score-divider {
+  font-size: clamp(1rem, 4vw, 2rem);
+  font-weight: 600;
+  color: #ffffff;
+  opacity: 0.8;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+/* Button Container */
+.button-container {
+  position: absolute;
+  bottom: 10vh;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  pointer-events: all;
+  display: flex;
+  gap: 2rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 90%;
+  max-width: 800px;
+}
+
+.final-score-button {
+  padding: 1rem 2rem;
+  font-size: clamp(1rem, 2.5vw, 1.25rem);
+  font-weight: 600;
+  border: 2px solid rgba(0, 255, 136, 0.6);
+  background: rgba(0, 40, 20, 0.8);
+  color: #00ff88;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  min-width: 150px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.final-score-button:hover {
+  background: rgba(0, 255, 136, 0.1);
+  border-color: #00ff88;
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 255, 136, 0.3);
+}
+
+.final-score-button:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 10px rgba(0, 255, 136, 0.2);
+}
+
+/* Score Animation Keyframes */
+@keyframes scoreShimmer {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+@keyframes scoreGlow {
+  0%, 100% {
+    filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.6)) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.8));
+  }
+  50% {
+    filter: drop-shadow(0 0 30px rgba(255, 215, 0, 1)) 
+            drop-shadow(0 0 50px rgba(255, 255, 0, 0.8)) 
+            drop-shadow(0 4px 8px rgba(0, 0, 0, 0.8));
+    transform: scale(1.05);
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .button-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    bottom: 8vh;
+  }
+  
+  .final-score-button {
+    width: 80%;
+    max-width: 300px;
+  }
+  
+  .scoreDisplay {
+    width: 90%;
+  }
+}

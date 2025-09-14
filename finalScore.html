@@ -18,10 +18,26 @@
         <div class="overlay-vignette"></div>
         <div class="overlay-mesh"></div>
     </div>
+
+    <!-- Score Display Container -->
+    <div class="scoreDisplay">
+        <div class="score-line">
+            <div class="final-score-value" id="animatedScore">0</div>
+            <div class="score-divider" id="scoreDivider">/50,000</div>
+        </div>
+    </div>
+
+    <!-- Button Container -->
+    <div class="button-container">
+        <button class="final-score-button" id="playAgainBtn">Play Again</button>
+        <button class="final-score-button" id="menuBtn">Menu</button>
+        <button class="final-score-button" id="summaryBtn">Summary</button>
+    </div>
     
     <!-- Load scripts -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="javaScript/mainJS/map.js"></script>
     <script src="javaScript/mainJS/roundLogic.js"></script>
+    <script src="javaScript/finalScoreJS/finalScoreDisplay.js"></script>
 </body>
 </html>
