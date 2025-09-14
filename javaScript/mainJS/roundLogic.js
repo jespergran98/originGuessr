@@ -93,6 +93,8 @@ class RoundLogic {
             return 'guess';
         } else if (path.includes('result.html') || path.endsWith('/result')) {
             return 'result';
+        } else if (path.includes('finalScore.html') || path.endsWith('/finalScore')) {
+            return 'finalScore';
         } else if (path.includes('index.html') || path === '/' || path.endsWith('/')) {
             return 'index';
         }
@@ -125,9 +127,9 @@ class RoundLogic {
         
         if (nextButton) {
             if (this.currentRound >= this.maxRounds) {
-                // Last round - change button to "Summary"
-                nextButton.textContent = 'Summary';
-                nextButton.onclick = () => this.goToSummary();
+                // Last round - change button to "Final Score"
+                nextButton.textContent = 'Final Score';
+                nextButton.onclick = () => this.goToFinalScore();
             } else {
                 // Regular round - keep "Next Round"
                 nextButton.textContent = 'Next Round';
@@ -192,17 +194,26 @@ class RoundLogic {
     }
 
     /**
-     * Handle navigation to summary page (placeholder for now)
+     * Handle navigation to finalScore page with complete game data
      */
-    goToSummary() {
-        console.log('Game completed! Final score:', this.totalScore);
-        console.log('Round scores:', this.roundScores);
+    goToFinalScore() {
+        // First, add the final round's score to our totals
+        const finalRoundScore = this.getCurrentRoundScore();
+        const finalTotalScore = this.totalScore + finalRoundScore;
+        const finalRoundScores = [...this.roundScores, finalRoundScore];
         
-        // For now, just log the completion - you can implement summary page later
-        alert(`Game completed!\nFinal Score: ${this.totalScore.toLocaleString()}\nRounds: ${this.roundScores.join(', ')}`);
+        console.log('Game completed!');
+        console.log('Final total score:', finalTotalScore);
+        console.log('All round scores:', finalRoundScores);
         
-        // Optionally return to index
-        // window.location.href = 'index.html';
+        // Create URL parameters for final score page
+        const params = new URLSearchParams();
+        params.append('totalScore', finalTotalScore.toString());
+        params.append('roundScores', encodeURIComponent(JSON.stringify(finalRoundScores)));
+        params.append('maxRounds', this.maxRounds.toString());
+        
+        // Navigate to final score page
+        window.location.href = `finalScore.html?${params.toString()}`;
     }
 
     /**
@@ -219,6 +230,35 @@ class RoundLogic {
     }
 
     /**
+     * Get final game statistics (used on final score page)
+     */
+    getFinalGameStats() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const totalScore = parseInt(urlParams.get('totalScore')) || 0;
+        const roundScoresParam = urlParams.get('roundScores');
+        const maxRounds = parseInt(urlParams.get('maxRounds')) || this.maxRounds;
+        
+        let roundScores = [];
+        if (roundScoresParam) {
+            try {
+                roundScores = JSON.parse(decodeURIComponent(roundScoresParam));
+            } catch (e) {
+                console.warn('Error parsing final round scores:', e);
+                roundScores = [];
+            }
+        }
+        
+        return {
+            totalScore,
+            roundScores,
+            maxRounds,
+            averageScore: roundScores.length > 0 ? Math.round(totalScore / roundScores.length) : 0,
+            bestRound: roundScores.length > 0 ? Math.max(...roundScores) : 0,
+            worstRound: roundScores.length > 0 ? Math.min(...roundScores) : 0
+        };
+    }
+
+    /**
      * Reset game state (useful for starting over)
      */
     resetGame() {
@@ -226,6 +266,14 @@ class RoundLogic {
         this.totalScore = 0;
         this.roundScores = [];
         console.log('Game reset');
+    }
+
+    /**
+     * Static method to start a new game from any page
+     */
+    static startNewGameFromAnyPage() {
+        // Clear any existing game state and go to round 1
+        window.location.href = 'guess.html?round=1&totalScore=0&scores=[]';
     }
 
     /**

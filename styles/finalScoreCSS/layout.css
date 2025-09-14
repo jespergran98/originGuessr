@@ -1,0 +1,37 @@
+#map {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+  pointer-events: none; /* Makes map immovable */
+}
+
+/* Ensure body and html take full screen */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* Simple Creative Overlay */
+.map-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2;
+  pointer-events: none;
+  background: 
+    radial-gradient(ellipse at top left, rgba(0, 100, 60, 0.2) 0%, transparent 50%),
+    radial-gradient(ellipse at bottom right, rgba(20, 80, 40, 0.15) 0%, transparent 50%),
+    linear-gradient(135deg, 
+      rgba(10, 60, 40, 0.9) 0%, 
+      rgba(30, 80, 60, 0.5) 30%, 
+      rgba(15, 50, 35, 0.5) 70%, 
+      rgba(5, 30, 20, 0.9) 100%
+    );
+}

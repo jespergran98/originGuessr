@@ -309,8 +309,8 @@ class ArtifactResultHandler {
             const maxRounds = 5;
             
             const isLastRound = currentRound >= maxRounds;
-            const buttonText = isLastRound ? 'Summary' : 'Next Round';
-            const buttonAction = isLastRound ? 'window.roundLogic.goToSummary()' : 'window.roundLogic.proceedToNextRound()';
+            const buttonText = isLastRound ? 'Final Score' : 'Next Round';
+            const buttonAction = isLastRound ? 'window.roundLogic.goToFinalScore()' : 'window.roundLogic.proceedToNextRound()';
             
             nextBox.innerHTML = `
                 <div class="next-round-content">

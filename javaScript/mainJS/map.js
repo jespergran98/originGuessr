@@ -1,8 +1,15 @@
 let map;
 
 function initMap() {
+    // Check if we're on the finalScore page by looking at the page title or URL
+    const isFinalScorePage = document.title.includes('Final Score') || 
+                            window.location.pathname.includes('finalScore');
+    
+    // Set minimum zoom based on the page
+    const minZoom = isFinalScorePage ? 3 : 2;
+    
     map = L.map('map', {
-        minZoom: 2,
+        minZoom: minZoom,
         maxBounds: [
             [-90, -1080],
             [90, 1080]
