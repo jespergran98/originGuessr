@@ -303,22 +303,26 @@ class ArtifactResultHandler {
     populateNextButton() {
         const nextBox = document.querySelector('.nextBox');
         if (nextBox) {
+            // Check if this is the last round
+            const urlParams = new URLSearchParams(window.location.search);
+            const currentRound = parseInt(urlParams.get('round')) || 1;
+            const maxRounds = 5;
+            
+            const isLastRound = currentRound >= maxRounds;
+            const buttonText = isLastRound ? 'Summary' : 'Next Round';
+            const buttonAction = isLastRound ? 'window.roundLogic.goToSummary()' : 'window.roundLogic.proceedToNextRound()';
+            
             nextBox.innerHTML = `
                 <div class="next-round-content">
-                    <button class="next-round-button" onclick="this.startNextRound()">
-                        Next Round
+                    <button class="next-round-button" onclick="${buttonAction}">
+                        ${buttonText}
                     </button>
                 </div>
             `;
-            console.log('Next button populated');
+            console.log(`Next button populated: ${buttonText} for round ${currentRound}`);
         } else {
             console.warn('Next box not found');
         }
-    }
-
-    startNextRound() {
-        // Navigate back to the main game page for another round
-        window.location.href = 'index.html';
     }
 
     initializeMap() {

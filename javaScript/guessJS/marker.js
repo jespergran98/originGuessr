@@ -54,6 +54,14 @@ class MarkerManager {
         params.append('guessLng', this.guessCoordinates.lng.toString());
         params.append('guessYear', guessYear.toString());
         
+        // Add round information if available
+        if (window.roundLogic) {
+            const gameStats = window.roundLogic.getGameStats();
+            params.append('round', gameStats.currentRound.toString());
+            params.append('totalScore', gameStats.totalScore.toString());
+            params.append('scores', encodeURIComponent(JSON.stringify(gameStats.roundScores)));
+        }
+        
         console.log('Navigating with artifact:', artifact.title);
         console.log('Guessed year:', guessYear);
         window.location.href = `result.html?${params.toString()}`;
