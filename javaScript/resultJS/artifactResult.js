@@ -347,7 +347,7 @@ class ArtifactResultHandler {
             });
 
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: 'Â© OpenStreetMap contributors'
+                attribution: '© OpenStreetMap contributors'
             }).addTo(map);
 
             // Set a default view (can be customized as needed)
