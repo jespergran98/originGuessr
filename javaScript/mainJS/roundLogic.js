@@ -5,6 +5,7 @@ class RoundLogic {
         this.currentRound = 1;
         this.totalScore = 0;
         this.roundScores = [];
+        this.usedArtifacts = [];
         this.gameData = {
             rounds: [],
             totalScore: 0,
@@ -34,6 +35,7 @@ class RoundLogic {
         const roundParam = urlParams.get('round');
         const scoreParam = urlParams.get('totalScore');
         const scoresParam = urlParams.get('scores');
+        const usedArtifactsParam = urlParams.get('usedArtifacts');
 
         if (roundParam && scoreParam) {
             // Continue existing game
@@ -48,8 +50,18 @@ class RoundLogic {
                     this.roundScores = [];
                 }
             }
+
+            if (usedArtifactsParam) {
+                try {
+                    this.usedArtifacts = JSON.parse(decodeURIComponent(usedArtifactsParam));
+                } catch (e) {
+                    console.warn('Error parsing used artifacts:', e);
+                    this.usedArtifacts = [];
+                }
+            }
             
             console.log(`Continuing game - Round ${this.currentRound}, Total Score: ${this.totalScore}`);
+            console.log('Used artifacts:', this.usedArtifacts);
         } else {
             // Start new game
             this.startNewGame();
@@ -63,6 +75,7 @@ class RoundLogic {
         this.currentRound = 1;
         this.totalScore = 0;
         this.roundScores = [];
+        this.usedArtifacts = [];
         console.log('Starting new game');
     }
 
@@ -151,10 +164,18 @@ class RoundLogic {
         this.totalScore += currentRoundScore;
         this.roundScores.push(currentRoundScore);
         
+        // Add current artifact to used artifacts list if available
+        if (window.currentArtifact && window.currentArtifact.id) {
+            if (!this.usedArtifacts.includes(window.currentArtifact.id)) {
+                this.usedArtifacts.push(window.currentArtifact.id);
+            }
+        }
+        
         // Move to next round
         this.currentRound++;
         
         console.log(`Proceeding to round ${this.currentRound} with total score: ${this.totalScore}`);
+        console.log('Used artifacts after this round:', this.usedArtifacts);
         
         // Navigate to guess page with updated parameters
         this.navigateToGuessPage();
@@ -190,6 +211,11 @@ class RoundLogic {
         params.append('totalScore', this.totalScore.toString());
         params.append('scores', encodeURIComponent(JSON.stringify(this.roundScores)));
         
+        // Include used artifacts to prevent duplicates
+        if (this.usedArtifacts.length > 0) {
+            params.append('usedArtifacts', encodeURIComponent(JSON.stringify(this.usedArtifacts)));
+        }
+        
         window.location.href = `guess.html?${params.toString()}`;
     }
 
@@ -202,9 +228,17 @@ class RoundLogic {
         const finalTotalScore = this.totalScore + finalRoundScore;
         const finalRoundScores = [...this.roundScores, finalRoundScore];
         
+        // Add final artifact to used artifacts if available
+        if (window.currentArtifact && window.currentArtifact.id) {
+            if (!this.usedArtifacts.includes(window.currentArtifact.id)) {
+                this.usedArtifacts.push(window.currentArtifact.id);
+            }
+        }
+        
         console.log('Game completed!');
         console.log('Final total score:', finalTotalScore);
         console.log('All round scores:', finalRoundScores);
+        console.log('All used artifacts:', this.usedArtifacts);
         
         // Create URL parameters for final score page
         const params = new URLSearchParams();
@@ -225,6 +259,7 @@ class RoundLogic {
             maxRounds: this.maxRounds,
             totalScore: this.totalScore,
             roundScores: this.roundScores,
+            usedArtifacts: this.usedArtifacts,
             isLastRound: this.currentRound >= this.maxRounds
         };
     }
@@ -265,6 +300,7 @@ class RoundLogic {
         this.currentRound = 1;
         this.totalScore = 0;
         this.roundScores = [];
+        this.usedArtifacts = [];
         console.log('Game reset');
     }
 
