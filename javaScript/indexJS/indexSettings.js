@@ -2,6 +2,9 @@ class IndexGameSettings {
     constructor() {
         this.buttonManager = new ButtonManager();
         
+        // Timer increments in seconds
+        this.timerIncrements = [15, 20, 30, 45, 60, 90, 120, 180, 240, 300, 420, 600];
+        
         // Historical timeframe increments
         this.timeframeIncrements = [
             "5 Million BC",
@@ -31,6 +34,7 @@ class IndexGameSettings {
         this.initializeSliders();
         this.initializeAnimations();
         this.createTimeframeTicks();
+        this.createTimerTicks();
     }
 
     initializeElements() {
@@ -54,6 +58,19 @@ class IndexGameSettings {
     setDefaultStates() {
         this.buttonManager.setDefaultActive(this.timerButtons, '[data-timer="no"]');
         this.buttonManager.setDefaultActive(this.timeframeButtons, '[data-timeframe="unspecified"]');
+
+        // Set timer slider min/max and default values
+        if (this.timeRange) {
+            const maxIndex = this.timerIncrements.length - 1;
+            
+            // Set min and max values (0-based index)
+            this.timeRange.min = 0;
+            this.timeRange.max = maxIndex;
+            
+            // Set default value to 60 seconds (index 4)
+            const defaultIndex = this.timerIncrements.indexOf(60);
+            this.timeRange.value = defaultIndex !== -1 ? defaultIndex : 4;
+        }
 
         // Set timeframe slider min/max and default values
         if (this.timeframeMin && this.timeframeMax) {
@@ -82,6 +99,46 @@ class IndexGameSettings {
             AnimationUtils.slideIn(this.timeframeSlider);
         } else {
             AnimationUtils.slideOut(this.timeframeSlider);
+        }
+    }
+
+    createTimerTicks() {
+        if (!this.timeSlider) return;
+        
+        const tickContainer = document.createElement('div');
+        tickContainer.className = 'timer-ticks';
+        
+        const sliderContainer = this.timeSlider.querySelector('.slider-container');
+        if (sliderContainer) {
+            sliderContainer.appendChild(tickContainer);
+            
+            this.timerIncrements.forEach((seconds, index) => {
+                const percentage = (index / (this.timerIncrements.length - 1)) * 100;
+                
+                // Create tick mark - make every 3rd tick major
+                const tick = document.createElement('div');
+                tick.className = `tick-mark ${index % 3 === 0 ? 'major' : ''}`;
+                tick.style.left = `${percentage}%`;
+                tickContainer.appendChild(tick);
+                
+                // Create tick label for major ticks and last tick
+                if (index % 3 === 0 || index === this.timerIncrements.length - 1) {
+                    const label = document.createElement('div');
+                    label.className = 'tick-label';
+                    
+                    // Format label based on seconds
+                    if (seconds < 60) {
+                        label.textContent = `${seconds}s`;
+                    } else {
+                        const mins = Math.floor(seconds / 60);
+                        const rem = seconds % 60;
+                        label.textContent = rem === 0 ? `${mins}m` : `${mins}m${rem}s`;
+                    }
+                    
+                    label.style.left = `${percentage}%`;
+                    tickContainer.appendChild(label);
+                }
+            });
         }
     }
 
@@ -169,20 +226,27 @@ class IndexGameSettings {
         }
     }
 
+    formatTimeLabel(seconds) {
+        if (seconds < 60) return seconds + " seconds";
+        let mins = Math.floor(seconds / 60);
+        let rem = seconds % 60;
+        return (rem === 0) ? (mins + " minute" + (mins > 1 ? "s" : "")) : (mins + " minute" + (mins > 1 ? "s" : "") + " " + rem + " seconds");
+    }
+
     updateTimerSlider() {
         if (!this.timeRange || !this.timerFill || !this.timeLabel) return;
 
-        const value = parseInt(this.timeRange.value);
-        const min = parseInt(this.timeRange.min);
-        const max = parseInt(this.timeRange.max);
-        const percentage = ((value - min) / (max - min)) * 100;
+        const index = parseInt(this.timeRange.value);
+        const seconds = this.timerIncrements[index];
+        const maxIndex = this.timerIncrements.length - 1;
+        const percentage = (index / maxIndex) * 100;
 
         requestAnimationFrame(() => {
             this.timerFill.style.width = `${percentage}%`;
             if (this.timerGlow) {
                 this.timerGlow.style.width = `${percentage}%`;
             }
-            this.updateLabel(this.timeLabel, `${value} seconds`);
+            this.updateLabel(this.timeLabel, this.formatTimeLabel(seconds));
         });
     }
 
@@ -267,6 +331,20 @@ class IndexGameSettings {
     resetLetterHover(letter) {
         letter.style.transform = 'translateY(0) scale(1) rotateZ(0deg)';
         letter.style.filter = 'brightness(1)';
+    }
+
+    // Utility method to get current timer selection as readable value
+    getTimerSelection() {
+        if (!this.timeRange) return null;
+        
+        const index = parseInt(this.timeRange.value);
+        const seconds = this.timerIncrements[index];
+        
+        return {
+            seconds: seconds,
+            formatted: this.formatTimeLabel(seconds),
+            index: index
+        };
     }
 
     // Utility method to get current timeframe selection as readable values
