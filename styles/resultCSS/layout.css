@@ -114,7 +114,8 @@ body {
 /* Right Column Elements */
 .imageResultBox {
     flex: 1;
-    background-color: var(--placeholder-color);
+    background-color: var(--dark-green-hover);
+    border-radius: 3vh;
     min-height: 200px;
 }
 

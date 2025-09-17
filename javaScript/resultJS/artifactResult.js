@@ -171,23 +171,115 @@ class ArtifactResultHandler {
         }
     }
 
-    populateImage() {
-        const imageResultBox = document.querySelector('.imageResultBox');
-        if (imageResultBox && this.artifactData.image) {
-            imageResultBox.innerHTML = `
-                <div class="artifact-image-container">
-                    <img src="${this.escapeHtml(this.artifactData.image)}" 
-                         alt="${this.escapeHtml(this.artifactData.title)}" 
-                         class="artifact-result-image"
-                         onload="console.log('Image loaded successfully')"
-                         onerror="console.error('Image failed to load:', this.src)">
-                </div>
-            `;
-            console.log('Image populated');
-        } else {
-            console.warn('Image box not found or no image data');
+populateImage() {
+    const imageResultBox = document.querySelector('.imageResultBox');
+    if (imageResultBox && this.artifactData.image) {
+        // Create image wrapper div
+        const imageWrapper = document.createElement('div');
+        imageWrapper.className = 'artifact-image-container';
+        imageWrapper.style.cssText = `
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-sizing: border-box;
+            position: relative;
+            margin: 0;
+            padding: 0;
+        `;
+        
+        // Create image element
+        const img = document.createElement('img');
+        img.src = this.artifactData.image;
+        img.alt = this.artifactData.title;
+        img.className = 'artifact-result-image';
+        
+        // Function to apply border radius based on actual rendered image size
+        const applyImageBorderRadius = () => {
+            const containerRect = imageWrapper.getBoundingClientRect();
+            const containerWidth = containerRect.width;
+            const containerHeight = containerRect.height;
+            
+            // Get image natural dimensions
+            const naturalWidth = img.naturalWidth;
+            const naturalHeight = img.naturalHeight;
+            
+            if (naturalWidth && naturalHeight) {
+                // Calculate the rendered size based on object-fit: contain logic
+                const containerAspect = containerWidth / containerHeight;
+                const imageAspect = naturalWidth / naturalHeight;
+                
+                let renderedWidth, renderedHeight;
+                
+                if (imageAspect > containerAspect) {
+                    // Image is wider than container aspect ratio - fit to width
+                    renderedWidth = containerWidth;
+                    renderedHeight = containerWidth / imageAspect;
+                } else {
+                    // Image is taller than container aspect ratio - fit to height
+                    renderedHeight = containerHeight;
+                    renderedWidth = containerHeight * imageAspect;
+                }
+                
+                // The image should be centered vertically due to align-items: center
+                // Calculate the center position (this matches flexbox align-items: center behavior)
+                const topOffset = (containerHeight - renderedHeight) / 2;
+                
+                // Create a clipping element that matches the actual image size
+                const clipElement = document.createElement('div');
+                clipElement.style.cssText = `
+                    position: absolute;
+                    centered: 0;
+                    top: ${topOffset}px;
+                    width: ${renderedWidth}px;
+                    height: ${renderedHeight}px;
+                    border-radius: 3vh;
+                    overflow: hidden;
+                    pointer-events: none;
+                `;
+                
+                // Move the image into the clip element and reset its styles
+                img.style.cssText = `
+                    width: ${renderedWidth}px;
+                    height: ${renderedHeight}px;
+                    object-fit: cover;
+                    object-position: center;
+                    border-radius: 3vh;
+                `;
+                
+                clipElement.appendChild(img);
+                imageWrapper.appendChild(clipElement);
+            }
+        };
+        
+        // Wait for image to load, then apply border radius
+        img.onload = () => {
+            console.log('Image loaded successfully');
+            applyImageBorderRadius();
+        };
+        
+        img.onerror = () => {
+            console.error('Image failed to load:', img.src);
+        };
+        
+        // Append image to wrapper first (will be moved by applyImageBorderRadius)
+        imageWrapper.appendChild(img);
+        
+        // Clear existing content and add the new wrapper
+        imageResultBox.innerHTML = '';
+        imageResultBox.appendChild(imageWrapper);
+        
+        // If image is already loaded (cached), apply border radius immediately
+        if (img.complete && img.naturalWidth) {
+            applyImageBorderRadius();
         }
+        
+        console.log('Image populated with border-radius fix');
+    } else {
+        console.warn('Image box not found or no image data');
     }
+}
 
     populateAttribution() {
         const attributeBox = document.querySelector('.attributeBox');

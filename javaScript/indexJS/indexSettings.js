@@ -10,10 +10,7 @@ class IndexGameSettings {
             "5 Million BC",
             "500,000 BC", 
             "100,000 BC",
-            "50,000 BC",
             "10,000 BC",
-            "5,000 BC",
-            "2,500 BC",
             "1,000 BC",
             "0",
             "500 AD",
@@ -21,17 +18,15 @@ class IndexGameSettings {
             "1000 AD",
             "1250 AD",
             "1500 AD",
-            "1650 AD",
-            "1800 AD",
+            "1750 AD",
             "1900 AD",
-            "2000 AD",
             "2025 AD"
         ];
         
         // Corresponding years for timeframe filtering
         this.timeframeYears = [
-            -5000000, -500000, -100000, -50000, -10000, -5000, -2500, -1000, 0,
-            500, 750, 1000, 1250, 1500, 1650, 1800, 1900, 2000, 2025
+            -5000000, -500000, -100000, -10000, -1000, 0,
+            500, 750, 1000, 1250, 1500, 1750, 1900, 2025
         ];
         
         this.initializeElements();
