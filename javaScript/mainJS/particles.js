@@ -9,7 +9,7 @@ class ParticleSystem {
 
         this.ctx = this.canvas.getContext('2d');
         this.particles = [];
-        this.particleCount = window.innerWidth < 768 ? 30 : 50;
+        this.particleCount = window.innerWidth < 768 ? 50 : 75;
         this.particlesActive = true;
         this.animationId = null;
         
