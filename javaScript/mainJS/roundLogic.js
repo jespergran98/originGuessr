@@ -127,6 +127,7 @@ class RoundLogic {
         this.usedArtifacts = [];
         this.timeframeMinIndex = null;
         this.timeframeMaxIndex = null;
+        sessionStorage.removeItem('gameArtifacts'); // Clear previous game artifacts
         console.log('Starting new game');
     }
 
@@ -215,7 +216,7 @@ class RoundLogic {
         this.totalScore += currentRoundScore;
         this.roundScores.push(currentRoundScore);
         
-        // Add current artifact to used artifacts list if available (using title since no id)
+        // Add current artifact to used artifacts list if available (using title)
         if (window.currentArtifact && window.currentArtifact.title) {
             if (!this.usedArtifacts.includes(window.currentArtifact.title)) {
                 this.usedArtifacts.push(window.currentArtifact.title);
@@ -309,6 +310,9 @@ class RoundLogic {
         console.log('All round scores:', finalRoundScores);
         console.log('All used artifacts:', this.usedArtifacts);
         
+        // Clear game artifacts from sessionStorage
+        sessionStorage.removeItem('gameArtifacts');
+        
         // Create URL parameters for final score page
         const params = new URLSearchParams();
         params.append('totalScore', finalTotalScore.toString());
@@ -372,6 +376,7 @@ class RoundLogic {
         this.usedArtifacts = [];
         this.timeframeMinIndex = null;
         this.timeframeMaxIndex = null;
+        sessionStorage.removeItem('gameArtifacts');
         console.log('Game reset');
     }
 
@@ -380,6 +385,7 @@ class RoundLogic {
      */
     static startNewGameFromAnyPage() {
         // Clear any existing game state and go to round 1
+        sessionStorage.removeItem('gameArtifacts');
         window.location.href = 'guess.html?round=1&totalScore=0&scores=[]';
     }
 
@@ -388,6 +394,7 @@ class RoundLogic {
      */
     static startNewGameFromIndex() {
         // Clear any existing game state and go to round 1
+        sessionStorage.removeItem('gameArtifacts');
         window.location.href = 'guess.html?round=1&totalScore=0&scores=[]';
     }
 }

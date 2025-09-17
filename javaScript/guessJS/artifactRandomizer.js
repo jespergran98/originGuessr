@@ -1,4 +1,3 @@
-// Load and display random artifact when page loads
 document.addEventListener('DOMContentLoaded', function() {
     fetch('assets/artifactList.json')
         .then(response => response.json())
@@ -11,9 +10,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 500, 750, 1000, 1250, 1500, 1650, 1800, 1900, 2000, 2025
             ];
             
-            // Get used artifacts from URL parameters
+            // Get URL parameters
             const urlParams = new URLSearchParams(window.location.search);
             const usedArtifactsParam = urlParams.get('usedArtifacts');
+            const round = parseInt(urlParams.get('round')) || 1;
             let usedArtifacts = [];
             
             if (usedArtifactsParam) {
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const minIndexStr = urlParams.get('timeframeMinIndex');
             const maxIndexStr = urlParams.get('timeframeMaxIndex');
             let availableArtifacts = artifacts.filter(artifact => 
-                !usedArtifacts.includes(artifact.title) // Use title as ID for filtering
+                !usedArtifacts.includes(artifact.title)
             );
             
             if (minIndexStr !== null && maxIndexStr !== null) {
@@ -45,82 +45,197 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log(`Filtering artifacts to timeframe: ${minYear} to ${maxYear}`);
             }
             
-            if (availableArtifacts.length === 0) {
-                console.error('No available artifacts remaining');
+            // Check if there are enough artifacts for a full game
+            if (availableArtifacts.length < 5) {
+                console.error('Not enough available artifacts for a full game');
+                const guessBox = document.querySelector('.guessBox');
+                guessBox.innerHTML = ''; // Clear any existing content
+                const errorMessage = document.createElement('div');
+                errorMessage.textContent = 'The selected timeframe does not contain enough artifacts';
+                errorMessage.style.cssText = `
+                    color: #fff;
+                    font-size: 1.2rem;
+                    text-align: center;
+                    padding: 20px;
+                    background-color: rgba(255, 0, 0, 0.2);
+                    border-radius: 8px;
+                    margin: 20px;
+                `;
+                guessBox.appendChild(errorMessage);
                 return;
             }
             
-            // Function to select and validate artifact
-            function selectValidArtifact(attempts = 0) {
-                if (attempts >= availableArtifacts.length) {
-                    console.error('No valid artifacts found after checking all available options');
-                    return;
+            // Check for pre-selected artifacts for the game
+            let gameArtifacts = [];
+            if (round === 1) {
+                // First round: Select 5 unique artifacts and validate images
+                // Shuffle and select 5 unique artifacts
+                const shuffled = availableArtifacts.sort(() => 0.5 - Math.random());
+                const selectedArtifacts = shuffled.slice(0, 5);
+                
+                // Preload all images in parallel
+                Promise.all(selectedArtifacts.map(artifact => 
+                    new Promise((resolve, reject) => {
+                        const img = new Image();
+                        img.onload = () => resolve(artifact);
+                        img.onerror = () => reject(new Error(`Failed to load image for ${artifact.title}`));
+                        img.src = artifact.image;
+                    })
+                ))
+                .then(validArtifacts => {
+                    // Store valid artifacts in sessionStorage
+                    gameArtifacts = validArtifacts;
+                    sessionStorage.setItem('gameArtifacts', JSON.stringify(gameArtifacts));
+                    console.log('Selected and validated new game artifacts:', gameArtifacts.map(a => a.title));
+                    displayCurrentArtifact(gameArtifacts, round);
+                })
+                .catch(error => {
+                    console.warn('Some artifacts failed to load:', error);
+                    // Remove invalid artifacts and try to select new ones
+                    const failedTitles = error.message.match(/Failed to load image for ([^,]+)/g) || [];
+                    const failedTitlesClean = failedTitles.map(title => title.replace('Failed to load image for ', ''));
+                    const remainingArtifacts = availableArtifacts.filter(a => !failedTitlesClean.includes(a.title));
+                    
+                    if (remainingArtifacts.length < 5) {
+                        console.error('Not enough valid artifacts remaining after validation');
+                        const guessBox = document.querySelector('.guessBox');
+                        guessBox.innerHTML = ''; // Clear any existing content
+                        const errorMessage = document.createElement('div');
+                        errorMessage.textContent = 'The selected timeframe does not contain enough artifacts';
+                        errorMessage.style.cssText = `
+                            color: #fff;
+                            font-size: 1.2rem;
+                            text-align: center;
+                            padding: 20px;
+                            background-color: rgba(255, 0, 0, 0.2);
+                            border-radius: 8px;
+                            margin: 20px;
+                        `;
+                        guessBox.appendChild(errorMessage);
+                        return;
+                    }
+                    
+                    // Select new artifacts to replace invalid ones
+                    const newShuffled = remainingArtifacts.sort(() => 0.5 - Math.random());
+                    gameArtifacts = newShuffled.slice(0, 5);
+                    sessionStorage.setItem('gameArtifacts', JSON.stringify(gameArtifacts));
+                    console.log('Selected new game artifacts after validation failure:', gameArtifacts.map(a => a.title));
+                    displayCurrentArtifact(gameArtifacts, round);
+                });
+            } else {
+                // Subsequent rounds: Retrieve pre-selected artifacts
+                const storedArtifacts = sessionStorage.getItem('gameArtifacts');
+                if (storedArtifacts) {
+                    try {
+                        gameArtifacts = JSON.parse(storedArtifacts);
+                        console.log('Retrieved game artifacts:', gameArtifacts.map(a => a.title));
+                    } catch (e) {
+                        console.warn('Error parsing stored game artifacts:', e);
+                        gameArtifacts = [];
+                    }
                 }
                 
-                const randomIndex = Math.floor(Math.random() * availableArtifacts.length);
-                const randomArtifact = availableArtifacts[randomIndex];
-                
-                // Test if image loads successfully
-                const img = document.createElement('img');
-                
-                img.onload = function() {
-                    // Image loaded successfully, use this artifact
-                    displayArtifact(randomArtifact);
-                };
-                
-                img.onerror = function() {
-                    console.warn(`Broken image for artifact: ${randomArtifact.title}, trying another...`);
-                    // Remove this artifact from available list and try again
-                    availableArtifacts.splice(randomIndex, 1);
-                    selectValidArtifact(attempts + 1);
-                };
-                
-                // Start loading the image
-                img.src = randomArtifact.image;
-            }
-            
-            function displayArtifact(artifact) {
-                // Store artifact globally for easy access
-                window.currentArtifact = artifact;
-                
-                const guessBox = document.querySelector('.guessBox');
-                const img = document.createElement('img');
-                img.src = artifact.image;
-                img.alt = artifact.title;
-                
-                guessBox.appendChild(img);
-                
-                // Update attribution box
-                updateAttribution(artifact);
-                
-                // Add this artifact to used list
-                if (!usedArtifacts.includes(artifact.title)) {
-                    usedArtifacts.push(artifact.title);
+                if (gameArtifacts.length === 0) {
+                    console.error('No stored game artifacts found, falling back to random selection');
+                    if (availableArtifacts.length < 5) {
+                        console.error('Not enough available artifacts remaining');
+                        const guessBox = document.querySelector('.guessBox');
+                        guessBox.innerHTML = ''; // Clear any existing content
+                        const errorMessage = document.createElement('div');
+                        errorMessage.textContent = 'The selected timeframe does not contain enough artifacts';
+                        errorMessage.style.cssText = `
+                            color: #fff;
+                            font-size: 1.2rem;
+                            text-align: center;
+                            padding: 20px;
+                            background-color: rgba(255, 0, 0, 0.2);
+                            border-radius: 8px;
+                            margin: 20px;
+                        `;
+                        guessBox.appendChild(errorMessage);
+                        return;
+                    }
+                    const randomIndex = Math.floor(Math.random() * availableArtifacts.length);
+                    gameArtifacts = [availableArtifacts[randomIndex]];
                 }
                 
-                // Update URL with used artifacts for next round
-                updateURLWithUsedArtifacts(usedArtifacts);
-                
-                // Dispatch event with artifact data
-                document.dispatchEvent(new CustomEvent('artifactLoaded', {
-                    detail: { artifact: artifact }
-                }));
-                
-                console.log('Loaded artifact:', artifact.title);
-                console.log('Used artifacts so far:', usedArtifacts);
+                displayCurrentArtifact(gameArtifacts, round);
             }
-            
-            // Start the selection process
-            selectValidArtifact();
         })
         .catch(error => {
             console.error('Error loading artifacts:', error);
+            const guessBox = document.querySelector('.guessBox');
+            guessBox.innerHTML = ''; // Clear any existing content
+            const errorMessage = document.createElement('div');
+            errorMessage.textContent = 'Error loading artifacts. Please try again.';
+            errorMessage.style.cssText = `
+                color: #fff;
+                font-size: 1.2rem;
+                text-align: center;
+                padding: 20px;
+                background-color: rgba(255, 0, 0, 0.2);
+                border-radius: 8px;
+                margin: 20px;
+            `;
+            guessBox.appendChild(errorMessage);
         });
 });
 
+// Function to display the artifact for the current round
+function displayCurrentArtifact(gameArtifacts, round) {
+    const currentArtifact = gameArtifacts[round - 1];
+    if (!currentArtifact) {
+        console.error('No artifact available for round', round);
+        const guessBox = document.querySelector('.guessBox');
+        guessBox.innerHTML = ''; // Clear any existing content
+        const errorMessage = document.createElement('div');
+        errorMessage.textContent = 'The selected timeframe does not contain enough artifacts';
+        errorMessage.style.cssText = `
+            color: #fff;
+            font-size: 1.2rem;
+            text-align: center;
+            padding: 20px;
+            background-color: rgba(255, 0, 0, 0.2);
+            border-radius: 8px;
+            margin: 20px;
+        `;
+        guessBox.appendChild(errorMessage);
+        return;
+    }
+    
+    // Store artifact globally for easy access
+    window.currentArtifact = currentArtifact;
+    
+    const guessBox = document.querySelector('.guessBox');
+    const img = document.createElement('img');
+    img.src = currentArtifact.image;
+    img.alt = currentArtifact.title;
+    
+    guessBox.appendChild(img);
+    
+    // Update attribution box (assuming updateAttribution is defined elsewhere)
+    updateAttribution(currentArtifact);
+    
+    // Update used artifacts
+    const usedArtifacts = JSON.parse(sessionStorage.getItem('gameState')?.usedArtifacts || '[]');
+    if (!usedArtifacts.includes(currentArtifact.title)) {
+        usedArtifacts.push(currentArtifact.title);
+    }
+    
+    // Update URL with used artifacts for next round
+    updateURLWithUsedArtifacts(usedArtifacts);
+    
+    // Dispatch event with artifact data
+    document.dispatchEvent(new CustomEvent('artifactLoaded', {
+        detail: { artifact: currentArtifact }
+    }));
+    
+    console.log('Loaded artifact:', currentArtifact.title);
+    console.log('Used artifacts so far:', usedArtifacts);
+}
+
 // Function to update makeGuess button behavior
 function updateURLWithUsedArtifacts(usedArtifacts) {
-    // Update the makeGuess button to save state to sessionStorage before navigation
     const makeGuessButton = document.getElementById('makeGuess-button');
     if (makeGuessButton) {
         const originalOnClick = makeGuessButton.onclick;
