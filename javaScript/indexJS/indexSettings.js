@@ -1,12 +1,36 @@
-// Index Page Game Settings
 class IndexGameSettings {
     constructor() {
         this.buttonManager = new ButtonManager();
+        
+        // Historical timeframe increments
+        this.timeframeIncrements = [
+            "5 Million BC",
+            "500,000 BC", 
+            "100,000 BC",
+            "50,000 BC",
+            "10,000 BC",
+            "5,000 BC",
+            "2,500 BC",
+            "1,000 BC",
+            "0",
+            "500 AD",
+            "750 AD",
+            "1000 AD",
+            "1250 AD",
+            "1500 AD",
+            "1650 AD",
+            "1800 AD",
+            "1900 AD",
+            "2000 AD",
+            "2025 AD"
+        ];
+        
         this.initializeElements();
         this.setDefaultStates();
         this.bindEvents();
         this.initializeSliders();
         this.initializeAnimations();
+        this.createTimeframeTicks();
     }
 
     initializeElements() {
@@ -28,54 +52,100 @@ class IndexGameSettings {
     }
 
     setDefaultStates() {
-        // Set default timer button
         this.buttonManager.setDefaultActive(this.timerButtons, '[data-timer="no"]');
-        
-        // Set default timeframe button
         this.buttonManager.setDefaultActive(this.timeframeButtons, '[data-timeframe="unspecified"]');
 
-        // Set initial slider visibility based on active buttons
+        // Set timeframe slider min/max and default values
+        if (this.timeframeMin && this.timeframeMax) {
+            const maxIndex = this.timeframeIncrements.length - 1;
+            
+            // Set min and max values (0-based index)
+            this.timeframeMin.min = 0;
+            this.timeframeMin.max = maxIndex;
+            this.timeframeMax.min = 0;
+            this.timeframeMax.max = maxIndex;
+            
+            // Set default values: min = 0 (5 Million BC), max = last index (2025 AD)
+            this.timeframeMin.value = 0;
+            this.timeframeMax.value = maxIndex;
+        }
+
         const activeTimer = this.buttonManager.getActiveButton(this.timerButtons);
-        if (activeTimer && activeTimer.dataset.timer === 'yes') {
+        if (activeTimer?.dataset.timer === 'yes') {
             AnimationUtils.slideIn(this.timeSlider);
         } else {
             AnimationUtils.slideOut(this.timeSlider);
         }
 
         const activeTimeframe = this.buttonManager.getActiveButton(this.timeframeButtons);
-        if (activeTimeframe && activeTimeframe.dataset.timeframe === 'flexible') {
+        if (activeTimeframe?.dataset.timeframe === 'flexible') {
             AnimationUtils.slideIn(this.timeframeSlider);
         } else {
             AnimationUtils.slideOut(this.timeframeSlider);
         }
     }
 
+    createTimeframeTicks() {
+        if (!this.timeframeSlider) return;
+        
+        const tickContainer = document.createElement('div');
+        tickContainer.className = 'timeframe-ticks';
+        
+        const sliderContainer = this.timeframeSlider.querySelector('.dual-slider-container');
+        if (sliderContainer) {
+            sliderContainer.appendChild(tickContainer);
+            
+            this.timeframeIncrements.forEach((increment, index) => {
+                const percentage = (index / (this.timeframeIncrements.length - 1)) * 100;
+                
+                // Create tick mark
+                const tick = document.createElement('div');
+                tick.className = `tick-mark ${index % 4 === 0 ? 'major' : ''}`;
+                tick.style.left = `${percentage}%`;
+                tickContainer.appendChild(tick);
+                
+                // Create tick label for major ticks only
+                if (index % 4 === 0 || index === this.timeframeIncrements.length - 1) {
+                    const label = document.createElement('div');
+                    label.className = 'tick-label';
+                    label.textContent = increment;
+                    label.style.left = `${percentage}%`;
+                    tickContainer.appendChild(label);
+                }
+            });
+        }
+    }
+
     bindEvents() {
-        // Timer buttons
         this.buttonManager.initializeButtonGroup(
-            this.timerButtons, 
+            this.timerButtons,
             (button) => this.handleTimerToggle(button),
             'timer'
         );
 
-        // Timeframe buttons
         this.buttonManager.initializeButtonGroup(
-            this.timeframeButtons, 
+            this.timeframeButtons,
             (button) => this.handleTimeframeToggle(button),
             'timeframe'
         );
 
-        // Slider events
-        this.timeRange?.addEventListener('input', () => this.updateTimerSlider());
-        this.timeframeMin?.addEventListener('input', () => this.updateTimeframeSlider());
-        this.timeframeMax?.addEventListener('input', () => this.updateTimeframeSlider());
+        if (this.timeRange) {
+            ['input', 'change'].forEach(event =>
+                this.timeRange.addEventListener(event, () => this.updateTimerSlider())
+            );
+        }
 
-        // Play button ripple effect
+        if (this.timeframeMin && this.timeframeMax) {
+            ['input', 'change'].forEach(event => {
+                this.timeframeMin.addEventListener(event, () => this.updateTimeframeSlider());
+                this.timeframeMax.addEventListener(event, () => this.updateTimeframeSlider());
+            });
+        }
+
         if (this.playBtn) {
             this.buttonManager.initializeRippleEffect([this.playBtn]);
         }
 
-        // Title letter hover effects
         this.titleLetters.forEach((letter, index) => {
             letter.style.setProperty('--i', index);
             letter.addEventListener('mouseenter', () => this.animateLetterHover(letter));
@@ -106,61 +176,56 @@ class IndexGameSettings {
         const min = parseInt(this.timeRange.min);
         const max = parseInt(this.timeRange.max);
         const percentage = ((value - min) / (max - min)) * 100;
-        
-        // Smooth animation for fill
-        this.timerFill.style.width = `${percentage}%`;
-        
-        // Update glow effect
-        if (this.timerGlow) {
-            this.timerGlow.style.width = `${percentage}%`;
-        }
-        
-        // Animate label changes
-        AnimationUtils.scaleLabel(this.timeLabel, `${value} seconds`);
-        
-        // Add pulse effect on interaction
-        AnimationUtils.addSliderPulse(this.timerFill);
+
+        requestAnimationFrame(() => {
+            this.timerFill.style.width = `${percentage}%`;
+            if (this.timerGlow) {
+                this.timerGlow.style.width = `${percentage}%`;
+            }
+            this.updateLabel(this.timeLabel, `${value} seconds`);
+        });
     }
 
     updateTimeframeSlider() {
         if (!this.timeframeMin || !this.timeframeMax || !this.timeframeFill || !this.timeframeLabel) return;
 
-        let minVal = parseInt(this.timeframeMin.value);
-        let maxVal = parseInt(this.timeframeMax.value);
+        let minIndex = parseInt(this.timeframeMin.value);
+        let maxIndex = parseInt(this.timeframeMax.value);
 
-        // Ensure min doesn't exceed max with smooth adjustment
-        if (minVal >= maxVal) {
-            minVal = Math.max(1, maxVal - 1);
-            this.timeframeMin.value = minVal;
-            AnimationUtils.addSliderShake(this.timeframeMin);
+        // Ensure min is always less than max
+        if (minIndex >= maxIndex) {
+            if (minIndex === 0) {
+                maxIndex = 1;
+                this.timeframeMax.value = maxIndex;
+            } else {
+                minIndex = maxIndex - 1;
+                this.timeframeMin.value = minIndex;
+            }
         }
 
-        // Ensure max doesn't go below min with smooth adjustment
-        if (maxVal <= minVal) {
-            maxVal = Math.min(100, minVal + 1);
-            this.timeframeMax.value = maxVal;
-            AnimationUtils.addSliderShake(this.timeframeMax);
-        }
+        const totalIncrements = this.timeframeIncrements.length - 1;
+        const minPercent = (minIndex / totalIncrements) * 100;
+        const maxPercent = (maxIndex / totalIncrements) * 100;
 
-        const minPercent = ((minVal - 1) / 99) * 100;
-        const maxPercent = ((maxVal - 1) / 99) * 100;
-        
-        // Smooth animation for fill
-        this.timeframeFill.style.left = `${minPercent}%`;
-        this.timeframeFill.style.width = `${maxPercent - minPercent}%`;
-        
-        // Update glow effect
-        if (this.timeframeGlow) {
-            this.timeframeGlow.style.left = `${minPercent}%`;
-            this.timeframeGlow.style.width = `${maxPercent - minPercent}%`;
+        requestAnimationFrame(() => {
+            this.timeframeFill.style.left = `${minPercent}%`;
+            this.timeframeFill.style.width = `${maxPercent - minPercent}%`;
+            if (this.timeframeGlow) {
+                this.timeframeGlow.style.left = `${minPercent}%`;
+                this.timeframeGlow.style.width = `${maxPercent - minPercent}%`;
+            }
+            
+            const minLabel = this.timeframeIncrements[minIndex];
+            const maxLabel = this.timeframeIncrements[maxIndex];
+            const labelText = `${minLabel} - ${maxLabel}`;
+            this.updateLabel(this.timeframeLabel, labelText);
+        });
+    }
+
+    updateLabel(labelElement, newText) {
+        if (labelElement?.textContent !== newText) {
+            labelElement.textContent = newText;
         }
-        
-        // Animate label changes
-        const labelText = minVal === maxVal ? `${minVal} years` : `${minVal} - ${maxVal} years`;
-        AnimationUtils.scaleLabel(this.timeframeLabel, labelText);
-        
-        // Add pulse effect on interaction
-        AnimationUtils.addSliderPulse(this.timeframeFill);
     }
 
     initializeSliders() {
@@ -169,11 +234,9 @@ class IndexGameSettings {
     }
 
     initializeAnimations() {
-        // Staggered title letter animation on load
         this.titleLetters.forEach((letter, index) => {
             letter.style.opacity = '0';
             letter.style.transform = 'translateY(30px)';
-            
             setTimeout(() => {
                 letter.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
                 letter.style.opacity = '1';
@@ -181,15 +244,12 @@ class IndexGameSettings {
             }, index * 50 + 300);
         });
 
-        // Animate cards on load
         const cards = document.querySelectorAll('.glass-card');
         AnimationUtils.staggerAnimation(cards, 150, 600);
 
-        // Play button entrance animation
         if (this.playBtn) {
             this.playBtn.style.opacity = '0';
             this.playBtn.style.transform = 'scale(0.9)';
-            
             setTimeout(() => {
                 this.playBtn.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
                 this.playBtn.style.opacity = '1';
@@ -207,5 +267,20 @@ class IndexGameSettings {
     resetLetterHover(letter) {
         letter.style.transform = 'translateY(0) scale(1) rotateZ(0deg)';
         letter.style.filter = 'brightness(1)';
+    }
+
+    // Utility method to get current timeframe selection as readable values
+    getTimeframeSelection() {
+        if (!this.timeframeMin || !this.timeframeMax) return null;
+        
+        const minIndex = parseInt(this.timeframeMin.value);
+        const maxIndex = parseInt(this.timeframeMax.value);
+        
+        return {
+            min: this.timeframeIncrements[minIndex],
+            max: this.timeframeIncrements[maxIndex],
+            minIndex: minIndex,
+            maxIndex: maxIndex
+        };
     }
 }
