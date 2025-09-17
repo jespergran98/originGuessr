@@ -104,26 +104,24 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
-/* Attribution Box Styling */
+
+/* Attribution Box Styling - Updated to match guess page */
 .attribution-content {
     display: flex;
     align-items: center;
-    justify-content: center;
-    text-align: center;
+    justify-content: flex-start;
+    width: 100%;
+    height: 100%;
+    color: var(--attribute-green);
+    font-size: 1.5em;
 }
 
-.attribution-text {
-    font-size: 1.8em;
-    color: var(--ad-green);
-    opacity: 0.8;
-}
-
-.attribution-text a {
-    color: var(--ad-green);
+.attribution-content a {
+    color: var(--attribute-green);
     text-decoration: none;
 }
 
-.attribution-text a:hover {
+.attribution-content a:hover {
     text-decoration: underline;
 }
 

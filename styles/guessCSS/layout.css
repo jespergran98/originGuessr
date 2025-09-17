@@ -46,14 +46,14 @@ body {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    color: var(--ad-green);
+    color: var(--attribute-green);
     font-size: 1.8em;
     padding-bottom: 10px;
     flex-shrink: 0;
 }
 
 .attributionBox a {
-    color: var(--ad-green);
+    color: var(--attribute-green);
     text-decoration: none;
 }
 

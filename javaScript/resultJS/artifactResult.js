@@ -116,8 +116,8 @@ class ArtifactResultHandler {
         this.populateYear();
         this.populateYearOff();
         this.populateImage();
-        this.populateDistance();
         this.populateAttribution();
+        this.populateDistance();
         this.populateScores();
         this.populateNextButton();
 
@@ -189,6 +189,28 @@ class ArtifactResultHandler {
         }
     }
 
+    populateAttribution() {
+        const attributeBox = document.querySelector('.attributeBox');
+        if (attributeBox) {
+            // Create the attribution-text span that attribution.js expects
+            attributeBox.innerHTML = `
+                <div class="attribution-content">
+                    <span id="attribution-text"></span>
+                </div>
+            `;
+            
+            // Use the same attribution.js function as the guess page
+            if (typeof updateAttribution === 'function') {
+                updateAttribution(this.artifactData);
+                console.log('Attribution populated using attribution.js');
+            } else {
+                console.warn('updateAttribution function not available');
+            }
+        } else {
+            console.warn('Attribution box not found');
+        }
+    }
+
     populateDistance() {
         const distanceOffBox = document.querySelector('.distanceOffBox');
         if (distanceOffBox && this.artifactData.lat && this.artifactData.lng && this.guessCoordinates) {
@@ -209,34 +231,6 @@ class ArtifactResultHandler {
             console.log('Distance populated:', formattedDistance);
         } else {
             console.warn('Distance box not found or missing coordinate data');
-        }
-    }
-
-    populateAttribution() {
-        const attributeBox = document.querySelector('.attributeBox');
-        if (attributeBox) {
-            let attributionText = 'Public Domain';
-            
-            if (this.artifactData.author && this.artifactData.author !== 'Public Domain') {
-                if (this.artifactData.authorLink) {
-                    attributionText = `Image by <a href="${this.escapeHtml(this.artifactData.authorLink)}" target="_blank" rel="noopener">${this.escapeHtml(this.artifactData.author)}</a>`;
-                } else {
-                    attributionText = `Image by ${this.escapeHtml(this.artifactData.author)}`;
-                }
-                
-                if (this.artifactData.license) {
-                    attributionText += ` - ${this.escapeHtml(this.artifactData.license)}`;
-                }
-            }
-
-            attributeBox.innerHTML = `
-                <div class="result-content attribution-content">
-                    <span class="attribution-text">${attributionText}</span>
-                </div>
-            `;
-            console.log('Attribution populated');
-        } else {
-            console.warn('Attribution box not found');
         }
     }
 
@@ -347,7 +341,7 @@ class ArtifactResultHandler {
             });
 
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors'
+                attribution: 'Ã‚Â© OpenStreetMap contributors'
             }).addTo(map);
 
             // Set a default view (can be customized as needed)
