@@ -28,6 +28,19 @@ body {
     min-height: 0;
     background-color: var(--placeholder-green);
     margin-bottom: 10px;
+    border-radius: 3vh;
+    overflow: hidden;
+}
+
+.image-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    margin: 0;
+    padding: 0;
 }
 
 .guessBox img {
@@ -35,14 +48,15 @@ body {
     height: 100%;
     object-fit: contain;
     object-position: left;
-    
+    display: block;
+    border-radius: 3vh;
 }
 
 .attributionBox {
     margin-left: 2vw;
     width: 66vw;
     height: 2vh;
-    min-height: 30px; /* Ensure minimum readable height */
+    min-height: 30px;
     display: flex;
     align-items: center;
     justify-content: flex-start;

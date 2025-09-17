@@ -207,11 +207,81 @@ function displayCurrentArtifact(gameArtifacts, round) {
     window.currentArtifact = currentArtifact;
     
     const guessBox = document.querySelector('.guessBox');
+    
+    // Create image wrapper div
+    const imageWrapper = document.createElement('div');
+    imageWrapper.className = 'image-wrapper';
+    
+    // Create image element
     const img = document.createElement('img');
     img.src = currentArtifact.image;
     img.alt = currentArtifact.title;
     
-    guessBox.appendChild(img);
+    // Function to apply border radius based on actual rendered image size
+    function applyImageBorderRadius() {
+        const containerRect = imageWrapper.getBoundingClientRect();
+        const containerWidth = containerRect.width;
+        const containerHeight = containerRect.height;
+        
+        // Get image natural dimensions
+        const naturalWidth = img.naturalWidth;
+        const naturalHeight = img.naturalHeight;
+        
+        if (naturalWidth && naturalHeight) {
+            // Calculate the rendered size based on object-fit: contain logic
+            const containerAspect = containerWidth / containerHeight;
+            const imageAspect = naturalWidth / naturalHeight;
+            
+            let renderedWidth, renderedHeight;
+            
+            if (imageAspect > containerAspect) {
+                // Image is wider than container aspect ratio - fit to width
+                renderedWidth = containerWidth;
+                renderedHeight = containerWidth / imageAspect;
+            } else {
+                // Image is taller than container aspect ratio - fit to height
+                renderedHeight = containerHeight;
+                renderedWidth = containerHeight * imageAspect;
+            }
+            
+            // The image should be centered vertically due to align-items: center
+            // Calculate the center position (this matches flexbox align-items: center behavior)
+            const topOffset = (containerHeight - renderedHeight) / 2;
+            
+            // Create a clipping element that matches the actual image size
+            const clipElement = document.createElement('div');
+            clipElement.style.position = 'absolute';
+            clipElement.style.left = '0';
+            clipElement.style.top = topOffset + 'px';
+            clipElement.style.width = renderedWidth + 'px';
+            clipElement.style.height = renderedHeight + 'px';
+            clipElement.style.borderRadius = '3vh';
+            clipElement.style.overflow = 'hidden';
+            clipElement.style.pointerEvents = 'none';
+            
+            // Move the image into the clip element and reset its styles
+            img.style.width = renderedWidth + 'px';
+            img.style.height = renderedHeight + 'px';
+            img.style.objectFit = 'cover';
+            img.style.objectPosition = 'center';
+            img.style.borderRadius = '3vh';
+            
+            clipElement.appendChild(img);
+            imageWrapper.appendChild(clipElement);
+        }
+    }
+    
+    // Wait for image to load, then apply border radius
+    img.onload = applyImageBorderRadius;
+    
+    // Append image to wrapper first (will be moved by applyImageBorderRadius)
+    imageWrapper.appendChild(img);
+    guessBox.appendChild(imageWrapper);
+    
+    // If image is already loaded (cached), apply border radius immediately
+    if (img.complete && img.naturalWidth) {
+        applyImageBorderRadius();
+    }
     
     // Update attribution box (assuming updateAttribution is defined elsewhere)
     updateAttribution(currentArtifact);

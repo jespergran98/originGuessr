@@ -41,8 +41,7 @@ body {
 /* Left Column Elements */
 .descriptionBox {
     min-height: 80px;      /* Minimum height for short descriptions */
-    max-height: 300px;     /* Maximum height to prevent excessive growth */
-    background-color: var(--placeholder-green);
+    background-color: var(--placeholder-color);
     flex-shrink: 0;       /* Add padding for better text spacing */
     box-sizing: border-box;
     
@@ -90,37 +89,38 @@ body {
 }
 
 .correctYearBox {
-    background-color: var(--placeholder-green);
+    background-color: var(--placeholder-color);
     width: auto;
     flex-shrink: 0;
 }
 
 .yearOffBox {
-    background-color: var(--placeholder-green);
+    background-color: var(--placeholder-color);
 }
 
 .mapResultBox {
     flex: 1;
-    background-color: var(--placeholder-green);
+    background-color: var(--placeholder-color);
     min-height: 50px;
+    border-radius: 3vh;
 }
 
 .distanceOffBox {
     height: 50px;
-    background-color: var(--placeholder-green);
+    background-color: var(--placeholder-color);
     flex-shrink: 0;
 }
 
 /* Right Column Elements */
 .imageResultBox {
     flex: 1;
-    background-color: var(--dark-green-hover);
+    background-color: var(--placeholder-color);
     min-height: 200px;
 }
 
 .attributeBox {
     height: 24px;
-    background-color: var(--placeholder-green);
+    background-color: var(--placeholder-color);
     flex-shrink: 0;
     display: flex;
     align-items: center;
@@ -137,22 +137,22 @@ body {
 
 .yearScoreBox {
     flex: 1;
-    background-color: var(--placeholder-green);
+    background-color: var(--placeholder-color);
 }
 
 .locationScoreBox {
     flex: 1;
-    background-color: var(--placeholder-green);
+    background-color: var(--placeholder-color);
 }
 
 .totalScoreBox {
     flex: 1;
-    background-color: var(--placeholder-green);
+    background-color: var(--placeholder-color);
 }
 
 .nextBox {
     flex: 1;
-    background-color: var(--placeholder-green);
+    background-color: var(--placeholder-color);
 }
 
 /* Footer */
