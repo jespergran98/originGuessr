@@ -6,6 +6,8 @@ class RoundLogic {
         this.totalScore = 0;
         this.roundScores = [];
         this.usedArtifacts = [];
+        this.timeframeMinIndex = null;
+        this.timeframeMaxIndex = null;
         this.gameData = {
             rounds: [],
             totalScore: 0,
@@ -28,7 +30,7 @@ class RoundLogic {
     }
 
     /**
-     * Load game state from sessionStorage or initialize new game
+     * Load game state from URL params or sessionStorage or initialize new game
      */
     loadGameState() {
         const urlParams = new URLSearchParams(window.location.search);
@@ -36,9 +38,11 @@ class RoundLogic {
         const scoreParam = urlParams.get('totalScore');
         const scoresParam = urlParams.get('scores');
         const usedArtifactsParam = urlParams.get('usedArtifacts');
+        const minIdxParam = urlParams.get('timeframeMinIndex');
+        const maxIdxParam = urlParams.get('timeframeMaxIndex');
 
         if (roundParam && scoreParam) {
-            // Continue existing game
+            // Continue existing game from URL
             this.currentRound = parseInt(roundParam);
             this.totalScore = parseInt(scoreParam);
             
@@ -59,12 +63,57 @@ class RoundLogic {
                     this.usedArtifacts = [];
                 }
             }
+
+            if (minIdxParam) {
+                this.timeframeMinIndex = parseInt(minIdxParam);
+            }
+            if (maxIdxParam) {
+                this.timeframeMaxIndex = parseInt(maxIdxParam);
+            }
             
-            console.log(`Continuing game - Round ${this.currentRound}, Total Score: ${this.totalScore}`);
+            console.log(`Continuing game from URL - Round ${this.currentRound}, Total Score: ${this.totalScore}`);
             console.log('Used artifacts:', this.usedArtifacts);
         } else {
-            // Start new game
-            this.startNewGame();
+            // Try to load from sessionStorage
+            const gameStateStr = sessionStorage.getItem('gameState');
+            if (gameStateStr) {
+                try {
+                    const state = JSON.parse(gameStateStr);
+                    this.currentRound = state.currentRound || 1;
+                    this.totalScore = state.totalScore || 0;
+                    this.roundScores = state.roundScores || [];
+                    this.usedArtifacts = state.usedArtifacts || [];
+                    this.timeframeMinIndex = state.timeframeMinIndex ? parseInt(state.timeframeMinIndex) : null;
+                    this.timeframeMaxIndex = state.timeframeMaxIndex ? parseInt(state.timeframeMaxIndex) : null;
+                    
+                    console.log(`Loaded game state from session - Round ${this.currentRound}, Total Score: ${this.totalScore}`);
+                    console.log('Used artifacts:', this.usedArtifacts);
+                } catch (e) {
+                    console.warn('Error parsing session game state:', e);
+                    this.startNewGame();
+                }
+            } else {
+                // Start new game
+                this.startNewGame();
+            }
+        }
+
+        // Fallback: If timeframe not set from URL, try sessionStorage
+        if (this.timeframeMinIndex === null || this.timeframeMaxIndex === null) {
+            const gameStateStr = sessionStorage.getItem('gameState');
+            if (gameStateStr) {
+                try {
+                    const state = JSON.parse(gameStateStr);
+                    if (this.timeframeMinIndex === null && state.timeframeMinIndex) {
+                        this.timeframeMinIndex = parseInt(state.timeframeMinIndex);
+                    }
+                    if (this.timeframeMaxIndex === null && state.timeframeMaxIndex) {
+                        this.timeframeMaxIndex = parseInt(state.timeframeMaxIndex);
+                    }
+                } catch (e) {
+                    console.warn('Error parsing session for timeframe fallback:', e);
+                }
+            }
         }
     }
 
@@ -76,6 +125,8 @@ class RoundLogic {
         this.totalScore = 0;
         this.roundScores = [];
         this.usedArtifacts = [];
+        this.timeframeMinIndex = null;
+        this.timeframeMaxIndex = null;
         console.log('Starting new game');
     }
 
@@ -164,10 +215,10 @@ class RoundLogic {
         this.totalScore += currentRoundScore;
         this.roundScores.push(currentRoundScore);
         
-        // Add current artifact to used artifacts list if available
-        if (window.currentArtifact && window.currentArtifact.id) {
-            if (!this.usedArtifacts.includes(window.currentArtifact.id)) {
-                this.usedArtifacts.push(window.currentArtifact.id);
+        // Add current artifact to used artifacts list if available (using title since no id)
+        if (window.currentArtifact && window.currentArtifact.title) {
+            if (!this.usedArtifacts.includes(window.currentArtifact.title)) {
+                this.usedArtifacts.push(window.currentArtifact.title);
             }
         }
         
@@ -176,6 +227,16 @@ class RoundLogic {
         
         console.log(`Proceeding to round ${this.currentRound} with total score: ${this.totalScore}`);
         console.log('Used artifacts after this round:', this.usedArtifacts);
+        
+        // Save updated state to sessionStorage before navigation
+        sessionStorage.setItem('gameState', JSON.stringify({
+            currentRound: this.currentRound,
+            totalScore: this.totalScore,
+            roundScores: this.roundScores,
+            usedArtifacts: this.usedArtifacts,
+            timeframeMinIndex: this.timeframeMinIndex,
+            timeframeMaxIndex: this.timeframeMaxIndex
+        }));
         
         // Navigate to guess page with updated parameters
         this.navigateToGuessPage();
@@ -216,6 +277,14 @@ class RoundLogic {
             params.append('usedArtifacts', encodeURIComponent(JSON.stringify(this.usedArtifacts)));
         }
         
+        // Include timeframe parameters if set
+        if (this.timeframeMinIndex !== null) {
+            params.append('timeframeMinIndex', this.timeframeMinIndex.toString());
+        }
+        if (this.timeframeMaxIndex !== null) {
+            params.append('timeframeMaxIndex', this.timeframeMaxIndex.toString());
+        }
+        
         window.location.href = `guess.html?${params.toString()}`;
     }
 
@@ -228,10 +297,10 @@ class RoundLogic {
         const finalTotalScore = this.totalScore + finalRoundScore;
         const finalRoundScores = [...this.roundScores, finalRoundScore];
         
-        // Add final artifact to used artifacts if available
-        if (window.currentArtifact && window.currentArtifact.id) {
-            if (!this.usedArtifacts.includes(window.currentArtifact.id)) {
-                this.usedArtifacts.push(window.currentArtifact.id);
+        // Add final artifact to used artifacts if available (using title)
+        if (window.currentArtifact && window.currentArtifact.title) {
+            if (!this.usedArtifacts.includes(window.currentArtifact.title)) {
+                this.usedArtifacts.push(window.currentArtifact.title);
             }
         }
         
@@ -301,6 +370,8 @@ class RoundLogic {
         this.totalScore = 0;
         this.roundScores = [];
         this.usedArtifacts = [];
+        this.timeframeMinIndex = null;
+        this.timeframeMaxIndex = null;
         console.log('Game reset');
     }
 

@@ -28,6 +28,12 @@ class IndexGameSettings {
             "2025 AD"
         ];
         
+        // Corresponding years for timeframe filtering
+        this.timeframeYears = [
+            -5000000, -500000, -100000, -50000, -10000, -5000, -2500, -1000, 0,
+            500, 750, 1000, 1250, 1500, 1650, 1800, 1900, 2000, 2025
+        ];
+        
         this.initializeElements();
         this.setDefaultStates();
         this.bindEvents();
@@ -201,6 +207,7 @@ class IndexGameSettings {
 
         if (this.playBtn) {
             this.buttonManager.initializeRippleEffect([this.playBtn]);
+            this.playBtn.addEventListener('click', () => this.startGame());
         }
 
         this.titleLetters.forEach((letter, index) => {
@@ -360,5 +367,23 @@ class IndexGameSettings {
             minIndex: minIndex,
             maxIndex: maxIndex
         };
+    }
+
+    startGame() {
+        const activeTimeframe = this.buttonManager.getActiveButton(this.timeframeButtons);
+        let params = new URLSearchParams();
+        params.append('round', '1');
+        params.append('totalScore', '0');
+        params.append('scores', '[]');
+
+        if (activeTimeframe && activeTimeframe.dataset.timeframe === 'flexible') {
+            const selection = this.getTimeframeSelection();
+            if (selection) {
+                params.append('timeframeMinIndex', selection.minIndex.toString());
+                params.append('timeframeMaxIndex', selection.maxIndex.toString());
+            }
+        }
+
+        window.location.href = `guess.html?${params.toString()}`;
     }
 }

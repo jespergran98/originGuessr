@@ -5,6 +5,12 @@ document.addEventListener('DOMContentLoaded', function() {
         .then(data => {
             const artifacts = data.artifacts;
             
+            // Define timeframe years for filtering
+            const timeframeYears = [
+                -5000000, -500000, -100000, -50000, -10000, -5000, -2500, -1000, 0,
+                500, 750, 1000, 1250, 1500, 1650, 1800, 1900, 2000, 2025
+            ];
+            
             // Get used artifacts from URL parameters
             const urlParams = new URLSearchParams(window.location.search);
             const usedArtifactsParam = urlParams.get('usedArtifacts');
@@ -19,10 +25,25 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
             
-            // Filter out used artifacts
-            const availableArtifacts = artifacts.filter(artifact => 
-                !usedArtifacts.includes(artifact.id)
+            // Get timeframe parameters for filtering
+            const minIndexStr = urlParams.get('timeframeMinIndex');
+            const maxIndexStr = urlParams.get('timeframeMaxIndex');
+            let availableArtifacts = artifacts.filter(artifact => 
+                !usedArtifacts.includes(artifact.title) // Use title as ID for filtering
             );
+            
+            if (minIndexStr !== null && maxIndexStr !== null) {
+                const minIndex = parseInt(minIndexStr);
+                const maxIndex = parseInt(maxIndexStr);
+                const minYear = timeframeYears[minIndex];
+                const maxYear = timeframeYears[maxIndex];
+                
+                availableArtifacts = availableArtifacts.filter(artifact => 
+                    artifact.year >= minYear && artifact.year <= maxYear
+                );
+                
+                console.log(`Filtering artifacts to timeframe: ${minYear} to ${maxYear}`);
+            }
             
             if (availableArtifacts.length === 0) {
                 console.error('No available artifacts remaining');
@@ -72,8 +93,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Update attribution box
                 updateAttribution(artifact);
                 
-                // Add this artifact to used list and update URL
-                usedArtifacts.push(artifact.id);
+                // Add this artifact to used list
+                if (!usedArtifacts.includes(artifact.title)) {
+                    usedArtifacts.push(artifact.title);
+                }
+                
+                // Update URL with used artifacts for next round
                 updateURLWithUsedArtifacts(usedArtifacts);
                 
                 // Dispatch event with artifact data
@@ -93,15 +118,24 @@ document.addEventListener('DOMContentLoaded', function() {
         });
 });
 
-// Function to update URL with used artifacts for next round
+// Function to update makeGuess button behavior
 function updateURLWithUsedArtifacts(usedArtifacts) {
-    // Update the makeGuess button to include used artifacts in navigation
+    // Update the makeGuess button to save state to sessionStorage before navigation
     const makeGuessButton = document.getElementById('makeGuess-button');
     if (makeGuessButton) {
         const originalOnClick = makeGuessButton.onclick;
         makeGuessButton.onclick = function() {
-            // Store used artifacts for result page navigation
-            window.currentUsedArtifacts = usedArtifacts;
+            // Save current game state to sessionStorage
+            const currentParams = new URLSearchParams(window.location.search);
+            sessionStorage.setItem('gameState', JSON.stringify({
+                currentRound: window.roundLogic.currentRound,
+                totalScore: window.roundLogic.totalScore,
+                roundScores: window.roundLogic.roundScores,
+                usedArtifacts: usedArtifacts,
+                timeframeMinIndex: currentParams.get('timeframeMinIndex'),
+                timeframeMaxIndex: currentParams.get('timeframeMaxIndex')
+            }));
+            
             if (originalOnClick) {
                 originalOnClick.call(this);
             }
