@@ -1,171 +1,447 @@
-#map {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 1;
-  pointer-events: none; /* Makes map immovable */
-}
+/* Final Score Page Layout - Inspired by Index Page Design */
 
-/* Ensure body and html take full screen */
+/* Body and HTML - Full Screen with Background */
 html, body {
-  margin: 0;
-  padding: 0;
-  height: 100%;
-  overflow: hidden;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    overflow: hidden;
+    align-items: center;
+    padding: clamp(1rem, 3vh, 2rem);
 }
 
-/* Simple Creative Overlay */
+/* Map Background */
+#map {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0.6;
+    filter: blur(1px);
+}
+
+/* Creative Overlay - Enhanced with Glassmorphism */
 .map-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 2;
-  pointer-events: none;
-  background: 
-    radial-gradient(ellipse at top left, rgba(0, 100, 60, 0.2) 0%, transparent 50%),
-    radial-gradient(ellipse at bottom right, rgba(20, 80, 40, 0.15) 0%, transparent 50%),
-    linear-gradient(135deg, 
-      rgba(10, 60, 40, 0.9) 0%, 
-      rgba(30, 80, 60, 0.5) 30%, 
-      rgba(15, 50, 35, 0.5) 70%, 
-      rgba(5, 30, 20, 0.9) 100%
-    );
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 2;
+    pointer-events: none;
+    background: 
+        radial-gradient(ellipse at top left, rgba(153, 238, 153, 0.1) 0%, transparent 50%),
+        radial-gradient(ellipse at bottom right, rgba(153, 238, 153, 0.08) 0%, transparent 50%),
+        linear-gradient(135deg, 
+            rgba(20, 40, 20, 0.95) 0%, 
+            rgba(15, 35, 15, 0.8) 30%, 
+            rgba(10, 30, 10, 0.8) 70%, 
+            rgba(5, 25, 5, 0.95) 100%
+        );
+    backdrop-filter: blur(2px);
 }
 
-/* Final Score Display Container */
-.scoreDisplay {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  z-index: 10;
-  pointer-events: all;
-  text-align: center;
-  color: #ffffff;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+/* Main Container */
+.main-container {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    width: 100%;
+    gap: clamp(2rem, 6vh, 4rem);
+    padding-top: clamp(2rem, 5vh, 4rem);
+    padding-bottom: clamp(2rem, 5vh, 4rem);
 }
 
-.scoreDisplay .score-line {
-  display: flex;
-  align-items: baseline;
-  justify-content: center;
-  gap: 0.2rem;
-  margin: 1rem 0 2rem 0;
-  flex-wrap: nowrap;
-  white-space: nowrap;
+/* Header Section */
+.header-section {
+    position: relative;
+    width: 100%;
+    text-align: center;
+    margin-bottom: clamp(1rem, 3vh, 2rem);
 }
 
-.scoreDisplay .final-score-value {
-  font-size: clamp(6rem, 20vw, 16rem);
-  font-weight: 900;
-  background: linear-gradient(45deg, #ffff00, #ffd700, #ffff00, #ffffff);
-  background-size: 200% 200%;
-  background-clip: text;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  text-shadow: none;
-  filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.6)) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.8));
-  line-height: 1;
-  flex-shrink: 0;
-  animation: scoreShimmer 3s ease-in-out infinite;
+/* Title Container */
+.title-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
 }
 
-.scoreDisplay .score-divider {
-  font-size: clamp(1rem, 4vw, 2rem);
-  font-weight: 600;
-  color: #ffffff;
-  opacity: 0.8;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-  line-height: 1;
-  flex-shrink: 0;
+.page-title {
+    font-size: clamp(2.5rem, 8vw, 5rem);
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: clamp(0.05em, 0.8vw, 0.15em);
+    color: var(--light-green);
+    line-height: 1.1;
+    position: relative;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    gap: clamp(0.05em, 0.5vw, 0.1em);
+    margin-bottom: 1rem;
+    white-space: nowrap;
+    overflow: visible;
+    width: 100%;
+}
+
+.title-letter {
+    display: inline-block;
+    position: relative;
+    animation: letterGlow 3s ease-in-out infinite alternate;
+    animation-delay: calc(var(--i) * 0.1s);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: default;
+    flex-shrink: 0;
+}
+
+.title-letter:hover {
+    transform: translateY(-10px) scale(1.1);
+    text-shadow: 
+        0 0 20px rgba(153, 238, 153, 0.8),
+        0 0 40px rgba(153, 238, 153, 0.6),
+        0 0 60px rgba(153, 238, 153, 0.4);
+    animation-play-state: paused;
+}
+
+.title-separator {
+    width: clamp(0.8rem, 1.5vw, 1.5rem);
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--light-green), transparent);
+    align-self: center;
+    margin: 0 clamp(0.3rem, 0.8vw, 0.8rem);
+    flex-shrink: 0;
+}
+
+.title-underline {
+    height: 3px;
+    width: 0;
+    background: linear-gradient(90deg, var(--light-green), var(--light-green-hover), var(--light-green));
+    border-radius: 2px;
+    animation: underlineGrow 2s ease-out 0.5s forwards;
+    box-shadow: 0 0 10px rgba(153, 238, 153, 0.5);
+}
+
+/* Score Section */
+.score-section {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: clamp(1rem, 3vh, 2rem);
+}
+
+.score-card {
+    position: relative;
+    padding: clamp(2rem, 5vh, 4rem) clamp(1.5rem, 4vw, 3rem);
+    text-align: center;
+    max-width: 800px;
+    width: 90%;
+}
+
+.score-line {
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+    gap: clamp(0.2rem, 1vw, 0.5rem);
+    margin-bottom: 1rem;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+}
+
+.final-score-value {
+    font-size: clamp(4rem, 15vw, 12rem);
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--light-green) 0%, var(--light-green-hover) 50%, #ffffff 100%);
+    background-size: 200% 200%;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: none;
+    filter: drop-shadow(0 0 20px rgba(153, 238, 153, 0.6)) drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
+    line-height: 1;
+    flex-shrink: 0;
+    animation: scoreShimmer 3s ease-in-out infinite;
+    position: relative;
+}
+
+.score-divider {
+    font-size: clamp(1.5rem, 5vw, 3rem);
+    font-weight: 600;
+    color: var(--light-green);
+    opacity: 0.8;
+    text-shadow: 0 0 10px rgba(153, 238, 153, 0.3);
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.score-accent {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, var(--light-green), transparent);
+    border-radius: 2px;
+    box-shadow: 0 0 10px rgba(153, 238, 153, 0.5);
+}
+
+/* Glass Card Effect */
+.glass-card {
+    background: rgba(153, 238, 153, 0.03);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(153, 238, 153, 0.1);
+    border-radius: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.glass-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(153, 238, 153, 0.3), transparent);
+}
+
+.glass-card::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 50% 0%, rgba(153, 238, 153, 0.05), transparent 50%);
+    pointer-events: none;
 }
 
 /* Button Container */
 .button-container {
-  position: absolute;
-  bottom: 10vh;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 10;
-  pointer-events: all;
-  display: flex;
-  gap: 2rem;
-  flex-wrap: wrap;
-  justify-content: center;
-  width: 90%;
-  max-width: 800px;
+    display: flex;
+    gap: clamp(1rem, 3vw, 2rem);
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    max-width: 900px;
+    margin-top: auto;
 }
 
 .final-score-button {
-  padding: 1rem 2rem;
-  font-size: clamp(1rem, 2.5vw, 1.25rem);
-  font-weight: 600;
-  border: 2px solid rgba(0, 255, 136, 0.6);
-  background: rgba(0, 40, 20, 0.8);
-  color: #00ff88;
-  border-radius: 12px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
-  min-width: 150px;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+    background: linear-gradient(135deg, rgba(153, 238, 153, 0.1) 0%, rgba(153, 238, 153, 0.05) 100%);
+    color: var(--light-green);
+    border: 2px solid rgba(153, 238, 153, 0.3);
+    padding: clamp(0.875rem, 2vh, 1.25rem) clamp(1.5rem, 3vw, 2.5rem);
+    font-size: clamp(1rem, 2vw, 1.3rem);
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: inherit;
+    position: relative;
+    overflow: hidden;
+    min-width: clamp(150px, 20vw, 200px);
+    backdrop-filter: blur(10px);
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    justify-content: center;
+    transform-style: preserve-3d;
+    box-shadow: 0 4px 15px rgba(153, 238, 153, 0.1);
+}
+
+.final-score-button::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, var(--light-green), var(--light-green-hover));
+    transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: -1;
+}
+
+.btn-text {
+    position: relative;
+    z-index: 2;
+}
+
+.btn-ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(153, 238, 153, 0.3);
+    transform: scale(0);
+    animation: ripple 0.6s linear;
+    pointer-events: none;
 }
 
 .final-score-button:hover {
-  background: rgba(0, 255, 136, 0.1);
-  border-color: #00ff88;
-  color: #ffffff;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(0, 255, 136, 0.3);
+    transform: translateY(-3px) scale(1.02);
+    border-color: rgba(153, 238, 153, 0.6);
+    box-shadow: 0 8px 25px rgba(153, 238, 153, 0.25);
+}
+
+.final-score-button:hover::before {
+    left: 0;
+}
+
+.final-score-button:hover,
+.final-score-button:hover .btn-text {
+    color: var(--dark-green);
 }
 
 .final-score-button:active {
-  transform: translateY(0);
-  box-shadow: 0 4px 10px rgba(0, 255, 136, 0.2);
+    transform: translateY(-1px) scale(0.98);
 }
 
-/* Score Animation Keyframes */
+/* Animations */
+@keyframes letterGlow {
+    0% { 
+        text-shadow: 0 0 10px rgba(153, 238, 153, 0.3);
+        opacity: 0.9;
+    }
+    100% { 
+        text-shadow: 
+            0 0 20px rgba(153, 238, 153, 0.6),
+            0 0 30px rgba(153, 238, 153, 0.4);
+        opacity: 1;
+    }
+}
+
+@keyframes underlineGrow {
+    0% { width: 0; }
+    100% { width: 100%; }
+}
+
 @keyframes scoreShimmer {
-  0%, 100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
+    0%, 100% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
 }
 
 @keyframes scoreGlow {
-  0%, 100% {
-    filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.6)) drop-shadow(0 4px 8px rgba(0, 0, 0, 0.8));
-  }
-  50% {
-    filter: drop-shadow(0 0 30px rgba(255, 215, 0, 1)) 
-            drop-shadow(0 0 50px rgba(255, 255, 0, 0.8)) 
-            drop-shadow(0 4px 8px rgba(0, 0, 0, 0.8));
-    transform: scale(1.05);
-  }
+    0%, 100% {
+        filter: drop-shadow(0 0 20px rgba(153, 238, 153, 0.6)) drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
+        transform: scale(1);
+    }
+    50% {
+        filter: drop-shadow(0 0 40px rgba(153, 238, 153, 1)) 
+                drop-shadow(0 0 60px rgba(153, 238, 153, 0.8)) 
+                drop-shadow(0 4px 12px rgba(0, 0, 0, 0.3));
+        transform: scale(1.02);
+    }
 }
 
-/* Responsive adjustments */
+@keyframes ripple {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
-  .button-container {
-    flex-direction: column;
-    align-items: center;
-    gap: 1rem;
-    bottom: 8vh;
-  }
-  
-  .final-score-button {
-    width: 80%;
-    max-width: 300px;
-  }
-  
-  .scoreDisplay {
-    width: 90%;
-  }
+    .main-container {
+        gap: clamp(1.5rem, 4vh, 2.5rem);
+        padding: clamp(1rem, 2vh, 2rem);
+    }
+    
+    .button-container {
+        flex-direction: column;
+        align-items: center;
+        gap: clamp(0.75rem, 1.5vh, 1.25rem);
+        max-width: 400px;
+    }
+    
+    .final-score-button {
+        width: 100%;
+        max-width: 300px;
+    }
+    
+    .score-card {
+        width: 95%;
+        padding: clamp(1.5rem, 3vh, 2.5rem) clamp(1rem, 2vw, 1.5rem);
+    }
+    
+    .page-title {
+        font-size: clamp(2rem, 10vw, 3.5rem);
+    }
+}
+
+/* Very small screens */
+@media (max-width: 480px) {
+    .main-container {
+        padding: clamp(0.5rem, 1vh, 1rem);
+        gap: clamp(1rem, 3vh, 2rem);
+    }
+    
+    .page-title {
+        font-size: clamp(1.8rem, 12vw, 3rem);
+        letter-spacing: clamp(0.02em, 0.5vw, 0.08em);
+        gap: clamp(0.02em, 0.3vw, 0.08em);
+    }
+    
+    .final-score-value {
+        font-size: clamp(3rem, 18vw, 8rem);
+    }
+}
+
+/* Landscape orientation adjustments */
+@media (max-height: 600px) and (orientation: landscape) {
+    .main-container {
+        gap: clamp(0.5rem, 2vh, 1.5rem);
+        padding: clamp(0.5rem, 1vh, 1rem);
+    }
+    
+    .header-section {
+        margin-bottom: clamp(0.5rem, 1vh, 1rem);
+    }
+    
+    .score-section {
+        margin-bottom: clamp(0.5rem, 1vh, 1rem);
+    }
+    
+    .score-card {
+        padding: clamp(1rem, 2vh, 1.5rem);
+    }
+}
+
+/* High-resolution displays */
+@media (min-resolution: 2dppx) {
+    .glass-card {
+        backdrop-filter: blur(20px);
+    }
+    
+    .final-score-button {
+        backdrop-filter: blur(15px);
+    }
+}
+
+/* Reduced motion accessibility */
+@media (prefers-reduced-motion: reduce) {
+    .title-letter,
+    .title-underline,
+    .final-score-value,
+    .final-score-button {
+        animation: none;
+        transition: none;
+    }
 }

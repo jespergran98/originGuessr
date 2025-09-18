@@ -9,7 +9,15 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 </head>
 <body>
-    
+    <!-- Animated Background Elements -->
+    <div class="background-animation">
+        <div class="floating-orb orb-1"></div>
+        <div class="floating-orb orb-2"></div>
+        <div class="floating-orb orb-3"></div>
+        <div class="grid-overlay"></div>
+    </div>
+
+    <!-- Map Container -->
     <div id="map"></div>
 
     <!-- Creative Overlay -->
@@ -19,25 +27,65 @@
         <div class="overlay-mesh"></div>
     </div>
 
-    <!-- Score Display Container -->
-    <div class="scoreDisplay">
-        <div class="score-line">
-            <div class="final-score-value" id="animatedScore">0</div>
-            <div class="score-divider" id="scoreDivider">/50,000</div>
-        </div>
-    </div>
+    <main class="main-container">
+        <!-- Header Section -->
+        <header class="header-section">
+            <div class="title-container">
+                <h1 class="page-title">
+                    <span class="title-letter">F</span>
+                    <span class="title-letter">I</span>
+                    <span class="title-letter">N</span>
+                    <span class="title-letter">A</span>
+                    <span class="title-letter">L</span>
+                    <span class="title-separator"></span>
+                    <span class="title-letter">S</span>
+                    <span class="title-letter">C</span>
+                    <span class="title-letter">O</span>
+                    <span class="title-letter">R</span>
+                    <span class="title-letter">E</span>
+                </h1>
+                <div class="title-underline"></div>
+            </div>
+        </header>
 
-    <!-- Button Container -->
-    <div class="button-container">
-        <button class="final-score-button" id="playAgainBtn">Play Again</button>
-        <button class="final-score-button" id="menuBtn">Menu</button>
-        <button class="final-score-button" id="summaryBtn">Summary</button>
-    </div>
+        <!-- Score Display Container -->
+        <section class="score-section">
+            <div class="score-card glass-card">
+                <div class="score-line">
+                    <div class="final-score-value" id="animatedScore">0</div>
+                    <div class="score-divider" id="scoreDivider">/50,000</div>
+                </div>
+                <div class="score-accent"></div>
+            </div>
+        </section>
+
+        <!-- Button Container -->
+        <div class="button-container">
+            <button class="final-score-button" id="playAgainBtn">
+                <span class="btn-text">Play Again</span>
+                <div class="btn-ripple"></div>
+            </button>
+            <button class="final-score-button" id="menuBtn">
+                <span class="btn-text">Menu</span>
+                <div class="btn-ripple"></div>
+            </button>
+            <button class="final-score-button" id="summaryBtn">
+                <span class="btn-text">Summary</span>
+                <div class="btn-ripple"></div>
+            </button>
+        </div>
+    </main>
+
+    <!-- Particle System Canvas -->
+    <canvas id="particleCanvas" class="particle-canvas"></canvas>
     
     <!-- Load scripts -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="javaScript/mainJS/map.js"></script>
     <script src="javaScript/mainJS/roundLogic.js"></script>
+    <script src="javaScript/mainJS/animations.js"></script>
+    <script src="javaScript/mainJS/particles.js"></script>
     <script src="javaScript/finalScoreJS/finalScoreDisplay.js"></script>
+    <script src="javaScript/finalScoreJS/finalScoreMap.js"></script>
 </body>
 </html>
