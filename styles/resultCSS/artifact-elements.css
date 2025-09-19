@@ -188,6 +188,18 @@
     flex-shrink: 0;
 }
 
+.score-value-zero {
+    font-size: clamp(1rem, 2vw, 10rem);
+    font-weight: bold;
+    text-shadow: 0 0 8px rgba(255, 0, 0, 0.3);
+    background: linear-gradient(45deg, #ff0000, #a80000);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
 .score-total {
     font-size: clamp(0.75rem, 1vw, 5rem);
     color: var(--light-green);

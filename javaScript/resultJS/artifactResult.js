@@ -368,23 +368,23 @@ class ArtifactResultHandler {
             console.warn('Distance box not found');
         }
     }
-
     populateScores() {
         if (!this.scores) {
             console.warn('No scores calculated, skipping score population');
             return;
         }
-
+    
         console.log('Populating scores with:', this.scores);
-
+    
         // Populate Year Score Box
         const yearScoreBox = document.querySelector('.yearScoreBox');
         if (yearScoreBox) {
+            const yearScoreClass = this.scores.yearScore === 0 ? 'score-value-zero' : 'score-value';
             yearScoreBox.innerHTML = `
                 <div class="score-content">
                     <div class="score-label">Year</div>
                     <div class="score-value-container">
-                        <span class="score-value">${this.scores.yearScore.toLocaleString()}</span>
+                        <span class="${yearScoreClass}">${this.scores.yearScore.toLocaleString()}</span>
                         <span class="score-total">/5000</span>
                     </div>
                 </div>
@@ -393,15 +393,16 @@ class ArtifactResultHandler {
         } else {
             console.warn('Year score box not found');
         }
-
+    
         // Populate Location Score Box
         const locationScoreBox = document.querySelector('.locationScoreBox');
         if (locationScoreBox) {
+            const locationScoreClass = this.scores.locationScore === 0 ? 'score-value-zero' : 'score-value';
             locationScoreBox.innerHTML = `
                 <div class="score-content">
                     <div class="score-label">Location</div>
                     <div class="score-value-container">
-                        <span class="score-value">${this.scores.locationScore.toLocaleString()}</span>
+                        <span class="${locationScoreClass}">${this.scores.locationScore.toLocaleString()}</span>
                         <span class="score-total">/5000</span>
                     </div>
                 </div>
@@ -410,15 +411,16 @@ class ArtifactResultHandler {
         } else {
             console.warn('Location score box not found');
         }
-
+    
         // Populate Total Score Box
         const totalScoreBox = document.querySelector('.totalScoreBox');
         if (totalScoreBox) {
+            const totalScoreClass = this.scores.totalScore === 0 ? 'score-value-zero' : 'score-value';
             totalScoreBox.innerHTML = `
                 <div class="score-content">
                     <div class="score-label">Total</div>
                     <div class="score-value-container">
-                        <span class="score-value">${this.scores.totalScore.toLocaleString()}</span>
+                        <span class="${totalScoreClass}">${this.scores.totalScore.toLocaleString()}</span>
                         <span class="score-total">/10000</span>
                     </div>
                 </div>
@@ -428,6 +430,7 @@ class ArtifactResultHandler {
             console.warn('Total score box not found');
         }
     }
+    
 
     populateNextButton() {
         const nextBox = document.querySelector('.nextBox');
