@@ -2,7 +2,7 @@
 class FinalScoreDisplay {
     constructor() {
         this.gameStats = null;
-        this.titleLetters = null;
+        this.titleElements = null;
         this.initialize();
     }
 
@@ -33,6 +33,7 @@ class FinalScoreDisplay {
     }
 
     initializeElements() {
+        this.titleElements = document.querySelectorAll('.title-letter, .title-separator');
         this.titleLetters = document.querySelectorAll('.title-letter');
         this.scoreElement = document.getElementById('animatedScore');
         this.scoreDivider = document.getElementById('scoreDivider');
@@ -105,7 +106,7 @@ class FinalScoreDisplay {
             });
         }
 
-        // Add hover effects to title letters
+        // Add hover effects to title letters only
         this.titleLetters.forEach((letter, index) => {
             letter.style.setProperty('--i', index);
             letter.addEventListener('mouseenter', () => this.animateLetterHover(letter));
@@ -148,14 +149,20 @@ class FinalScoreDisplay {
     }
 
     initializeAnimations() {
-        // Animate title letters entrance
-        this.titleLetters.forEach((letter, index) => {
-            letter.style.opacity = '0';
-            letter.style.transform = 'translateY(30px)';
+        // Animate title elements entrance (letters and separator)
+        this.titleElements.forEach((el, index) => {
+            el.style.setProperty('--i', index);
             setTimeout(() => {
-                letter.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
-                letter.style.opacity = '1';
-                letter.style.transform = 'translateY(0)';
+                el.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+                el.style.opacity = '1';
+                el.style.transform = 'translateY(0)';
+                
+                // Add animation class to letters after they animate in
+                if (el.classList.contains('title-letter')) {
+                    setTimeout(() => {
+                        el.classList.add('animated');
+                    }, 600); // Wait for entrance animation to complete
+                }
             }, index * 50 + 200);
         });
 
@@ -166,8 +173,6 @@ class FinalScoreDisplay {
         // Animate buttons
         this.buttons.forEach((button, index) => {
             if (!button) return;
-            button.style.opacity = '0';
-            button.style.transform = 'scale(0.9) translateY(20px)';
             setTimeout(() => {
                 button.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
                 button.style.opacity = '1';
@@ -178,8 +183,6 @@ class FinalScoreDisplay {
 
     staggerAnimation(elements, delay, startDelay = 0) {
         elements.forEach((element, index) => {
-            element.style.opacity = '0';
-            element.style.transform = 'translateY(30px) scale(0.95)';
             setTimeout(() => {
                 element.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
                 element.style.opacity = '1';

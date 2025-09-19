@@ -96,11 +96,18 @@ html, body {
 .title-letter {
     display: inline-block;
     position: relative;
+    cursor: default;
+    flex-shrink: 0;
+    /* Start completely invisible and transformed */
+    opacity: 0;
+    transform: translateY(30px);
+    /* Remove initial animation - will be added by JavaScript */
+}
+
+.title-letter.animated {
     animation: letterGlow 3s ease-in-out infinite alternate;
     animation-delay: calc(var(--i) * 0.1s);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    cursor: default;
-    flex-shrink: 0;
 }
 
 .title-letter:hover {
@@ -119,6 +126,9 @@ html, body {
     align-self: center;
     margin: 0 clamp(0.3rem, 0.8vw, 0.8rem);
     flex-shrink: 0;
+    /* Start completely invisible and transformed */
+    opacity: 0;
+    transform: translateY(30px);
 }
 
 .title-underline {
@@ -203,6 +213,8 @@ html, body {
     border-radius: 20px;
     position: relative;
     overflow: hidden;
+    opacity: 0; /* Start invisible */
+    transform: translateY(30px) scale(0.95); /* Start transformed */
 }
 
 .glass-card::before {
@@ -259,6 +271,8 @@ html, body {
     justify-content: center;
     transform-style: preserve-3d;
     box-shadow: 0 4px 15px rgba(153, 238, 153, 0.1);
+    opacity: 0; /* Start invisible */
+    transform: scale(0.9) translateY(20px); /* Start transformed */
 }
 
 .final-score-button::before {
@@ -432,6 +446,7 @@ html, body {
 /* Reduced motion accessibility */
 @media (prefers-reduced-motion: reduce) {
     .title-letter,
+    .title-separator,
     .title-underline,
     .final-score-value,
     .final-score-button {
