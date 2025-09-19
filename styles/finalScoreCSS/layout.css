@@ -17,8 +17,6 @@ html, body {
     height: 100%;
     z-index: 1;
     pointer-events: none;
-    opacity: 0.6;
-    filter: blur(1px);
 }
 
 /* Creative Overlay - Enhanced with Glassmorphism */
@@ -320,6 +318,42 @@ html, body {
     transform: translateY(-1px) scale(0.98);
 }
 
+/* Exit Summary Button */
+.exit-summary-button {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 10000;
+    background: linear-gradient(135deg, var(--light-green), var(--light-green-hover));
+    color: var(--dark-green);
+    border: 2px solid rgba(153, 238, 153, 0.6);
+    padding: clamp(0.75rem, 2vh, 1rem) clamp(1.25rem, 3vw, 1.5rem);
+    font-size: clamp(1.8rem, 3.6vw, 2.2rem);
+    font-weight: 600;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: inherit;
+    overflow: hidden;
+    width: auto;
+    min-width: clamp(240px, 30vw, 300px);
+    max-width: 200px;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    justify-content: center;
+    transform-style: preserve-3d;
+    box-shadow: 0 4px 15px rgba(153, 238, 153, 0.3);
+    opacity: 0;
+    transform: scale(0.9) translateY(-20px);
+    pointer-events: none;
+    backdrop-filter: none; /* No glass effect by default */
+}
+
+
+
 /* Animations */
 @keyframes letterGlow {
     0% { 
@@ -394,6 +428,15 @@ html, body {
     .page-title {
         font-size: clamp(2rem, 10vw, 3.5rem);
     }
+    
+    .exit-summary-button {
+        top: 15px;
+        right: 15px;
+        padding: clamp(0.5rem, 1.5vh, 0.75rem) clamp(1rem, 2vw, 1.25rem);
+        font-size: clamp(0.8rem, 1.5vw, 1rem);
+        min-width: clamp(100px, 12vw, 120px);
+        max-width: 150px;
+    }
 }
 
 /* Very small screens */
@@ -410,6 +453,15 @@ html, body {
     
     .final-score-value {
         font-size: clamp(3rem, 18vw, 8rem);
+    }
+    
+    .exit-summary-button {
+        top: 10px;
+        right: 10px;
+        padding: clamp(0.5rem, 1.5vh, 0.75rem) clamp(0.75rem, 1.5vw, 1rem);
+        font-size: clamp(0.7rem, 1.2vw, 0.9rem);
+        min-width: clamp(80px, 10vw, 100px);
+        max-width: 120px;
     }
 }
 
@@ -430,6 +482,15 @@ html, body {
     .score-card {
         padding: clamp(1rem, 2vh, 1.5rem);
     }
+    
+    .exit-summary-button {
+        top: 10px;
+        right: 10px;
+        padding: clamp(0.5rem, 1.5vh, 0.75rem) clamp(0.75rem, 1.5vw, 1rem);
+        font-size: clamp(0.8rem, 1.5vw, 1rem);
+        min-width: clamp(100px, 12vw, 120px);
+        max-width: 150px;
+    }
 }
 
 /* High-resolution displays */
@@ -438,7 +499,8 @@ html, body {
         backdrop-filter: blur(20px);
     }
     
-    .final-score-button {
+    .final-score-button,
+    .exit-summary-button {
         backdrop-filter: blur(15px);
     }
 }
@@ -449,7 +511,8 @@ html, body {
     .title-separator,
     .title-underline,
     .final-score-value,
-    .final-score-button {
+    .final-score-button,
+    .exit-summary-button {
         animation: none;
         transition: none;
     }

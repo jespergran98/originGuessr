@@ -149,53 +149,22 @@ class SummaryHandler {
         this.exitButton = document.createElement('button');
         this.exitButton.className = 'exit-summary-button';
         this.exitButton.innerHTML = `
-            <span class="exit-btn-text">Exit Summary</span>
+            <span class="btn-text">Exit Summary</span>
             <svg class="exit-btn-icon" viewBox="0 0 24 24" width="20" height="20">
                 <path fill="currentColor" d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
             </svg>
         `;
         
-        // Add styles
-        this.exitButton.style.cssText = `
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 10000;
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(59, 130, 246, 0.5);
-            border-radius: 12px;
-            padding: 12px 20px;
-            font-size: 16px;
-            font-weight: 600;
-            color: #1e40af;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            opacity: 0;
-            transform: translateY(-20px);
-            pointer-events: none;
-        `;
-        
         // Add hover effects
         this.exitButton.addEventListener('mouseenter', () => {
-            this.exitButton.style.background = 'rgba(59, 130, 246, 0.1)';
-            this.exitButton.style.borderColor = 'rgba(59, 130, 246, 0.8)';
-            this.exitButton.style.transform = 'translateY(-2px)';
-            this.exitButton.style.boxShadow = '0 12px 40px rgba(0, 0, 0, 0.15)';
+            this.exitButton.style.transform = 'translateY(-3px) scale(1.02)';
         });
         
         this.exitButton.addEventListener('mouseleave', () => {
-            this.exitButton.style.background = 'rgba(255, 255, 255, 0.95)';
-            this.exitButton.style.borderColor = 'rgba(59, 130, 246, 0.5)';
-            this.exitButton.style.transform = 'translateY(0)';
-            this.exitButton.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.1)';
+            this.exitButton.style.transform = 'translateY(0) scale(1)';
         });
         
-        // Add click handler
+        // Add click handler with ripple effect
         this.exitButton.addEventListener('click', (e) => {
             e.preventDefault();
             this.createRipple(e);
@@ -262,7 +231,7 @@ class SummaryHandler {
             height: ${size}px;
             left: ${x}px;
             top: ${y}px;
-            background: radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(153, 238, 153, 0.3) 0%, transparent 70%);
             border-radius: 50%;
             transform: scale(0);
             animation: ripple 0.6s ease-out;
