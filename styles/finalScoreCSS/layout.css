@@ -6,8 +6,6 @@ html, body {
     padding: 0;
     height: 100%;
     overflow: hidden;
-    align-items: center;
-    padding: clamp(1rem, 3vh, 2rem);
 }
 
 /* Map Background */
@@ -15,8 +13,8 @@ html, body {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     z-index: 1;
     pointer-events: none;
     opacity: 0.6;
@@ -28,8 +26,8 @@ html, body {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     z-index: 2;
     pointer-events: none;
     background: 
@@ -52,11 +50,11 @@ html, body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 100vh;
+    height: 100%;
     width: 100%;
-    gap: clamp(2rem, 6vh, 4rem);
-    padding-top: clamp(2rem, 5vh, 4rem);
-    padding-bottom: clamp(2rem, 5vh, 4rem);
+    gap: clamp(1.5rem, 4vh, 3rem);
+    padding: clamp(1rem, 3vh, 2rem);
+    box-sizing: border-box;
 }
 
 /* Header Section */
@@ -236,7 +234,6 @@ html, body {
     justify-content: center;
     width: 100%;
     max-width: 900px;
-    margin-top: auto;
 }
 
 .final-score-button {
@@ -361,7 +358,6 @@ html, body {
 @media (max-width: 768px) {
     .main-container {
         gap: clamp(1.5rem, 4vh, 2.5rem);
-        padding: clamp(1rem, 2vh, 2rem);
     }
     
     .button-container {
@@ -389,7 +385,6 @@ html, body {
 /* Very small screens */
 @media (max-width: 480px) {
     .main-container {
-        padding: clamp(0.5rem, 1vh, 1rem);
         gap: clamp(1rem, 3vh, 2rem);
     }
     
@@ -408,7 +403,6 @@ html, body {
 @media (max-height: 600px) and (orientation: landscape) {
     .main-container {
         gap: clamp(0.5rem, 2vh, 1.5rem);
-        padding: clamp(0.5rem, 1vh, 1rem);
     }
     
     .header-section {
