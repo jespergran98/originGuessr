@@ -19,6 +19,7 @@ body {
     gap: 2vw;
     padding: 5vh 2vw 180px 2vw; /* Top, Right, Bottom (footer space), Left */
     min-height: 0;
+    z-index: 1;
 }
 
 /* Column Layout */
@@ -103,6 +104,9 @@ body {
     background-color: var(--placeholder-color);
     min-height: 50px;
     border-radius: 3vh;
+    box-shadow: 
+        0 8px 64px rgba(0, 0, 0, 0.7),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
 }
 
 .distanceOffBox {
@@ -114,9 +118,32 @@ body {
 /* Right Column Elements */
 .imageResultBox {
     flex: 1;
-    background-color: var(--dark-green-hover);
+    background: rgba(4, 8, 3, 0.315);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(43, 124, 43, 0.3);
     border-radius: 3vh;
     min-height: 200px;
+    box-shadow: 
+        0 8px 64px rgba(0, 0, 0, 0.7),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.imageResultBox::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(
+        90deg, 
+        transparent, 
+        rgba(183, 172, 71, 0.4), 
+        transparent
+    );
 }
 
 .attributeBox {

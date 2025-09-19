@@ -30,6 +30,7 @@ body {
     margin-bottom: 10px;
     border-radius: 3vh;
     overflow: hidden;
+    z-index: 1;
 }
 
 .image-wrapper {

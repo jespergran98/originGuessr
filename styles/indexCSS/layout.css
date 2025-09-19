@@ -76,6 +76,7 @@ body {
     width: 100%;
     max-width: 700px;
     min-height: 0;
+    z-index: 1;
 }
 
 .option-header {
@@ -91,28 +92,82 @@ body {
     position: relative;
 }
 
-.timer-icon::before {
-    content: '';
-    position: absolute;
-    width: 20px;
-    height: 20px;
-    border: 2px solid var(--light-green);
-    border-radius: 50%;
-    top: 2px;
-    left: 2px;
+/* Container for the clock */
+.timer-icon {
+  position: relative;
+  width: 24px;
+  height: 24px;
 }
 
+/* Clock face */
 .timer-icon::after {
-    content: '';
-    position: absolute;
-    width: 8px;
-    height: 8px;
-    background: var(--light-green);
-    top: 8px;
-    left: 12px;
-    border-radius: 0 2px 2px 0;
-    transform: rotate(45deg);
+  content: '';
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border: 2px solid var(--light-green);
+  border-radius: 50%;
+  top: 0;
+  left: 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
 }
+
+/* Minute hand */
+.timer-icon::before {
+  content: '';
+  position: absolute;
+  width: 2px;
+  height: 8px;
+  background: var(--light-green);
+  top: 50%;
+  left: 50%;
+  transform-origin: 50% 100%; /* Rotate around the bottom of the hand */
+  transform: translate(-50%, -100%); /* Position hand to extend upward from center */
+  animation: rotate-minute 3s linear infinite;
+  z-index: 1; /* Ensure hands appear below the center circle */
+}
+
+/* Hour hand */
+.timer-icon__hour-hand {
+  position: absolute;
+  width: 6px;
+  height: 2px;
+  background: var(--light-green);
+  top: 50%;
+  left: 50%;
+  transform-origin: 0 50%; /* Rotate around the left edge */
+  border-radius: 1px;
+  animation: rotate-hour 10s linear infinite;
+  z-index: 1; /* Ensure hands appear below the center circle */
+}
+
+/* Center circle - using a pseudo-element on the hour hand span */
+.timer-icon__hour-hand::after {
+  content: '';
+  position: absolute;
+  width: 3px;
+  height: 3px;
+  background: var(--light-green);
+  border-radius: 50%;
+  top: 50%;
+  left: 0;
+  transform: translate(-50%, -50%);
+  z-index: 2; /* Ensure center circle appears above the hands */
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Animations for hands */
+@keyframes rotate-minute {
+  from { transform: translate(-50%, -100%) rotate(0deg); }
+  to { transform: translate(-50%, -100%) rotate(360deg); }
+}
+
+@keyframes rotate-hour {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 
 .period-icon::before {
     content: '';
