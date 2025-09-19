@@ -141,7 +141,7 @@ body {
     background: linear-gradient(
         90deg, 
         transparent, 
-        rgba(183, 172, 71, 0.4), 
+        rgb(88, 110, 83), 
         transparent
     );
 }

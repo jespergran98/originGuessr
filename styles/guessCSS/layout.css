@@ -24,33 +24,17 @@ body {
     flex: 1;
     display: flex;
     align-items: center;
-    justify-content: flex-start;
     min-height: 0;
     background-color: var(--placeholder-green);
     margin-bottom: 10px;
     border-radius: 3vh;
-    overflow: hidden;
     z-index: 1;
 }
 
 .image-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
     width: 100%;
     height: 100%;
     position: relative;
-    margin: 0;
-    padding: 0;
-}
-
-.guessBox img {
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    object-position: left;
-    display: block;
-    border-radius: 3vh;
 }
 
 .attributionBox {
