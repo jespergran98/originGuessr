@@ -5,8 +5,9 @@ class ResultMapAnimation {
         this.map = null;
         this.isAnimating = false;
         this.eventListeners = [];
-        this.lineCoordinates = null; // Store line coordinates for smooth updates
+        this.lineCoordinates = null;
         this.isLineAnimationComplete = false;
+        this.noGuess = false; // Track if no guess was made
         
         this.init();
     }
@@ -40,7 +41,47 @@ class ResultMapAnimation {
         }
 
         this.isAnimating = true;
-        this.lineCoordinates = coords; // Store for line updates
+        
+        // Check if no guess was made
+        const urlParams = new URLSearchParams(window.location.search);
+        this.noGuess = urlParams.get('noGuess') === 'true';
+
+        if (this.noGuess) {
+            // No guess was made - show only the correct location
+            console.log('No guess made - showing only correct location');
+            await this.animateNoGuessScenario(coords.correct);
+        } else {
+            // Normal animation with guess and correct location
+            console.log('Normal animation with guess');
+            await this.animateNormalScenario(coords);
+        }
+
+        this.isAnimating = false;
+    }
+
+    async animateNoGuessScenario(correct) {
+        try {
+            // Center the map on the correct location
+            this.map.setView([correct.lat, correct.lng], 8, { animate: false });
+            
+            await this.wait(300); // Brief pause
+            
+            // Show the correct location flag directly
+            this.addMarker('correct', correct.lat, correct.lng);
+            
+            // Zoom in slightly to focus on the correct location
+            this.map.flyTo([correct.lat, correct.lng], 10, {
+                duration: 1.5,
+                easeLinearity: 0.25
+            });
+            
+        } catch (error) {
+            console.error('Animation error (no guess):', error);
+        }
+    }
+
+    async animateNormalScenario(coords) {
+        this.lineCoordinates = coords;
         const { guess, correct } = coords;
 
         try {
@@ -54,15 +95,15 @@ class ResultMapAnimation {
             // Step 2: Show guess marker immediately with splat
             this.addMarkerWithSplat('guess', guess.lat, guess.lng);
             
-            await this.wait(600); // Shorter wait for snappiness
+            await this.wait(600);
             
             // Step 3: Quick zoom out and pan to optimal view
             this.map.flyTo(view.center, view.optimalZoom, {
-                duration: 1.2, // Faster transition
+                duration: 1.2,
                 easeLinearity: 0.2
             });
             
-            await this.wait(600); // Shorter wait
+            await this.wait(600);
             
             // Step 4: Draw line quickly
             await this.animateLine(guess, correct);
@@ -72,9 +113,7 @@ class ResultMapAnimation {
             this.enforceMarkerLayering();
             
         } catch (error) {
-            console.error('Animation error:', error);
-        } finally {
-            this.isAnimating = false;
+            console.error('Animation error (normal):', error);
         }
     }
 
@@ -109,7 +148,7 @@ class ResultMapAnimation {
             [correct.lat, correct.lng]
         ]);
 
-        const paddedBounds = bounds.pad(0.15); // Less padding for tighter view
+        const paddedBounds = bounds.pad(0.15);
         const center = paddedBounds.getCenter();
         
         let optimalZoom = this.map.getBoundsZoom(paddedBounds, false);
@@ -145,7 +184,7 @@ class ResultMapAnimation {
 
     drawAnimatedLine(start, end) {
         return new Promise(resolve => {
-            const steps = 30; // Fewer steps for snappier animation
+            const steps = 30;
             let currentStep = 0;
             this.isLineAnimationComplete = false;
             
@@ -157,7 +196,7 @@ class ResultMapAnimation {
                     return;
                 }
                 
-                const progress = this.easeOutCubic(currentStep / steps); // Snappier easing
+                const progress = this.easeOutCubic(currentStep / steps);
                 const currentLat = start.lat + (end.lat - start.lat) * progress;
                 const currentLng = start.lng + (end.lng - start.lng) * progress;
                 
@@ -184,17 +223,14 @@ class ResultMapAnimation {
     }
 
     bindLineUpdates(start, end) {
-        // Enhanced line update function that handles zoom animations better
         const updateLine = () => {
             if (!this.isLineAnimationComplete) return;
             
-            // Use requestAnimationFrame for smooth updates during zoom
             requestAnimationFrame(() => {
                 this.updateLinePath(start, end);
             });
         };
         
-        // Bind to more events for smoother line updates during zoom
         const events = ['move', 'zoom', 'zoomstart', 'zoomend', 'viewreset', 'resize'];
         
         events.forEach(event => {
@@ -202,7 +238,6 @@ class ResultMapAnimation {
             this.eventListeners.push({ event, handler: updateLine });
         });
 
-        // Special handling for zoom animation frames
         const handleZoomAnimation = () => {
             if (this.map.isZooming && this.map.isZooming()) {
                 this.updateLinePath(start, end);
@@ -210,7 +245,6 @@ class ResultMapAnimation {
             }
         };
 
-        // Listen for zoom start to begin continuous updates
         const zoomStartHandler = () => {
             requestAnimationFrame(handleZoomAnimation);
         };
@@ -234,7 +268,6 @@ class ResultMapAnimation {
             zIndexOffset: markerConfig.zIndex
         }).addTo(this.map);
 
-        // Immediate layering enforcement
         setTimeout(() => this.enforceMarkerLayering(), 10);
     }
 
@@ -253,23 +286,17 @@ class ResultMapAnimation {
             zIndexOffset: markerConfig.zIndex
         }).addTo(this.map);
 
-        // Ensure proper layering after marker creation
         setTimeout(() => this.enforceMarkerLayering(), 10);
     }
 
     enforceMarkerLayering() {
-        // Ensure markers stay above the line overlay
         Object.values(this.markers).forEach(marker => {
             if (marker && marker._icon) {
-                // Force z-index on the marker element
                 marker._icon.style.zIndex = marker.options.zIndexOffset || 1000;
-                
-                // Bring to front in Leaflet's layer system
                 marker.bringToFront && marker.bringToFront();
             }
         });
 
-        // Ensure line overlay stays below markers
         if (this.lineOverlay) {
             this.lineOverlay.style.zIndex = '500';
         }
@@ -284,6 +311,7 @@ class ResultMapAnimation {
                             <path class="marker-body" d="M16 2C23 2 29 8 29 16C29 24 16 46 16 46C16 46 3 24 3 16C3 8 9 2 16 2Z"/>
                             <circle class="marker-pin" cx="16" cy="16" r="5"/>
                         </svg>
+                    </div>
                 `,
                 className: 'guess-marker-container',
                 size: [32, 48],

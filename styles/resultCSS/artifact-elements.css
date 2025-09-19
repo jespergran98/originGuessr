@@ -60,6 +60,16 @@
     background-clip: text;
 }
 
+.noguess-year-off-highlight {
+    font-size: 1.5em;
+    font-weight: bold;
+    text-shadow: 0 0 8px rgba(255, 0, 0, 0.3);
+    background: linear-gradient(45deg, #ff0000, #a80000);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
 /* Distance Box Styling */
 .distance-content {
     text-align: center;
@@ -70,6 +80,7 @@
     color: var(--light-green);
     line-height: 1.4;
 }
+
 .distance-highlight {
     font-size: 1.5em;
     font-weight: bold;
@@ -79,6 +90,17 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
 }
+
+.noguess-distance-highlight {
+    font-size: 1.5em;
+    font-weight: bold;
+    text-shadow: 0 0 8px rgba(255, 0, 0, 0.3);
+    background: linear-gradient(45deg, #ff0000, #a80000);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
 
 .distance-value {
     font-size: 1.5em;

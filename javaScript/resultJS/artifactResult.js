@@ -5,6 +5,7 @@ class ArtifactResultHandler {
         this.guessCoordinates = null;
         this.guessYear = null;
         this.scores = null;
+        this.noGuess = false; // Track if no guess was made
         this.initialize();
     }
 
@@ -22,13 +23,18 @@ class ArtifactResultHandler {
         const guessLat = urlParams.get('guessLat');
         const guessLng = urlParams.get('guessLng');
         const guessYearParam = urlParams.get('guessYear');
+        const noGuessParam = urlParams.get('noGuess'); // Check for no guess flag
 
         console.log('URL Parameters:', {
             artifact: artifactParam ? 'present' : 'missing',
             guessLat,
             guessLng,
-            guessYear: guessYearParam
+            guessYear: guessYearParam,
+            noGuess: noGuessParam
         });
+
+        // Check if this is a "no guess" scenario
+        this.noGuess = noGuessParam === 'true';
 
         if (!artifactParam || !guessLat || !guessLng || !guessYearParam) {
             console.error('Missing URL parameters');
@@ -47,6 +53,7 @@ class ArtifactResultHandler {
             console.log('Processing result for:', this.artifactData.title);
             console.log('Guess coordinates:', this.guessCoordinates);
             console.log('Guess year:', this.guessYear);
+            console.log('No guess year made:', this.noGuess);
 
             if (!this.validateArtifactData()) {
                 console.error('Invalid artifact data:', this.artifactData);
@@ -92,14 +99,26 @@ class ArtifactResultHandler {
             }
         }
 
-        this.scores = window.resultCalculation.calculateAllScores({
-            correctLat: this.artifactData.lat,
-            correctLng: this.artifactData.lng,
-            guessLat: this.guessCoordinates.lat,
-            guessLng: this.guessCoordinates.lng,
-            correctYear: this.artifactData.year,
-            guessedYear: this.guessYear
-        });
+        // If no guess was made, set all scores to 0
+        if (this.noGuess) {
+            this.scores = {
+                distance: null, // No distance calculation needed
+                locationScore: 0,
+                yearScore: 0,
+                totalScore: 0
+            };
+            console.log('No guess made - all scores set to 0');
+        } else {
+            // Normal score calculation
+            this.scores = window.resultCalculation.calculateAllScores({
+                correctLat: this.artifactData.lat,
+                correctLng: this.artifactData.lng,
+                guessLat: this.guessCoordinates.lat,
+                guessLng: this.guessCoordinates.lng,
+                correctYear: this.artifactData.year,
+                guessedYear: this.guessYear
+            });
+        }
 
         console.log('Calculated scores:', this.scores);
     }
@@ -156,130 +175,142 @@ class ArtifactResultHandler {
 
     populateYearOff() {
         const yearOffBox = document.querySelector('.yearOffBox');
-        if (yearOffBox && this.artifactData.year !== undefined && this.guessYear !== null) {
-            const yearDifference = Math.abs(this.guessYear - this.artifactData.year);
-            const formattedDifference = yearDifference.toLocaleString();
-            
-            yearOffBox.innerHTML = `
-                <div class="result-content year-off-content">
-                    <div class="year-off-text">You were <span class="year-off-highlight">${formattedDifference}</span> years off</div>
-                </div>
-            `;
-            console.log('Year difference populated:', formattedDifference);
+        if (yearOffBox) {
+            if (this.noGuess) {
+                // Show "No guess made" message instead of year difference
+                yearOffBox.innerHTML = `
+                    <div class="result-content year-off-content">
+                        <div class="year-off-text">No year guess made - <span class="noguess-year-off-highlight">Time expired</span></div>
+                    </div>
+                `;
+                console.log('Year off populated: No guess made');
+            } else if (this.artifactData.year !== undefined && this.guessYear !== null) {
+                const yearDifference = Math.abs(this.guessYear - this.artifactData.year);
+                const formattedDifference = yearDifference.toLocaleString();
+                
+                yearOffBox.innerHTML = `
+                    <div class="result-content year-off-content">
+                        <div class="year-off-text">You were <span class="year-off-highlight">${formattedDifference}</span> years off</div>
+                    </div>
+                `;
+                console.log('Year difference populated:', formattedDifference);
+            } else {
+                console.warn('Year off box found but missing data');
+            }
         } else {
-            console.warn('Year off box not found or missing data');
+            console.warn('Year off box not found');
         }
     }
 
-populateImage() {
-    const imageResultBox = document.querySelector('.imageResultBox');
-    if (imageResultBox && this.artifactData.image) {
-        // Create image wrapper div
-        const imageWrapper = document.createElement('div');
-        imageWrapper.className = 'artifact-image-container';
-        imageWrapper.style.cssText = `
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-sizing: border-box;
-            position: relative;
-            margin: 0;
-            padding: 0;
-        `;
-        
-        // Create image element
-        const img = document.createElement('img');
-        img.src = this.artifactData.image;
-        img.alt = this.artifactData.title;
-        img.className = 'artifact-result-image';
-        
-        // Function to apply border radius based on actual rendered image size
-        const applyImageBorderRadius = () => {
-            const containerRect = imageWrapper.getBoundingClientRect();
-            const containerWidth = containerRect.width;
-            const containerHeight = containerRect.height;
+    populateImage() {
+        const imageResultBox = document.querySelector('.imageResultBox');
+        if (imageResultBox && this.artifactData.image) {
+            // Create image wrapper div
+            const imageWrapper = document.createElement('div');
+            imageWrapper.className = 'artifact-image-container';
+            imageWrapper.style.cssText = `
+                width: 100%;
+                height: 100%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-sizing: border-box;
+                position: relative;
+                margin: 0;
+                padding: 0;
+            `;
             
-            // Get image natural dimensions
-            const naturalWidth = img.naturalWidth;
-            const naturalHeight = img.naturalHeight;
+            // Create image element
+            const img = document.createElement('img');
+            img.src = this.artifactData.image;
+            img.alt = this.artifactData.title;
+            img.className = 'artifact-result-image';
             
-            if (naturalWidth && naturalHeight) {
-                // Calculate the rendered size based on object-fit: contain logic
-                const containerAspect = containerWidth / containerHeight;
-                const imageAspect = naturalWidth / naturalHeight;
+            // Function to apply border radius based on actual rendered image size
+            const applyImageBorderRadius = () => {
+                const containerRect = imageWrapper.getBoundingClientRect();
+                const containerWidth = containerRect.width;
+                const containerHeight = containerRect.height;
                 
-                let renderedWidth, renderedHeight;
+                // Get image natural dimensions
+                const naturalWidth = img.naturalWidth;
+                const naturalHeight = img.naturalHeight;
                 
-                if (imageAspect > containerAspect) {
-                    // Image is wider than container aspect ratio - fit to width
-                    renderedWidth = containerWidth;
-                    renderedHeight = containerWidth / imageAspect;
-                } else {
-                    // Image is taller than container aspect ratio - fit to height
-                    renderedHeight = containerHeight;
-                    renderedWidth = containerHeight * imageAspect;
+                if (naturalWidth && naturalHeight) {
+                    // Calculate the rendered size based on object-fit: contain logic
+                    const containerAspect = containerWidth / containerHeight;
+                    const imageAspect = naturalWidth / naturalHeight;
+                    
+                    let renderedWidth, renderedHeight;
+                    
+                    if (imageAspect > containerAspect) {
+                        // Image is wider than container aspect ratio - fit to width
+                        renderedWidth = containerWidth;
+                        renderedHeight = containerWidth / imageAspect;
+                    } else {
+                        // Image is taller than container aspect ratio - fit to height
+                        renderedHeight = containerHeight;
+                        renderedWidth = containerHeight * imageAspect;
+                    }
+                    
+                    // The image should be centered vertically due to align-items: center
+                    // Calculate the center position (this matches flexbox align-items: center behavior)
+                    const topOffset = (containerHeight - renderedHeight) / 2;
+                    
+                    // Create a clipping element that matches the actual image size
+                    const clipElement = document.createElement('div');
+                    clipElement.style.cssText = `
+                        position: absolute;
+                        centered: 0;
+                        top: ${topOffset}px;
+                        width: ${renderedWidth}px;
+                        height: ${renderedHeight}px;
+                        border-radius: 3vh;
+                        overflow: hidden;
+                        pointer-events: none;
+                    `;
+                    
+                    // Move the image into the clip element and reset its styles
+                    img.style.cssText = `
+                        width: ${renderedWidth}px;
+                        height: ${renderedHeight}px;
+                        object-fit: cover;
+                        object-position: center;
+                        border-radius: 3vh;
+                    `;
+                    
+                    clipElement.appendChild(img);
+                    imageWrapper.appendChild(clipElement);
                 }
-                
-                // The image should be centered vertically due to align-items: center
-                // Calculate the center position (this matches flexbox align-items: center behavior)
-                const topOffset = (containerHeight - renderedHeight) / 2;
-                
-                // Create a clipping element that matches the actual image size
-                const clipElement = document.createElement('div');
-                clipElement.style.cssText = `
-                    position: absolute;
-                    centered: 0;
-                    top: ${topOffset}px;
-                    width: ${renderedWidth}px;
-                    height: ${renderedHeight}px;
-                    border-radius: 3vh;
-                    overflow: hidden;
-                    pointer-events: none;
-                `;
-                
-                // Move the image into the clip element and reset its styles
-                img.style.cssText = `
-                    width: ${renderedWidth}px;
-                    height: ${renderedHeight}px;
-                    object-fit: cover;
-                    object-position: center;
-                    border-radius: 3vh;
-                `;
-                
-                clipElement.appendChild(img);
-                imageWrapper.appendChild(clipElement);
+            };
+            
+            // Wait for image to load, then apply border radius
+            img.onload = () => {
+                console.log('Image loaded successfully');
+                applyImageBorderRadius();
+            };
+            
+            img.onerror = () => {
+                console.error('Image failed to load:', img.src);
+            };
+            
+            // Append image to wrapper first (will be moved by applyImageBorderRadius)
+            imageWrapper.appendChild(img);
+            
+            // Clear existing content and add the new wrapper
+            imageResultBox.innerHTML = '';
+            imageResultBox.appendChild(imageWrapper);
+            
+            // If image is already loaded (cached), apply border radius immediately
+            if (img.complete && img.naturalWidth) {
+                applyImageBorderRadius();
             }
-        };
-        
-        // Wait for image to load, then apply border radius
-        img.onload = () => {
-            console.log('Image loaded successfully');
-            applyImageBorderRadius();
-        };
-        
-        img.onerror = () => {
-            console.error('Image failed to load:', img.src);
-        };
-        
-        // Append image to wrapper first (will be moved by applyImageBorderRadius)
-        imageWrapper.appendChild(img);
-        
-        // Clear existing content and add the new wrapper
-        imageResultBox.innerHTML = '';
-        imageResultBox.appendChild(imageWrapper);
-        
-        // If image is already loaded (cached), apply border radius immediately
-        if (img.complete && img.naturalWidth) {
-            applyImageBorderRadius();
+            
+            console.log('Image populated with border-radius fix');
+        } else {
+            console.warn('Image box not found or no image data');
         }
-        
-        console.log('Image populated with border-radius fix');
-    } else {
-        console.warn('Image box not found or no image data');
     }
-}
 
     populateAttribution() {
         const attributeBox = document.querySelector('.attributeBox');
@@ -305,24 +336,36 @@ populateImage() {
 
     populateDistance() {
         const distanceOffBox = document.querySelector('.distanceOffBox');
-        if (distanceOffBox && this.artifactData.lat && this.artifactData.lng && this.guessCoordinates) {
-            const distance = this.calculateDistance(
-                this.artifactData.lat,
-                this.artifactData.lng,
-                this.guessCoordinates.lat,
-                this.guessCoordinates.lng
-            );
+        if (distanceOffBox) {
+            if (this.noGuess) {
+                // Show "No guess made" message instead of distance
+                distanceOffBox.innerHTML = `
+                    <div class="result-content distance-content">
+                        <div class="distance-text">No location guess made - <span class="noguess-distance-highlight">Time expired</span></div>
+                    </div>
+                `;
+                console.log('Distance populated: No guess made');
+            } else if (this.artifactData.lat && this.artifactData.lng && this.guessCoordinates) {
+                const distance = this.calculateDistance(
+                    this.artifactData.lat,
+                    this.artifactData.lng,
+                    this.guessCoordinates.lat,
+                    this.guessCoordinates.lng
+                );
 
-            const formattedDistance = this.formatDistance(distance);
-            
-            distanceOffBox.innerHTML = `
-                <div class="result-content distance-content">
-                    <div class="distance-text">You were <span class="distance-highlight">${formattedDistance}</span> away from the correct location</div>
-                </div>
-            `;
-            console.log('Distance populated:', formattedDistance);
+                const formattedDistance = this.formatDistance(distance);
+                
+                distanceOffBox.innerHTML = `
+                    <div class="result-content distance-content">
+                        <div class="distance-text">You were <span class="distance-highlight">${formattedDistance}</span> away from the correct location</div>
+                    </div>
+                `;
+                console.log('Distance populated:', formattedDistance);
+            } else {
+                console.warn('Distance box found but missing coordinate data');
+            }
         } else {
-            console.warn('Distance box not found or missing coordinate data');
+            console.warn('Distance box not found');
         }
     }
 
@@ -433,11 +476,14 @@ populateImage() {
             });
 
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: 'Ã‚Â© OpenStreetMap contributors'
+                attribution: '© OpenStreetMap contributors'
             }).addTo(map);
 
             // Set a default view (can be customized as needed)
             map.setView([0, 0], 2);
+
+            // Make the map globally accessible for the animation
+            window.map = map;
 
             console.log('Map initialized successfully');
         } catch (error) {

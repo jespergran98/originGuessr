@@ -82,22 +82,6 @@ class FinalScoreDisplay {
         // Initialize ripple effects for buttons
         this.initializeRippleEffect(this.buttons);
 
-        if (this.playAgainBtn) {
-            this.playAgainBtn.addEventListener('click', (e) => {
-                this.createRipple(e, this.playAgainBtn);
-                console.log('Play Again clicked - functionality to be implemented');
-                // Placeholder for future implementation
-            });
-        }
-
-        if (this.menuBtn) {
-            this.menuBtn.addEventListener('click', (e) => {
-                this.createRipple(e, this.menuBtn);
-                console.log('Menu clicked - functionality to be implemented');
-                // Placeholder for future implementation
-            });
-        }
-
         if (this.summaryBtn) {
             this.summaryBtn.addEventListener('click', (e) => {
                 this.createRipple(e, this.summaryBtn);

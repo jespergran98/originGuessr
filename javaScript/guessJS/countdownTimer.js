@@ -205,15 +205,167 @@ class CountdownTimer {
             this.timerContainer.classList.add('time-up');
         }
         
-        console.log('Time up!');
+        console.log('Time up! Processing forced navigation...');
         
-        // Auto-submit the current guess after a short delay
+        // Handle navigation based on current game state
         setTimeout(() => {
-            const guessButton = document.getElementById('makeGuess-button');
-            if (guessButton && !guessButton.disabled) {
-                guessButton.click();
+            this.handleTimeUpNavigation();
+        }, 1500); // Short delay to show "TIME UP!" message
+    }
+
+    handleTimeUpNavigation() {
+        // Check if we have a marker placed
+        const hasMarker = window.markerManager && window.markerManager.hasMarker();
+        
+        if (hasMarker) {
+            // User has placed a marker - proceed to result page with their guess
+            console.log('Timer expired with marker placed - proceeding to result page');
+            this.proceedToResultPage();
+        } else {
+            // No marker placed - proceed to next round or final score with default/no guess
+            console.log('Timer expired without marker - proceeding to next round or final score');
+            this.proceedWithoutGuess();
+        }
+    }
+
+    proceedToResultPage() {
+        // This mimics the logic from MarkerManager.navigateToResult()
+        const artifact = window.currentArtifact;
+        
+        if (!artifact) {
+            console.error('Missing artifact data for time-up navigation');
+            // Fallback to proceeding without guess
+            this.proceedWithoutGuess();
+            return;
+        }
+
+        // Get the current marker coordinates
+        const guessCoordinates = window.markerManager.getGuessCoordinates();
+        
+        if (!guessCoordinates) {
+            console.error('No guess coordinates available despite marker being placed');
+            this.proceedWithoutGuess();
+            return;
+        }
+
+        // Get the current year from the timeline slider
+        let guessYear = 1337; // Default fallback
+        if (window.timelineSlider && typeof window.timelineSlider.getCurrentYear === 'function') {
+            guessYear = window.timelineSlider.getCurrentYear();
+        }
+
+        const params = new URLSearchParams();
+        params.append('artifact', encodeURIComponent(JSON.stringify(artifact)));
+        params.append('guessLat', guessCoordinates.lat.toString());
+        params.append('guessLng', guessCoordinates.lng.toString());
+        params.append('guessYear', guessYear.toString());
+        
+        // Add round information if available
+        if (window.roundLogic) {
+            const gameStats = window.roundLogic.getGameStats();
+            params.append('round', gameStats.currentRound.toString());
+            params.append('totalScore', gameStats.totalScore.toString());
+            params.append('scores', encodeURIComponent(JSON.stringify(gameStats.roundScores)));
+            
+            // Add timer parameter to maintain timer setting for next round
+            if (gameStats.timerSeconds) {
+                params.append('timerSeconds', gameStats.timerSeconds.toString());
             }
-        }, 1500);
+        }
+        
+        console.log('Timer expired - navigating to result page with guess:', {
+            artifact: artifact.title,
+            coordinates: guessCoordinates,
+            year: guessYear
+        });
+        
+        window.location.href = `result.html?${params.toString()}`;
+    }
+
+    proceedWithoutGuess() {
+        // Check if this is the final round
+        if (window.roundLogic) {
+            const gameStats = window.roundLogic.getGameStats();
+            
+            if (gameStats.isLastRound) {
+                // Final round - go directly to final score page
+                console.log('Timer expired on final round without guess - going to final score');
+                this.goDirectToFinalScore();
+            } else {
+                // Not final round - go to result page with no guess (will score 0)
+                console.log('Timer expired without guess - going to result page with no guess');
+                this.proceedToResultPageWithoutGuess();
+            }
+        } else {
+            // Fallback - assume it's not the final round
+            this.proceedToResultPageWithoutGuess();
+        }
+    }
+
+    proceedToResultPageWithoutGuess() {
+        const artifact = window.currentArtifact;
+        
+        if (!artifact) {
+            console.error('Missing artifact data - cannot proceed to result page');
+            return;
+        }
+
+        // Use default/invalid coordinates to indicate no guess
+        const defaultLat = 0;
+        const defaultLng = 0;
+        const defaultYear = 1337;
+
+        const params = new URLSearchParams();
+        params.append('artifact', encodeURIComponent(JSON.stringify(artifact)));
+        params.append('guessLat', defaultLat.toString());
+        params.append('guessLng', defaultLng.toString());
+        params.append('guessYear', defaultYear.toString());
+        params.append('noGuess', 'true'); // Flag to indicate no guess was made
+        
+        // Add round information if available
+        if (window.roundLogic) {
+            const gameStats = window.roundLogic.getGameStats();
+            params.append('round', gameStats.currentRound.toString());
+            params.append('totalScore', gameStats.totalScore.toString());
+            params.append('scores', encodeURIComponent(JSON.stringify(gameStats.roundScores)));
+            
+            // Add timer parameter to maintain timer setting for next round
+            if (gameStats.timerSeconds) {
+                params.append('timerSeconds', gameStats.timerSeconds.toString());
+            }
+        }
+        
+        console.log('Timer expired - navigating to result page without guess');
+        window.location.href = `result.html?${params.toString()}`;
+    }
+
+    goDirectToFinalScore() {
+        // Calculate final score without adding any points for this round
+        if (window.roundLogic) {
+            const gameStats = window.roundLogic.getGameStats();
+            const finalTotalScore = gameStats.totalScore; // No additional points
+            const finalRoundScores = [...gameStats.roundScores, 0]; // Add 0 for this round
+            
+            console.log('Going directly to final score - Timer expired on final round');
+            console.log('Final total score:', finalTotalScore);
+            console.log('All round scores:', finalRoundScores);
+            
+            // Clear game artifacts from sessionStorage
+            sessionStorage.removeItem('gameArtifacts');
+            
+            // Create URL parameters for final score page
+            const params = new URLSearchParams();
+            params.append('totalScore', finalTotalScore.toString());
+            params.append('roundScores', encodeURIComponent(JSON.stringify(finalRoundScores)));
+            params.append('maxRounds', '5'); // Assuming 5 rounds max
+            
+            // Navigate to final score page
+            window.location.href = `finalScore.html?${params.toString()}`;
+        } else {
+            console.error('Round logic not available - cannot calculate final score');
+            // Fallback navigation
+            window.location.href = 'finalScore.html';
+        }
     }
 
     stop() {
