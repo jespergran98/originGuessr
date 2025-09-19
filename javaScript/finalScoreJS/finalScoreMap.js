@@ -197,13 +197,31 @@ class FinalScoreMap {
         }
 
         try {
-            const bounds = L.latLngBounds(coordinates);
-            const paddedBounds = bounds.pad(0.1);
+            // Find the extreme coordinates to create the perfect fit
+            const lats = coordinates.map(coord => coord[0]);
+            const lngs = coordinates.map(coord => coord[1]);
             
+            const northernmost = Math.max(...lats);
+            const southernmost = Math.min(...lats);
+            const easternmost = Math.max(...lngs);
+            const westernmost = Math.min(...lngs);
+            
+            // Create bounds with the exact extremes
+            const bounds = L.latLngBounds(
+                [southernmost, westernmost], // southwest corner
+                [northernmost, easternmost]  // northeast corner
+            );
+            
+            // Add a tiny margin (2% padding) for perfect fit
+            const paddedBounds = bounds.pad(0.02);
+            
+            // Fit the bounds without zoom restrictions for perfect fit
             this.map.fitBounds(paddedBounds, {
-                maxZoom: 8, // Don't zoom in too much for final score overview
-                padding: [20, 20]
+                padding: [15, 15] // Small pixel padding for marker visibility at edges
             });
+            
+            console.log(`Final score map bounds - N:${northernmost.toFixed(4)}, S:${southernmost.toFixed(4)}, E:${easternmost.toFixed(4)}, W:${westernmost.toFixed(4)}`);
+            
         } catch (error) {
             console.warn('Could not set optimal view:', error);
             this.map.setView([20, 0], 2);
