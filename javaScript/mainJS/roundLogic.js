@@ -8,6 +8,7 @@ class RoundLogic {
         this.usedArtifacts = [];
         this.timeframeMinIndex = null;
         this.timeframeMaxIndex = null;
+        this.timerSeconds = null; // Add timer seconds property
         this.gameData = {
             rounds: [],
             totalScore: 0,
@@ -40,6 +41,7 @@ class RoundLogic {
         const usedArtifactsParam = urlParams.get('usedArtifacts');
         const minIdxParam = urlParams.get('timeframeMinIndex');
         const maxIdxParam = urlParams.get('timeframeMaxIndex');
+        const timerParam = urlParams.get('timerSeconds'); // Get timer parameter
 
         if (roundParam && scoreParam) {
             // Continue existing game from URL
@@ -71,8 +73,16 @@ class RoundLogic {
                 this.timeframeMaxIndex = parseInt(maxIdxParam);
             }
             
+            // Load timer seconds from URL
+            if (timerParam) {
+                this.timerSeconds = parseInt(timerParam);
+            }
+            
             console.log(`Continuing game from URL - Round ${this.currentRound}, Total Score: ${this.totalScore}`);
             console.log('Used artifacts:', this.usedArtifacts);
+            if (this.timerSeconds) {
+                console.log('Timer enabled:', this.timerSeconds, 'seconds');
+            }
         } else {
             // Try to load from sessionStorage
             const gameStateStr = sessionStorage.getItem('gameState');
@@ -85,9 +95,13 @@ class RoundLogic {
                     this.usedArtifacts = state.usedArtifacts || [];
                     this.timeframeMinIndex = state.timeframeMinIndex ? parseInt(state.timeframeMinIndex) : null;
                     this.timeframeMaxIndex = state.timeframeMaxIndex ? parseInt(state.timeframeMaxIndex) : null;
+                    this.timerSeconds = state.timerSeconds ? parseInt(state.timerSeconds) : null; // Load timer from session
                     
                     console.log(`Loaded game state from session - Round ${this.currentRound}, Total Score: ${this.totalScore}`);
                     console.log('Used artifacts:', this.usedArtifacts);
+                    if (this.timerSeconds) {
+                        console.log('Timer enabled:', this.timerSeconds, 'seconds');
+                    }
                 } catch (e) {
                     console.warn('Error parsing session game state:', e);
                     this.startNewGame();
@@ -98,8 +112,8 @@ class RoundLogic {
             }
         }
 
-        // Fallback: If timeframe not set from URL, try sessionStorage
-        if (this.timeframeMinIndex === null || this.timeframeMaxIndex === null) {
+        // Fallback: If timeframe or timer not set from URL, try sessionStorage
+        if (this.timeframeMinIndex === null || this.timeframeMaxIndex === null || this.timerSeconds === null) {
             const gameStateStr = sessionStorage.getItem('gameState');
             if (gameStateStr) {
                 try {
@@ -110,8 +124,11 @@ class RoundLogic {
                     if (this.timeframeMaxIndex === null && state.timeframeMaxIndex) {
                         this.timeframeMaxIndex = parseInt(state.timeframeMaxIndex);
                     }
+                    if (this.timerSeconds === null && state.timerSeconds) {
+                        this.timerSeconds = parseInt(state.timerSeconds);
+                    }
                 } catch (e) {
-                    console.warn('Error parsing session for timeframe fallback:', e);
+                    console.warn('Error parsing session for fallback:', e);
                 }
             }
         }
@@ -127,6 +144,7 @@ class RoundLogic {
         this.usedArtifacts = [];
         this.timeframeMinIndex = null;
         this.timeframeMaxIndex = null;
+        this.timerSeconds = null; // Reset timer
         sessionStorage.removeItem('gameArtifacts'); // Clear previous game artifacts
         console.log('Starting new game');
     }
@@ -236,7 +254,8 @@ class RoundLogic {
             roundScores: this.roundScores,
             usedArtifacts: this.usedArtifacts,
             timeframeMinIndex: this.timeframeMinIndex,
-            timeframeMaxIndex: this.timeframeMaxIndex
+            timeframeMaxIndex: this.timeframeMaxIndex,
+            timerSeconds: this.timerSeconds // Save timer to session
         }));
         
         // Navigate to guess page with updated parameters
@@ -286,6 +305,11 @@ class RoundLogic {
             params.append('timeframeMaxIndex', this.timeframeMaxIndex.toString());
         }
         
+        // Include timer parameter if set
+        if (this.timerSeconds !== null && this.timerSeconds > 0) {
+            params.append('timerSeconds', this.timerSeconds.toString());
+        }
+        
         window.location.href = `guess.html?${params.toString()}`;
     }
 
@@ -333,6 +357,7 @@ class RoundLogic {
             totalScore: this.totalScore,
             roundScores: this.roundScores,
             usedArtifacts: this.usedArtifacts,
+            timerSeconds: this.timerSeconds, // Include timer in stats
             isLastRound: this.currentRound >= this.maxRounds
         };
     }
@@ -376,6 +401,7 @@ class RoundLogic {
         this.usedArtifacts = [];
         this.timeframeMinIndex = null;
         this.timeframeMaxIndex = null;
+        this.timerSeconds = null; // Reset timer
         sessionStorage.removeItem('gameArtifacts');
         console.log('Game reset');
     }

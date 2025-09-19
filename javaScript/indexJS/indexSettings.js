@@ -364,18 +364,35 @@ class IndexGameSettings {
         };
     }
 
+    // Check if timer is enabled
+    isTimerEnabled() {
+        const activeTimer = this.buttonManager.getActiveButton(this.timerButtons);
+        return activeTimer?.dataset.timer === 'yes';
+    }
+
     startGame() {
         const activeTimeframe = this.buttonManager.getActiveButton(this.timeframeButtons);
+        const timerEnabled = this.isTimerEnabled();
+        
         let params = new URLSearchParams();
         params.append('round', '1');
         params.append('totalScore', '0');
         params.append('scores', '[]');
 
+        // Add timeframe parameters if flexible timeframe is selected
         if (activeTimeframe && activeTimeframe.dataset.timeframe === 'flexible') {
             const selection = this.getTimeframeSelection();
             if (selection) {
                 params.append('timeframeMinIndex', selection.minIndex.toString());
                 params.append('timeframeMaxIndex', selection.maxIndex.toString());
+            }
+        }
+
+        // Add timer parameters if timer is enabled
+        if (timerEnabled) {
+            const timerSelection = this.getTimerSelection();
+            if (timerSelection) {
+                params.append('timerSeconds', timerSelection.seconds.toString());
             }
         }
 

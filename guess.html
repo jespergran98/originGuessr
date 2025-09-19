@@ -20,6 +20,15 @@
     
     <h1 class="header-text">ORIGINGUESSR</h1>
 
+    <!-- Countdown Timer - appears only when timer is enabled -->
+    <div class="countdown-timer" id="countdownTimer" style="display: none;">
+        <div class="timer-label">TIME REMAINING</div>
+        <div class="timer-value" id="timerValue">0:00</div>
+        <div class="timer-progress">
+            <div class="timer-progress-bar" id="timerProgressBar"></div>
+        </div>
+    </div>
+
     <!-- Game Stats UI -->
     <div class="game-stats">
         <div class="stat-item">
@@ -64,5 +73,7 @@
     <script src="javaScript/guessJS/artifactRandomizer.js"></script>
     <script src="javaScript/guessJS/marker.js"></script>
     <script src="javaScript/guessJS/mapBoxSlider.js"></script>
+    <script src="javaScript/guessJS/countdownTimer.js"></script>
+    <script src="javaScript/guessJS/countdownTimer.js"></script>
   </body>
 </html>
