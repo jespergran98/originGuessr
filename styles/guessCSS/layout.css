@@ -65,6 +65,7 @@ body {
     font-size: 1.8em;
     padding-bottom: 10px;
     flex-shrink: 0;
+    z-index: 1;
 }
 
 .attributionBox a {
