@@ -34,10 +34,10 @@ html, body {
         radial-gradient(ellipse at top left, rgba(153, 238, 153, 0.1) 0%, transparent 50%),
         radial-gradient(ellipse at bottom right, rgba(153, 238, 153, 0.08) 0%, transparent 50%),
         linear-gradient(135deg, 
-            rgba(20, 40, 20, 0.95) 0%, 
-            rgba(15, 35, 15, 0.8) 30%, 
-            rgba(10, 30, 10, 0.8) 70%, 
-            rgba(5, 25, 5, 0.95) 100%
+            rgba(20, 40, 20, 0.8) 0%, 
+            rgba(15, 35, 15, 0.6) 30%, 
+            rgba(10, 30, 10, 0.6) 70%, 
+            rgba(5, 25, 5, 0.8) 100%
         );
     backdrop-filter: blur(2px);
 }
