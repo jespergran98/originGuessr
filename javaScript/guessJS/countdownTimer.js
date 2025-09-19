@@ -27,7 +27,7 @@ class CountdownTimer {
         const urlParams = new URLSearchParams(window.location.search);
         const timerSeconds = urlParams.get('timerSeconds');
         
-        if (timerSeconds) {
+        if (timerSeconds && parseInt(timerSeconds) > 0) {
             this.totalTime = parseInt(timerSeconds);
             this.timeRemaining = this.totalTime;
             this.isTimerEnabled = true;
@@ -45,11 +45,16 @@ class CountdownTimer {
                     this.timeRemaining = this.totalTime;
                     this.isTimerEnabled = true;
                     console.log('Timer enabled from session storage:', this.totalTime, 'seconds');
+                    return;
                 }
             } catch (e) {
                 console.warn('Error parsing timer settings from session:', e);
             }
         }
+        
+        // If no timer found, ensure it's disabled
+        this.isTimerEnabled = false;
+        console.log('Timer disabled - no timer settings found');
     }
 
     setupTimer() {
@@ -69,6 +74,7 @@ class CountdownTimer {
             }
             
             // Add initial styling class
+            this.timerContainer.classList.remove('normal', 'warning', 'critical', 'time-up');
             this.timerContainer.classList.add('normal');
             
             console.log('Timer setup complete using existing HTML element');
@@ -124,7 +130,7 @@ class CountdownTimer {
     }
 
     startTimer() {
-        if (this.isActive || !this.isTimerEnabled) return;
+        if (this.isActive || !this.isTimerEnabled || this.timeRemaining <= 0) return;
         
         this.isActive = true;
         this.intervalId = setInterval(() => {
@@ -134,7 +140,7 @@ class CountdownTimer {
         // Update progress bar initially
         this.updateProgressBar();
         
-        console.log('Timer started');
+        console.log('Timer started with', this.timeRemaining, 'seconds remaining');
     }
 
     tick() {
@@ -157,14 +163,14 @@ class CountdownTimer {
 
     updateProgressBar() {
         const progressBar = document.getElementById('timerProgressBar');
-        if (progressBar) {
+        if (progressBar && this.totalTime > 0) {
             const percentRemaining = (this.timeRemaining / this.totalTime) * 100;
-            progressBar.style.width = `${percentRemaining}%`;
+            progressBar.style.width = `${Math.max(0, percentRemaining)}%`;
         }
     }
 
     updateTimerStyle() {
-        if (!this.timerContainer) return;
+        if (!this.timerContainer || this.totalTime <= 0) return;
         
         const percentRemaining = (this.timeRemaining / this.totalTime) * 100;
         
@@ -225,7 +231,7 @@ class CountdownTimer {
     }
 
     resume() {
-        if (!this.isActive && this.timeRemaining > 0) {
+        if (!this.isActive && this.timeRemaining > 0 && this.isTimerEnabled) {
             this.startTimer();
         }
     }

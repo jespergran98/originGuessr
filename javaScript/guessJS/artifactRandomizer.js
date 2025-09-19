@@ -304,22 +304,36 @@ function displayCurrentArtifact(gameArtifacts, round) {
     console.log('Used artifacts so far:', usedArtifacts);
 }
 
-// Function to update makeGuess button behavior
+// Function to update makeGuess button behavior - FIXED: Now preserves timer settings
 function updateURLWithUsedArtifacts(usedArtifacts) {
     const makeGuessButton = document.getElementById('makeGuess-button');
     if (makeGuessButton) {
         const originalOnClick = makeGuessButton.onclick;
         makeGuessButton.onclick = function() {
-            // Save current game state to sessionStorage
+            // Get current URL parameters to preserve timer settings
             const currentParams = new URLSearchParams(window.location.search);
+            
+            // Get timer settings from URL or roundLogic
+            let timerSeconds = null;
+            const urlTimerParam = currentParams.get('timerSeconds');
+            if (urlTimerParam) {
+                timerSeconds = parseInt(urlTimerParam);
+            } else if (window.roundLogic && window.roundLogic.timerSeconds) {
+                timerSeconds = window.roundLogic.timerSeconds;
+            }
+            
+            // Save current game state to sessionStorage - FIXED: Now includes timer
             sessionStorage.setItem('gameState', JSON.stringify({
-                currentRound: window.roundLogic.currentRound,
-                totalScore: window.roundLogic.totalScore,
-                roundScores: window.roundLogic.roundScores,
+                currentRound: window.roundLogic ? window.roundLogic.currentRound : 1,
+                totalScore: window.roundLogic ? window.roundLogic.totalScore : 0,
+                roundScores: window.roundLogic ? window.roundLogic.roundScores : [],
                 usedArtifacts: usedArtifacts,
                 timeframeMinIndex: currentParams.get('timeframeMinIndex'),
-                timeframeMaxIndex: currentParams.get('timeframeMaxIndex')
+                timeframeMaxIndex: currentParams.get('timeframeMaxIndex'),
+                timerSeconds: timerSeconds // CRITICAL FIX: Include timer in session storage
             }));
+            
+            console.log('Saved game state with timer:', timerSeconds);
             
             if (originalOnClick) {
                 originalOnClick.call(this);

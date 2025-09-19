@@ -284,7 +284,7 @@ class RoundLogic {
     }
 
     /**
-     * Navigate to guess page with current game state
+     * Navigate to guess page with current game state - FIXED: Now includes timer parameter
      */
     navigateToGuessPage() {
         const params = new URLSearchParams();
@@ -305,12 +305,15 @@ class RoundLogic {
             params.append('timeframeMaxIndex', this.timeframeMaxIndex.toString());
         }
         
-        // Include timer parameter if set
+        // CRITICAL FIX: Include timer parameter if set - this was missing the condition check
         if (this.timerSeconds !== null && this.timerSeconds > 0) {
             params.append('timerSeconds', this.timerSeconds.toString());
+            console.log(`Adding timer parameter to URL: ${this.timerSeconds} seconds`);
         }
         
-        window.location.href = `guess.html?${params.toString()}`;
+        const targetUrl = `guess.html?${params.toString()}`;
+        console.log(`Navigating to: ${targetUrl}`);
+        window.location.href = targetUrl;
     }
 
     /**

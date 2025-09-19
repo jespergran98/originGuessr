@@ -1,7 +1,7 @@
 /* Countdown Timer Styles */
 .countdown-timer {
     position: fixed;
-    top: 2vh;
+    top: 1vh;
     left: 50%;
     transform: translateX(-50%);
     z-index: 1000;
@@ -11,17 +11,17 @@
     background: linear-gradient(135deg, 
         rgba(var(--light-green-rgb), 0.15) 0%,
         rgba(var(--light-green-rgb), 0.25) 100%);
-    border: 2px solid var(--light-green);
-    border-radius: 1rem;
-    padding: 1rem 2rem;
-    backdrop-filter: blur(10px);
+    border: 1px solid var(--light-green);
+    border-radius: 0.6rem;
+    padding: 0.5rem 2rem;
+    backdrop-filter: blur(8px);
     box-shadow: 
-        0 4px 15px rgba(0, 0, 0, 0.3),
-        0 0 20px rgba(var(--light-green-rgb), 0.2),
+        0 3px 12px rgba(0, 0, 0, 0.25),
+        0 0 15px rgba(var(--light-green-rgb), 0.15),
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     animation: timerPulse 2s ease-in-out infinite;
-    min-width: 180px;
+    min-width: 140px;
 }
 
 .timer-label {
@@ -29,24 +29,24 @@
     font-weight: 600;
     letter-spacing: 0.05em;
     opacity: 0.9;
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.15rem;
     color: inherit;
 }
 
 .timer-value {
-    font-size: 2.5rem;
+    font-size: 2rem;
     font-weight: 700;
     font-family: 'Courier New', monospace;
     color: inherit;
     line-height: 1;
-    margin-bottom: 0.5rem;
+    margin-bottom: 0.3rem;
 }
 
 .timer-progress {
     width: 100%;
-    height: 4px;
+    height: 5px;
     background: rgba(0, 0, 0, 0.3);
-    border-radius: 2px;
+    border-radius: 1px;
     overflow: hidden;
     position: relative;
 }
@@ -56,9 +56,9 @@
     background: linear-gradient(90deg, 
         var(--light-green) 0%, 
         rgba(var(--light-green-rgb), 0.8) 100%);
-    border-radius: 2px;
+    border-radius: 1px;
     transition: width 1s linear;
-    box-shadow: 0 0 10px rgba(var(--light-green-rgb), 0.5);
+    box-shadow: 0 0 8px rgba(var(--light-green-rgb), 0.5);
 }
 
 .countdown-timer.normal {
@@ -82,8 +82,8 @@
         rgba(255, 204, 2, 0.15) 0%,
         rgba(255, 204, 2, 0.25) 100%);
     box-shadow: 
-        0 4px 15px rgba(0, 0, 0, 0.3),
-        0 0 25px rgba(255, 204, 2, 0.3),
+        0 3px 12px rgba(0, 0, 0, 0.25),
+        0 0 20px rgba(255, 204, 2, 0.25),
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
     animation: timerWarningPulse 1.5s ease-in-out infinite;
 }
@@ -92,7 +92,7 @@
     background: linear-gradient(90deg, 
         #ffcc02 0%, 
         rgba(255, 204, 2, 0.8) 100%);
-    box-shadow: 0 0 10px rgba(255, 204, 2, 0.5);
+    box-shadow: 0 0 8px rgba(255, 204, 2, 0.5);
 }
 
 .countdown-timer.critical {
@@ -102,8 +102,8 @@
         rgba(255, 71, 87, 0.15) 0%,
         rgba(255, 71, 87, 0.25) 100%);
     box-shadow: 
-        0 4px 15px rgba(0, 0, 0, 0.3),
-        0 0 30px rgba(255, 71, 87, 0.4),
+        0 3px 12px rgba(0, 0, 0, 0.25),
+        0 0 25px rgba(255, 71, 87, 0.35),
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
     animation: timerCriticalPulse 1s ease-in-out infinite;
 }
@@ -112,7 +112,7 @@
     background: linear-gradient(90deg, 
         #ff4757 0%, 
         rgba(255, 71, 87, 0.8) 100%);
-    box-shadow: 0 0 10px rgba(255, 71, 87, 0.5);
+    box-shadow: 0 0 8px rgba(255, 71, 87, 0.5);
 }
 
 .countdown-timer.time-up {
@@ -122,14 +122,14 @@
         rgba(255, 56, 56, 0.2) 0%,
         rgba(255, 56, 56, 0.3) 100%);
     box-shadow: 
-        0 4px 20px rgba(0, 0, 0, 0.4),
-        0 0 40px rgba(255, 56, 56, 0.6),
+        0 3px 15px rgba(0, 0, 0, 0.35),
+        0 0 30px rgba(255, 56, 56, 0.5),
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
     animation: timeUpFlash 0.5s ease-in-out infinite alternate;
 }
 
 .countdown-timer.time-up .timer-value {
-    font-size: 1.8rem;
+    font-size: 1.2rem;
 }
 
 /* Timer Animations */
@@ -139,7 +139,7 @@
         opacity: 0.95;
     }
     50% {
-        transform: translateX(-50%) scale(1.02);
+        transform: translateX(-50%) scale(1.015);
         opacity: 1;
     }
 }
@@ -148,15 +148,15 @@
     0%, 100% {
         transform: translateX(-50%) scale(1);
         box-shadow: 
-            0 4px 15px rgba(0, 0, 0, 0.3),
-            0 0 25px rgba(255, 204, 2, 0.3),
+            0 3px 12px rgba(0, 0, 0, 0.25),
+            0 0 20px rgba(255, 204, 2, 0.25),
             inset 0 1px 0 rgba(255, 255, 255, 0.1);
     }
     50% {
-        transform: translateX(-50%) scale(1.03);
+        transform: translateX(-50%) scale(1.02);
         box-shadow: 
-            0 4px 18px rgba(0, 0, 0, 0.4),
-            0 0 35px rgba(255, 204, 2, 0.5),
+            0 3px 15px rgba(0, 0, 0, 0.35),
+            0 0 30px rgba(255, 204, 2, 0.4),
             inset 0 1px 0 rgba(255, 255, 255, 0.1);
     }
 }
@@ -165,15 +165,15 @@
     0%, 100% {
         transform: translateX(-50%) scale(1);
         box-shadow: 
-            0 4px 15px rgba(0, 0, 0, 0.3),
-            0 0 30px rgba(255, 71, 87, 0.4),
+            0 3px 12px rgba(0, 0, 0, 0.25),
+            0 0 25px rgba(255, 71, 87, 0.35),
             inset 0 1px 0 rgba(255, 255, 255, 0.1);
     }
     50% {
-        transform: translateX(-50%) scale(1.05);
+        transform: translateX(-50%) scale(1.03);
         box-shadow: 
-            0 4px 20px rgba(0, 0, 0, 0.4),
-            0 0 45px rgba(255, 71, 87, 0.7),
+            0 3px 15px rgba(0, 0, 0, 0.35),
+            0 0 35px rgba(255, 71, 87, 0.6),
             inset 0 1px 0 rgba(255, 255, 255, 0.1);
     }
 }
@@ -185,47 +185,47 @@
     }
     100% {
         opacity: 1;
-        transform: translateX(-50%) scale(1.08);
+        transform: translateX(-50%) scale(1.06);
     }
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
     .countdown-timer {
-        top: 1vh;
-        min-width: 150px;
-        padding: 0.75rem 1.5rem;
+        top: 0.5vh;
+        min-width: 140px;
+        padding: 0.4rem 1.6rem;
     }
     
     .timer-value {
-        font-size: 2rem;
+        font-size: 1.4rem;
     }
     
     .timer-label {
-        font-size: 0.8rem;
+        font-size: 0.65rem;
     }
     
     .countdown-timer.time-up .timer-value {
-        font-size: 1.5rem;
+        font-size: 1rem;
     }
 }
 
 @media (max-width: 480px) {
     .countdown-timer {
         min-width: 120px;
-        padding: 0.6rem 1.2rem;
+        padding: 0.3rem 1.4rem;
     }
     
     .timer-value {
-        font-size: 1.6rem;
+        font-size: 1.2rem;
     }
     
     .timer-label {
-        font-size: 0.75rem;
+        font-size: 0.6rem;
     }
     
     .countdown-timer.time-up .timer-value {
-        font-size: 1.2rem;
+        font-size: 0.9rem;
     }
 }
 
