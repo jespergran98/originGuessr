@@ -369,7 +369,6 @@ class IndexGameSettings {
         const activeTimer = this.buttonManager.getActiveButton(this.timerButtons);
         return activeTimer?.dataset.timer === 'yes';
     }
-
     startGame() {
         const activeTimeframe = this.buttonManager.getActiveButton(this.timeframeButtons);
         const timerEnabled = this.isTimerEnabled();
@@ -378,7 +377,13 @@ class IndexGameSettings {
         params.append('round', '1');
         params.append('totalScore', '0');
         params.append('scores', '[]');
-
+    
+        // CRITICAL FIX: Clear previous game state when starting a new game
+        // This ensures old timer/timeframe settings don't persist
+        sessionStorage.removeItem('gameState');
+        sessionStorage.removeItem('gameArtifacts');
+        sessionStorage.removeItem('finalScoreGameSettings');
+    
         // Add timeframe parameters if flexible timeframe is selected
         if (activeTimeframe && activeTimeframe.dataset.timeframe === 'flexible') {
             const selection = this.getTimeframeSelection();
@@ -387,7 +392,8 @@ class IndexGameSettings {
                 params.append('timeframeMaxIndex', selection.maxIndex.toString());
             }
         }
-
+        // IMPORTANT: No else clause needed here because we're not preserving old settings
+    
         // Add timer parameters if timer is enabled
         if (timerEnabled) {
             const timerSelection = this.getTimerSelection();
@@ -395,7 +401,13 @@ class IndexGameSettings {
                 params.append('timerSeconds', timerSelection.seconds.toString());
             }
         }
-
+        // IMPORTANT: No else clause needed here because we cleared sessionStorage above
+    
+        console.log('Starting new game with fresh settings:', {
+            timerEnabled: timerEnabled,
+            timeframeEnabled: activeTimeframe && activeTimeframe.dataset.timeframe === 'flexible'
+        });
+    
         window.location.href = `guess.html?${params.toString()}`;
     }
 }
