@@ -222,9 +222,9 @@ class CountdownTimer {
             console.log('Timer expired with marker placed - proceeding to result page');
             this.proceedToResultPage();
         } else {
-            // No marker placed - proceed to next round or final score with default/no guess
-            console.log('Timer expired without marker - proceeding to next round or final score');
-            this.proceedWithoutGuess();
+            // No marker placed - proceed to result page with no guess
+            console.log('Timer expired without marker - proceeding to result page with no guess');
+            this.proceedToResultPageWithoutGuess();
         }
     }
 
@@ -235,7 +235,7 @@ class CountdownTimer {
         if (!artifact) {
             console.error('Missing artifact data for time-up navigation');
             // Fallback to proceeding without guess
-            this.proceedWithoutGuess();
+            this.proceedToResultPageWithoutGuess();
             return;
         }
 
@@ -244,7 +244,7 @@ class CountdownTimer {
         
         if (!guessCoordinates) {
             console.error('No guess coordinates available despite marker being placed');
-            this.proceedWithoutGuess();
+            this.proceedToResultPageWithoutGuess();
             return;
         }
 
@@ -282,26 +282,6 @@ class CountdownTimer {
         window.location.href = `result.html?${params.toString()}`;
     }
 
-    proceedWithoutGuess() {
-        // Check if this is the final round
-        if (window.roundLogic) {
-            const gameStats = window.roundLogic.getGameStats();
-            
-            if (gameStats.isLastRound) {
-                // Final round - go directly to final score page
-                console.log('Timer expired on final round without guess - going to final score');
-                this.goDirectToFinalScore();
-            } else {
-                // Not final round - go to result page with no guess (will score 0)
-                console.log('Timer expired without guess - going to result page with no guess');
-                this.proceedToResultPageWithoutGuess();
-            }
-        } else {
-            // Fallback - assume it's not the final round
-            this.proceedToResultPageWithoutGuess();
-        }
-    }
-
     proceedToResultPageWithoutGuess() {
         const artifact = window.currentArtifact;
         
@@ -337,35 +317,6 @@ class CountdownTimer {
         
         console.log('Timer expired - navigating to result page without guess');
         window.location.href = `result.html?${params.toString()}`;
-    }
-
-    goDirectToFinalScore() {
-        // Calculate final score without adding any points for this round
-        if (window.roundLogic) {
-            const gameStats = window.roundLogic.getGameStats();
-            const finalTotalScore = gameStats.totalScore; // No additional points
-            const finalRoundScores = [...gameStats.roundScores, 0]; // Add 0 for this round
-            
-            console.log('Going directly to final score - Timer expired on final round');
-            console.log('Final total score:', finalTotalScore);
-            console.log('All round scores:', finalRoundScores);
-            
-            // Clear game artifacts from sessionStorage
-            sessionStorage.removeItem('gameArtifacts');
-            
-            // Create URL parameters for final score page
-            const params = new URLSearchParams();
-            params.append('totalScore', finalTotalScore.toString());
-            params.append('roundScores', encodeURIComponent(JSON.stringify(finalRoundScores)));
-            params.append('maxRounds', '5'); // Assuming 5 rounds max
-            
-            // Navigate to final score page
-            window.location.href = `finalScore.html?${params.toString()}`;
-        } else {
-            console.error('Round logic not available - cannot calculate final score');
-            // Fallback navigation
-            window.location.href = 'finalScore.html';
-        }
     }
 
     stop() {
