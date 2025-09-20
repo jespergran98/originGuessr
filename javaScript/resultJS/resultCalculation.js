@@ -75,7 +75,7 @@ class ResultCalculation {
 
         // Score calculation with exponential decay
         const maxDecayScore = 4999;
-        const sensitivity = 80;
+        const sensitivity = 50;
         let score = maxDecayScore * Math.exp(-incrementsAway / sensitivity);
         
         score = Math.max(0, score);
