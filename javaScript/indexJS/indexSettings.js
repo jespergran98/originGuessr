@@ -301,17 +301,6 @@ class IndexGameSettings {
         minIndex = Math.max(0, Math.min(minIndex, maxBoundIndex));
         maxIndex = Math.max(0, Math.min(maxIndex, maxBoundIndex));
 
-        // Ensure min is always less than max
-        if (minIndex >= maxIndex) {
-            if (minIndex === 0) {
-                maxIndex = 1;
-                this.timeframeMax.value = maxIndex;
-            } else {
-                minIndex = maxIndex - 1;
-                this.timeframeMin.value = minIndex;
-            }
-        }
-
         const totalIncrements = this.timeframeIncrements.length - 1;
         const minPercent = (minIndex / totalIncrements) * 100;
         const maxPercent = (maxIndex / totalIncrements) * 100;
