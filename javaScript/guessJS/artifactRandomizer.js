@@ -48,128 +48,28 @@ document.addEventListener('DOMContentLoaded', function() {
             // Check if there are enough artifacts for a full game
             if (availableArtifacts.length < 5) {
                 console.error('Not enough available artifacts for a full game');
-                const guessBox = document.querySelector('.guessBox');
-                guessBox.innerHTML = ''; // Clear any existing content
-                const errorMessage = document.createElement('div');
-                errorMessage.textContent = 'The selected timeframe does not contain enough artifacts';
-                errorMessage.style.cssText = `
-                    color: #fff;
-                    font-size: 1.2rem;
-                    text-align: center;
-                    padding: 20px;
-                    background-color: rgba(255, 0, 0, 0.2);
-                    border-radius: 8px;
-                    margin: 20px;
-                `;
-                guessBox.appendChild(errorMessage);
+                showErrorMessage('The selected timeframe does not contain enough artifacts');
                 return;
             }
             
             // Check for pre-selected artifacts for the game
             let gameArtifacts = [];
             if (round === 1) {
-                // First round: Validate and display first artifact, then validate the rest in background
+                // First round: Find and display first valid artifact ASAP, then validate others in background
                 const shuffled = availableArtifacts.sort(() => 0.5 - Math.random());
                 
-                // Validate the first artifact before displaying
-                const firstArtifact = shuffled[0];
-                const firstImagePromise = new Promise((resolve, reject) => {
-                    const img = new Image();
-                    img.onload = () => resolve(firstArtifact);
-                    img.onerror = () => reject(new Error(`Failed to load image for ${firstArtifact.title}`));
-                    img.src = firstArtifact.image;
-                });
-                
-                // Display first artifact only after it's validated
-                firstImagePromise
-                    .then(validFirstArtifact => {
-                        console.log('First artifact validated, displaying:', validFirstArtifact.title);
-                        displayCurrentArtifact([validFirstArtifact], round);
+                // Race to find the first valid artifact as quickly as possible
+                findFirstValidArtifact(shuffled, 0)
+                    .then(validArtifact => {
+                        console.log('First artifact validated and displayed:', validArtifact.title);
+                        displayCurrentArtifact([validArtifact], round);
+                        
+                        // Now validate remaining artifacts for the game in the background
+                        validateRemainingArtifacts(shuffled, validArtifact);
                     })
                     .catch(error => {
-                        console.warn('First artifact failed to load, trying next:', error);
-                        // If first artifact fails, try the next one
-                        tryNextArtifact(shuffled.slice(1), round);
-                    });
-                
-                const remainingArtifacts = shuffled.slice(1, 4);
-                
-                // Validate remaining artifacts in parallel (background process)
-                const remainingPromises = remainingArtifacts.map(artifact => 
-                    new Promise((resolve, reject) => {
-                        const img = new Image();
-                        img.onload = () => resolve(artifact);
-                        img.onerror = () => reject(new Error(`Failed to load image for ${artifact.title}`));
-                        img.src = artifact.image;
-                    })
-                );
-                
-                // Handle validation of all artifacts (including first one again for consistency)
-                Promise.allSettled([firstImagePromise, ...remainingPromises])
-                    .then(results => {
-                        const validArtifacts = [];
-                        const failedArtifacts = [];
-                        
-                        results.forEach((result, index) => {
-                            if (result.status === 'fulfilled') {
-                                validArtifacts.push(result.value);
-                            } else {
-                                const artifactName = index === 0 ? shuffled[0].title : remainingArtifacts[index - 1].title;
-                                failedArtifacts.push(artifactName);
-                                console.warn(`Failed to validate artifact: ${artifactName}`);
-                            }
-                        });
-                        
-                        // If we need to replace failed artifacts
-                        if (validArtifacts.length < 5) {
-                            const usedTitles = [...validArtifacts.map(a => a.title), ...failedArtifacts];
-                            const replacementCandidates = availableArtifacts.filter(a => !usedTitles.includes(a.title));
-                            
-                            // Try to find valid replacements
-                            const neededReplacements = 5 - validArtifacts.length;
-                            const replacementPromises = replacementCandidates.slice(0, neededReplacements).map(artifact =>
-                                new Promise((resolve, reject) => {
-                                    const img = new Image();
-                                    img.onload = () => resolve(artifact);
-                                    img.onerror = () => reject(new Error(`Failed to load image for ${artifact.title}`));
-                                    img.src = artifact.image;
-                                })
-                            );
-                            
-                            Promise.allSettled(replacementPromises)
-                                .then(replacementResults => {
-                                    replacementResults.forEach(result => {
-                                        if (result.status === 'fulfilled' && validArtifacts.length < 5) {
-                                            validArtifacts.push(result.value);
-                                        }
-                                    });
-                                    
-                                    if (validArtifacts.length < 5) {
-                                        console.error('Could not find enough valid artifacts after replacements');
-                                        // Fallback: use whatever valid artifacts we have, filling with unvalidated ones if needed
-                                        while (validArtifacts.length < 5 && replacementCandidates.length > 0) {
-                                            const fallback = replacementCandidates.shift();
-                                            if (!validArtifacts.some(a => a.title === fallback.title)) {
-                                                validArtifacts.push(fallback);
-                                            }
-                                        }
-                                    }
-                                    
-                                    gameArtifacts = validArtifacts.slice(0, 5);
-                                    sessionStorage.setItem('gameArtifacts', JSON.stringify(gameArtifacts));
-                                    console.log('Final game artifacts after validation and replacement:', gameArtifacts.map(a => a.title));
-                                    
-                                    // Note: First artifact display is already handled above, no need to update here
-                                });
-                        } else {
-                            // All artifacts validated successfully
-                            gameArtifacts = validArtifacts;
-                            sessionStorage.setItem('gameArtifacts', JSON.stringify(gameArtifacts));
-                            console.log('All artifacts validated successfully:', gameArtifacts.map(a => a.title));
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Unexpected error during artifact validation:', error);
+                        console.error('Could not find any valid artifacts:', error);
+                        showErrorMessage('Unable to load any valid artifacts from the selected timeframe');
                     });
                     
             } else {
@@ -189,20 +89,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     console.error('No stored game artifacts found, falling back to random selection');
                     if (availableArtifacts.length < 5) {
                         console.error('Not enough available artifacts remaining');
-                        const guessBox = document.querySelector('.guessBox');
-                        guessBox.innerHTML = ''; // Clear any existing content
-                        const errorMessage = document.createElement('div');
-                        errorMessage.textContent = 'The selected timeframe does not contain enough artifacts';
-                        errorMessage.style.cssText = `
-                            color: #fff;
-                            font-size: 1.2rem;
-                            text-align: center;
-                            padding: 20px;
-                            background-color: rgba(255, 0, 0, 0.2);
-                            border-radius: 8px;
-                            margin: 20px;
-                        `;
-                        guessBox.appendChild(errorMessage);
+                        showErrorMessage('The selected timeframe does not contain enough artifacts');
                         return;
                     }
                     const randomIndex = Math.floor(Math.random() * availableArtifacts.length);
@@ -214,61 +101,138 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(error => {
             console.error('Error loading artifacts:', error);
-            const guessBox = document.querySelector('.guessBox');
-            guessBox.innerHTML = ''; // Clear any existing content
-            const errorMessage = document.createElement('div');
-            errorMessage.textContent = 'Error loading artifacts. Please try again.';
-            errorMessage.style.cssText = `
-                color: #fff;
-                font-size: 1.2rem;
-                text-align: center;
-                padding: 20px;
-                background-color: rgba(255, 0, 0, 0.2);
-                border-radius: 8px;
-                margin: 20px;
-            `;
-            guessBox.appendChild(errorMessage);
+            showErrorMessage('Error loading artifacts. Please try again.');
         });
 });
 
-// Helper function to try the next artifact if the first one fails
-function tryNextArtifact(remainingCandidates, round) {
-    if (remainingCandidates.length === 0) {
-        console.error('No more artifacts to try');
-        const guessBox = document.querySelector('.guessBox');
-        guessBox.innerHTML = '';
-        const errorMessage = document.createElement('div');
-        errorMessage.textContent = 'Unable to load any valid artifacts from the selected timeframe';
-        errorMessage.style.cssText = `
-            color: #fff;
-            font-size: 1.2rem;
-            text-align: center;
-            padding: 20px;
-            background-color: rgba(255, 0, 0, 0.2);
-            border-radius: 8px;
-            margin: 20px;
-        `;
-        guessBox.appendChild(errorMessage);
-        return;
-    }
-    
-    const nextArtifact = remainingCandidates[0];
-    const nextImagePromise = new Promise((resolve, reject) => {
+// Optimized function to find first valid artifact quickly
+function findFirstValidArtifact(candidates, startIndex) {
+    return new Promise((resolve, reject) => {
+        if (startIndex >= candidates.length) {
+            reject(new Error('No valid artifacts found'));
+            return;
+        }
+        
+        const artifact = candidates[startIndex];
         const img = new Image();
-        img.onload = () => resolve(nextArtifact);
-        img.onerror = () => reject(new Error(`Failed to load image for ${nextArtifact.title}`));
-        img.src = nextArtifact.image;
+        
+        // Set up both success and failure handlers
+        const cleanup = () => {
+            img.onload = null;
+            img.onerror = null;
+        };
+        
+        img.onload = () => {
+            cleanup();
+            resolve(artifact);
+        };
+        
+        img.onerror = () => {
+            cleanup();
+            console.warn(`Artifact ${artifact.title} failed to load, trying next...`);
+            // Immediately try the next artifact
+            findFirstValidArtifact(candidates, startIndex + 1)
+                .then(resolve)
+                .catch(reject);
+        };
+        
+        // Start loading the image
+        img.src = artifact.image;
     });
+}
+
+// Function to validate remaining artifacts in the background
+function validateRemainingArtifacts(allCandidates, firstValidArtifact) {
+    // Remove the first valid artifact from candidates and take next 4
+    const remainingCandidates = allCandidates.filter(a => a.title !== firstValidArtifact.title).slice(0, 4);
     
-    nextImagePromise
-        .then(validArtifact => {
-            console.log('Next artifact validated, displaying:', validArtifact.title);
-            displayCurrentArtifact([validArtifact], round);
+    // Validate remaining artifacts in parallel
+    const validationPromises = remainingCandidates.map(artifact => 
+        new Promise((resolve, reject) => {
+            const img = new Image();
+            img.onload = () => resolve(artifact);
+            img.onerror = () => reject(new Error(`Failed to load image for ${artifact.title}`));
+            img.src = artifact.image;
+        })
+    );
+    
+    Promise.allSettled(validationPromises)
+        .then(results => {
+            const validArtifacts = [firstValidArtifact]; // Start with the first one
+            const failedArtifacts = [];
+            
+            results.forEach((result, index) => {
+                if (result.status === 'fulfilled') {
+                    validArtifacts.push(result.value);
+                } else {
+                    failedArtifacts.push(remainingCandidates[index].title);
+                    console.warn(`Failed to validate artifact: ${remainingCandidates[index].title}`);
+                }
+            });
+            
+            // If we need more artifacts, find replacements
+            if (validArtifacts.length < 5) {
+                const usedTitles = [...validArtifacts.map(a => a.title), ...failedArtifacts];
+                const replacementCandidates = allCandidates.filter(a => !usedTitles.includes(a.title));
+                
+                const neededReplacements = 5 - validArtifacts.length;
+                const replacementPromises = replacementCandidates.slice(0, neededReplacements).map(artifact =>
+                    new Promise((resolve, reject) => {
+                        const img = new Image();
+                        img.onload = () => resolve(artifact);
+                        img.onerror = () => reject(new Error(`Failed to load image for ${artifact.title}`));
+                        img.src = artifact.image;
+                    })
+                );
+                
+                Promise.allSettled(replacementPromises)
+                    .then(replacementResults => {
+                        replacementResults.forEach(result => {
+                            if (result.status === 'fulfilled' && validArtifacts.length < 5) {
+                                validArtifacts.push(result.value);
+                            }
+                        });
+                        
+                        // Use fallback artifacts if still not enough
+                        while (validArtifacts.length < 5 && replacementCandidates.length > 0) {
+                            const fallback = replacementCandidates.shift();
+                            if (!validArtifacts.some(a => a.title === fallback.title)) {
+                                validArtifacts.push(fallback);
+                            }
+                        }
+                        
+                        const gameArtifacts = validArtifacts.slice(0, 5);
+                        sessionStorage.setItem('gameArtifacts', JSON.stringify(gameArtifacts));
+                        console.log('Final game artifacts after validation and replacement:', gameArtifacts.map(a => a.title));
+                    });
+            } else {
+                // All artifacts validated successfully
+                const gameArtifacts = validArtifacts.slice(0, 5);
+                sessionStorage.setItem('gameArtifacts', JSON.stringify(gameArtifacts));
+                console.log('All artifacts validated successfully:', gameArtifacts.map(a => a.title));
+            }
         })
         .catch(error => {
-            console.warn('Next artifact also failed, trying another:', error);
-            tryNextArtifact(remainingCandidates.slice(1), round);
+            console.error('Unexpected error during background artifact validation:', error);
         });
+}
+
+// Helper function to show error messages
+function showErrorMessage(message) {
+    const guessBox = document.querySelector('.guessBox');
+    guessBox.innerHTML = '';
+    const errorMessage = document.createElement('div');
+    errorMessage.textContent = message;
+    errorMessage.style.cssText = `
+        color: #fff;
+        font-size: 1.2rem;
+        text-align: center;
+        padding: 20px;
+        background-color: rgba(255, 0, 0, 0.2);
+        border-radius: 8px;
+        margin: 20px;
+    `;
+    guessBox.appendChild(errorMessage);
 }
 
 // Function to display the artifact for the current round
@@ -276,20 +240,7 @@ function displayCurrentArtifact(gameArtifacts, round) {
     const currentArtifact = gameArtifacts[round - 1];
     if (!currentArtifact) {
         console.error('No artifact available for round', round);
-        const guessBox = document.querySelector('.guessBox');
-        guessBox.innerHTML = ''; // Clear any existing content
-        const errorMessage = document.createElement('div');
-        errorMessage.textContent = 'The selected timeframe does not contain enough artifacts';
-        errorMessage.style.cssText = `
-            color: #fff;
-            font-size: 1.2rem;
-            text-align: center;
-            padding: 20px;
-            background-color: rgba(255, 0, 0, 0.2);
-            border-radius: 8px;
-            margin: 20px;
-        `;
-        guessBox.appendChild(errorMessage);
+        showErrorMessage('The selected timeframe does not contain enough artifacts');
         return;
     }
     
@@ -382,10 +333,13 @@ function displayCurrentArtifact(gameArtifacts, round) {
     }
     
     // Update attribution box (assuming updateAttribution is defined elsewhere)
-    updateAttribution(currentArtifact);
+    if (typeof updateAttribution === 'function') {
+        updateAttribution(currentArtifact);
+    }
     
     // Update used artifacts
-    const usedArtifacts = JSON.parse(sessionStorage.getItem('gameState')?.usedArtifacts || '[]');
+    const gameState = JSON.parse(sessionStorage.getItem('gameState') || '{}');
+    const usedArtifacts = gameState.usedArtifacts || [];
     if (!usedArtifacts.includes(currentArtifact.title)) {
         usedArtifacts.push(currentArtifact.title);
     }
