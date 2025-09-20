@@ -304,6 +304,8 @@ function displayCurrentArtifact(gameArtifacts, round) {
     // Create image wrapper div
     const imageWrapper = document.createElement('div');
     imageWrapper.className = 'image-wrapper';
+    // Add padding to allow shadow to show outside the image bounds (large shadow needs lots of space)
+    imageWrapper.style.padding = '80px';
     
     // Create image element
     const img = document.createElement('img');
@@ -312,9 +314,11 @@ function displayCurrentArtifact(gameArtifacts, round) {
     
     // Function to apply border radius based on actual rendered image size
     function applyImageBorderRadius() {
+        // Get the wrapper's content area (excluding padding)
         const containerRect = imageWrapper.getBoundingClientRect();
-        const containerWidth = containerRect.width;
-        const containerHeight = containerRect.height;
+        const paddingSize = 80; // Match the padding we added
+        const containerWidth = containerRect.width - (paddingSize * 2);
+        const containerHeight = containerRect.height - (paddingSize * 2);
         
         // Get image natural dimensions
         const naturalWidth = img.naturalWidth;
@@ -344,20 +348,21 @@ function displayCurrentArtifact(gameArtifacts, round) {
             // Create a clipping element that matches the actual image size
             const clipElement = document.createElement('div');
             clipElement.style.position = 'absolute';
-            clipElement.style.left = '0';
-            clipElement.style.top = topOffset + 'px';
+            clipElement.style.left = paddingSize + 'px'; // Account for padding
+            clipElement.style.top = (topOffset + paddingSize) + 'px'; // Account for padding
             clipElement.style.width = renderedWidth + 'px';
             clipElement.style.height = renderedHeight + 'px';
             clipElement.style.borderRadius = '3vh';
             clipElement.style.overflow = 'hidden';
             clipElement.style.pointerEvents = 'none';
+            // Add the shadow to the clipping element
+            clipElement.style.boxShadow = '0 8px 64px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.1)';
             
             // Move the image into the clip element and reset its styles
             img.style.width = renderedWidth + 'px';
             img.style.height = renderedHeight + 'px';
             img.style.objectFit = 'cover';
             img.style.objectPosition = 'center';
-            img.style.borderRadius = '3vh';
             
             clipElement.appendChild(img);
             imageWrapper.appendChild(clipElement);

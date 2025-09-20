@@ -31,9 +31,10 @@ body {
 }
 
 .image-wrapper {
-    width: 100%;
-    height: 100%;
+    width: calc(100% + 160px);
+    height: calc(100% + 160px);
     position: relative;
+    margin: -80px; /* Negative margin to offset the extra size from padding */
 }
 
 .attributionBox {
