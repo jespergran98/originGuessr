@@ -1,265 +1,281 @@
 /**
- * Fixed Artifact Image Zoom Functionality
- * Mouse wheel to zoom, drag to pan, double-click to reset
- * Fixed panning constraints to prevent image from moving too far
+ * Improved Image Zoom and Pan
+ * Works with actual rendered image dimensions and clipping elements
  */
 
 class ArtifactZoom {
     constructor() {
-        this.zoomLevel = 1;
-        this.minZoom = 1;
-        this.maxZoom = 4;
-        this.zoomStep = 0.3;
-        this.isDragging = false;
-        this.startX = 0;
-        this.startY = 0;
+        this.scale = 1;
         this.translateX = 0;
         this.translateY = 0;
+        this.isDragging = false;
+        this.dragStartX = 0;
+        this.dragStartY = 0;
+        this.dragStartTranslateX = 0;
+        this.dragStartTranslateY = 0;
+        
         this.imageWrapper = null;
-        this.originalImageWidth = 0;
-        this.originalImageHeight = 0;
+        this.image = null;
+        this.clipElement = null;
         
         this.init();
     }
     
     init() {
-        document.addEventListener('artifactLoaded', () => {
-            this.setupZoom();
-        });
-        this.setupZoom();
+        document.addEventListener('DOMContentLoaded', () => this.setup());
+        document.addEventListener('artifactLoaded', () => setTimeout(() => this.setup(), 500));
+        if (document.readyState !== 'loading') this.setup();
     }
     
-    setupZoom() {
+    setup() {
         this.imageWrapper = document.querySelector('.image-wrapper');
-        
         if (!this.imageWrapper) {
-            setTimeout(() => this.setupZoom(), 100);
+            setTimeout(() => this.setup(), 100);
             return;
         }
         
-        // Wait for image to load and get original dimensions
-        const image = this.imageWrapper.querySelector('img');
-        if (image && image.complete) {
-            this.storeOriginalDimensions();
-        } else if (image) {
-            image.addEventListener('load', () => {
-                this.storeOriginalDimensions();
-            });
+        // First try to find the image directly in wrapper (fallback)
+        this.image = this.imageWrapper.querySelector('img');
+        if (!this.image) {
+            setTimeout(() => this.setup(), 100);
+            return;
         }
         
-        this.resetZoom();
+        // Try to find the clipping element created by artifactRandomizer
+        this.clipElement = this.imageWrapper.querySelector('div[style*="border-radius"]');
+        
+        // If we have a clipping element, get the image from there instead
+        if (this.clipElement) {
+            const clipImage = this.clipElement.querySelector('img');
+            if (clipImage) {
+                this.image = clipImage;
+                console.log('Using clipped image setup');
+            }
+        } else {
+            console.log('Using direct image setup (no clipping element found)');
+        }
+        
         this.addStyles();
         this.addEventListeners();
-    }
-    
-    storeOriginalDimensions() {
-        const image = this.imageWrapper.querySelector('img');
-        if (image) {
-            // Store the rendered size of the image (after CSS like object-fit: contain)
-            const rect = image.getBoundingClientRect();
-            this.originalImageWidth = rect.width;
-            this.originalImageHeight = rect.height;
-        }
+        this.reset();
+        
+        console.log('Zoom setup complete:', {
+            hasWrapper: !!this.imageWrapper,
+            hasImage: !!this.image,
+            hasClipElement: !!this.clipElement,
+            imageSize: this.image ? `${this.image.naturalWidth}x${this.image.naturalHeight}` : 'unknown'
+        });
     }
     
     addStyles() {
-        if (document.querySelector('#zoom-styles')) return;
+        if (document.getElementById('zoom-styles')) return;
         
         const style = document.createElement('style');
         style.id = 'zoom-styles';
         style.textContent = `
             .image-wrapper {
+                overflow: hidden !important;
                 cursor: zoom-in;
-                overflow: hidden;
             }
-            
-            .image-wrapper.zoomed {
-                cursor: grab;
-            }
-            
-            .image-wrapper.dragging {
-                cursor: grabbing;
-            }
-            
-            .image-wrapper img {
-                display: block;
-                max-width: 100%;
-                max-height: 100%;
-                object-fit: contain;
-            }
+            .image-wrapper.can-pan { cursor: grab; }
+            .image-wrapper.is-panning { cursor: grabbing; }
         `;
         document.head.appendChild(style);
     }
     
     addEventListeners() {
-        if (!this.imageWrapper) return;
-        
-        // Mouse wheel zoom
+        // Zoom with mouse wheel
         this.imageWrapper.addEventListener('wheel', (e) => {
             e.preventDefault();
             
-            const delta = e.deltaY > 0 ? -1 : 1;
-            const rect = this.imageWrapper.getBoundingClientRect();
-            const centerX = e.clientX - rect.left;
-            const centerY = e.clientY - rect.top;
+            // Use clip element if available, otherwise use wrapper
+            const targetElement = this.clipElement || this.imageWrapper;
+            const rect = targetElement.getBoundingClientRect();
+            const mouseX = e.clientX - rect.left;
+            const mouseY = e.clientY - rect.top;
             
-            if (delta > 0) {
-                this.zoomIn(centerX, centerY);
+            if (e.deltaY < 0) {
+                this.zoomIn(mouseX, mouseY);
             } else {
                 this.zoomOut();
             }
         });
         
-        // Double click to reset
-        this.imageWrapper.addEventListener('dblclick', (e) => {
-            e.preventDefault();
-            this.resetZoom();
-        });
-        
-        // Mouse drag for panning
+        // Start panning
         this.imageWrapper.addEventListener('mousedown', (e) => {
-            if (this.zoomLevel <= this.minZoom) return;
+            if (this.scale <= 1) return;
             
             e.preventDefault();
             this.isDragging = true;
-            this.startX = e.clientX - this.translateX;
-            this.startY = e.clientY - this.translateY;
-            this.updateCursor();
+            this.dragStartX = e.clientX;
+            this.dragStartY = e.clientY;
+            this.dragStartTranslateX = this.translateX;
+            this.dragStartTranslateY = this.translateY;
+            
+            this.imageWrapper.classList.add('is-panning');
         });
         
+        // Pan
         document.addEventListener('mousemove', (e) => {
             if (!this.isDragging) return;
             
             e.preventDefault();
-            this.translateX = e.clientX - this.startX;
-            this.translateY = e.clientY - this.startY;
             
-            this.constrainPanning();
-            this.applyTransform();
+            const deltaX = e.clientX - this.dragStartX;
+            const deltaY = e.clientY - this.dragStartY;
+            
+            this.translateX = this.dragStartTranslateX + deltaX;
+            this.translateY = this.dragStartTranslateY + deltaY;
+            
+            this.constrain();
+            this.updateTransform();
         });
         
+        // Stop panning
         document.addEventListener('mouseup', () => {
             if (this.isDragging) {
                 this.isDragging = false;
+                this.imageWrapper.classList.remove('is-panning');
                 this.updateCursor();
             }
         });
         
-        this.updateCursor();
+        // Reset on double click
+        this.imageWrapper.addEventListener('dblclick', (e) => {
+            e.preventDefault();
+            this.reset();
+        });
+        
+        // Prevent context menu when zoomed
+        this.imageWrapper.addEventListener('contextmenu', (e) => {
+            if (this.scale > 1) e.preventDefault();
+        });
     }
     
-    zoomIn(centerX, centerY) {
-        if (this.zoomLevel >= this.maxZoom) return;
+    zoomIn(mouseX, mouseY) {
+        const oldScale = this.scale;
+        this.scale = Math.min(4, this.scale * 1.3);
         
-        const oldZoom = this.zoomLevel;
-        this.zoomLevel = Math.min(this.maxZoom, this.zoomLevel + this.zoomStep);
+        if (this.scale === oldScale) return;
         
-        // Zoom towards cursor position
-        const zoomRatio = this.zoomLevel / oldZoom;
-        const rect = this.imageWrapper.getBoundingClientRect();
-        const centerXRel = centerX - rect.width / 2;
-        const centerYRel = centerY - rect.height / 2;
+        // Get the dimensions of the zoom target (clip element or wrapper)
+        const targetElement = this.clipElement || this.imageWrapper;
+        const rect = targetElement.getBoundingClientRect();
+        const centerX = rect.width / 2;
+        const centerY = rect.height / 2;
         
-        this.translateX = centerXRel - (centerXRel - this.translateX) * zoomRatio;
-        this.translateY = centerYRel - (centerYRel - this.translateY) * zoomRatio;
+        const offsetX = mouseX - centerX;
+        const offsetY = mouseY - centerY;
         
-        this.constrainPanning();
-        this.applyTransform();
+        this.translateX = offsetX - (offsetX - this.translateX) * (this.scale / oldScale);
+        this.translateY = offsetY - (offsetY - this.translateY) * (this.scale / oldScale);
+        
+        this.constrain();
+        this.updateTransform();
         this.updateCursor();
     }
     
     zoomOut() {
-        if (this.zoomLevel <= this.minZoom) return;
+        this.scale = Math.max(1, this.scale / 1.3);
         
-        this.zoomLevel = Math.max(this.minZoom, this.zoomLevel - this.zoomStep);
-        
-        if (this.zoomLevel === this.minZoom) {
+        if (this.scale <= 1) {
+            this.scale = 1;
             this.translateX = 0;
             this.translateY = 0;
+        } else {
+            this.constrain();
         }
         
-        this.constrainPanning();
-        this.applyTransform();
+        this.updateTransform();
         this.updateCursor();
     }
     
-    resetZoom() {
-        this.zoomLevel = this.minZoom;
-        this.translateX = 0;
-        this.translateY = 0;
-        this.applyTransform();
-        this.updateCursor();
-    }
-    
-    constrainPanning() {
-        if (this.zoomLevel <= this.minZoom) {
+    constrain() {
+        if (this.scale <= 1) {
             this.translateX = 0;
             this.translateY = 0;
             return;
         }
         
-        // If we don't have original dimensions yet, try to get them
-        if (this.originalImageWidth === 0 || this.originalImageHeight === 0) {
-            this.storeOriginalDimensions();
-            if (this.originalImageWidth === 0 || this.originalImageHeight === 0) {
-                return; // Can't constrain without knowing image size
+        let imageWidth, imageHeight;
+        
+        if (this.clipElement) {
+            // Use clipping element dimensions (actual rendered image size)
+            const clipRect = this.clipElement.getBoundingClientRect();
+            imageWidth = clipRect.width;
+            imageHeight = clipRect.height;
+        } else {
+            // Fallback: calculate rendered size from natural dimensions
+            const wrapperRect = this.imageWrapper.getBoundingClientRect();
+            const naturalWidth = this.image.naturalWidth;
+            const naturalHeight = this.image.naturalHeight;
+            
+            if (!naturalWidth || !naturalHeight) return;
+            
+            const wrapperAspect = wrapperRect.width / wrapperRect.height;
+            const imageAspect = naturalWidth / naturalHeight;
+            
+            if (imageAspect > wrapperAspect) {
+                imageWidth = wrapperRect.width;
+                imageHeight = wrapperRect.width / imageAspect;
+            } else {
+                imageHeight = wrapperRect.height;
+                imageWidth = wrapperRect.height * imageAspect;
             }
         }
         
-        const containerRect = this.imageWrapper.getBoundingClientRect();
+        if (!imageWidth || !imageHeight) return;
         
         // Calculate scaled dimensions
-        const scaledWidth = this.originalImageWidth * this.zoomLevel;
-        const scaledHeight = this.originalImageHeight * this.zoomLevel;
+        const scaledWidth = imageWidth * this.scale;
+        const scaledHeight = imageHeight * this.scale;
         
-        // Calculate maximum translation IN UNSCALED COORDINATES
-        // Since CSS transform applies translate() BEFORE scale(), we need to think in original image coordinates
-        if (scaledWidth > containerRect.width) {
-            // Maximum distance we can move the center of the image from container center
-            const maxOffset = (scaledWidth - containerRect.width) / 2;
-            // Convert back to unscaled coordinates by dividing by zoom level
-            const maxTranslateX = maxOffset / this.zoomLevel;
-            this.translateX = Math.max(-maxTranslateX, Math.min(maxTranslateX, this.translateX));
-        } else {
-            this.translateX = 0;
-        }
+        // Calculate pan limits
+        const maxTranslateX = (scaledWidth - imageWidth) / 2;
+        const maxTranslateY = (scaledHeight - imageHeight) / 2;
         
-        if (scaledHeight > containerRect.height) {
-            const maxOffset = (scaledHeight - containerRect.height) / 2;
-            const maxTranslateY = maxOffset / this.zoomLevel;
-            this.translateY = Math.max(-maxTranslateY, Math.min(maxTranslateY, this.translateY));
-        } else {
-            this.translateY = 0;
-        }
+        // Apply constraints
+        this.translateX = Math.max(-maxTranslateX, Math.min(maxTranslateX, this.translateX));
+        this.translateY = Math.max(-maxTranslateY, Math.min(maxTranslateY, this.translateY));
+        
+        console.log('Pan constraints:', {
+            imageSize: `${imageWidth.toFixed(1)}x${imageHeight.toFixed(1)}`,
+            scaledSize: `${scaledWidth.toFixed(1)}x${scaledHeight.toFixed(1)}`,
+            maxTranslate: `${maxTranslateX.toFixed(1)}, ${maxTranslateY.toFixed(1)}`,
+            actualTranslate: `${this.translateX.toFixed(1)}, ${this.translateY.toFixed(1)}`,
+            scale: this.scale.toFixed(2)
+        });
     }
     
-    applyTransform() {
-        const image = this.imageWrapper.querySelector('img');
-        if (image) {
-            image.style.transform = `scale(${this.zoomLevel}) translate(${this.translateX}px, ${this.translateY}px)`;
-            image.style.transformOrigin = 'center';
-            image.style.transition = this.isDragging ? 'none' : 'transform 0.2s ease';
+    updateTransform() {
+        if (!this.image) return;
+        
+        this.image.style.transform = `translate(${this.translateX}px, ${this.translateY}px) scale(${this.scale})`;
+        this.image.style.transformOrigin = 'center center';
+        
+        if (this.isDragging) {
+            this.image.style.transition = 'none';
+        } else {
+            this.image.style.transition = 'transform 0.2s ease-out';
         }
     }
     
     updateCursor() {
-        if (!this.imageWrapper) return;
+        this.imageWrapper.classList.remove('can-pan');
         
-        this.imageWrapper.classList.remove('zoomed', 'dragging');
-        
-        if (this.isDragging) {
-            this.imageWrapper.classList.add('dragging');
-        } else if (this.zoomLevel > this.minZoom) {
-            this.imageWrapper.classList.add('zoomed');
+        if (this.scale > 1) {
+            this.imageWrapper.classList.add('can-pan');
         }
+    }
+    
+    reset() {
+        this.scale = 1;
+        this.translateX = 0;
+        this.translateY = 0;
+        this.updateTransform();
+        this.updateCursor();
     }
 }
 
-// Initialize zoom functionality
-document.addEventListener('DOMContentLoaded', function() {
-    window.artifactZoom = new ArtifactZoom();
-});
-
-if (document.readyState !== 'loading') {
-    window.artifactZoom = new ArtifactZoom();
-}
+// Initialize
+window.artifactZoom = new ArtifactZoom();

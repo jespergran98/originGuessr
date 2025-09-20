@@ -14,7 +14,6 @@ class IndexGameSettings {
             "1,000 BC",
             "0",
             "500 AD",
-            "750 AD",
             "1000 AD",
             "1250 AD",
             "1500 AD",
@@ -26,7 +25,7 @@ class IndexGameSettings {
         // Corresponding years for timeframe filtering
         this.timeframeYears = [
             -5000000, -500000, -100000, -10000, -1000, 0,
-            500, 750, 1000, 1250, 1500, 1750, 1900, 2025
+            500, 1000, 1250, 1500, 1750, 1900, 2025
         ];
         
         this.initializeElements();
@@ -301,6 +300,38 @@ class IndexGameSettings {
         minIndex = Math.max(0, Math.min(minIndex, maxBoundIndex));
         maxIndex = Math.max(0, Math.min(maxIndex, maxBoundIndex));
 
+        // Prevent handles from crossing over - constraint enforcement without moving handles
+        if (minIndex >= maxIndex) {
+            // Don't automatically move handles, just constrain them at their limits
+            if (minIndex === maxBoundIndex) {
+                // If min handle is at maximum, constrain max handle to stay at maximum
+                minIndex = maxBoundIndex - 1;
+                this.timeframeMin.value = minIndex;
+            } else if (maxIndex === 0) {
+                // If max handle is at minimum, constrain min handle to stay at minimum + 1
+                maxIndex = 1;
+                this.timeframeMax.value = maxIndex;
+            } else {
+                // For all other cases, maintain minimum 1-increment gap by reverting the problematic move
+                // The handle that caused the conflict stays at its previous valid position
+                const prevMinIndex = parseInt(this.timeframeMin.getAttribute('data-prev-value') || '0');
+                const prevMaxIndex = parseInt(this.timeframeMax.getAttribute('data-prev-value') || maxBoundIndex.toString());
+                
+                // Check which handle moved into invalid territory and revert it
+                if (minIndex !== prevMinIndex && minIndex >= maxIndex) {
+                    minIndex = Math.min(prevMinIndex, maxIndex - 1);
+                    this.timeframeMin.value = minIndex;
+                } else if (maxIndex !== prevMaxIndex && maxIndex <= minIndex) {
+                    maxIndex = Math.max(prevMaxIndex, minIndex + 1);
+                    this.timeframeMax.value = maxIndex;
+                }
+            }
+        }
+
+        // Store current values for next comparison
+        this.timeframeMin.setAttribute('data-prev-value', minIndex.toString());
+        this.timeframeMax.setAttribute('data-prev-value', maxIndex.toString());
+
         const totalIncrements = this.timeframeIncrements.length - 1;
         const minPercent = (minIndex / totalIncrements) * 100;
         const maxPercent = (maxIndex / totalIncrements) * 100;
@@ -397,6 +428,16 @@ class IndexGameSettings {
         letter.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
         letter.style.transform = 'translateY(-10px) scale(1.1) rotateZ(5deg)';
         letter.style.filter = 'brightness(1.2)';
+    }
+
+    resetLetterHover(letter) {
+        letter.style.transform = 'translateY(0) scale(1) rotateZ(0deg)';
+        letter.style.filter = 'brightness(1)';
+    }
+
+    refreshSliderVisuals() {
+        this.updateTimerSlider();
+        this.updateTimeframeSlider();
     }
 
     loadPreviousSettings() {

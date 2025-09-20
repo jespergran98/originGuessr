@@ -14,7 +14,6 @@ class IndexGameSettings {
             "1,000 BC",
             "0",
             "500 AD",
-            "750 AD",
             "1000 AD",
             "1250 AD",
             "1500 AD",
@@ -26,7 +25,7 @@ class IndexGameSettings {
         // Corresponding years for timeframe filtering
         this.timeframeYears = [
             -5000000, -500000, -100000, -10000, -1000, 0,
-            500, 750, 1000, 1250, 1500, 1750, 1900, 2025
+            500, 1000, 1250, 1500, 1750, 1900, 2025
         ];
         
         this.initializeElements();

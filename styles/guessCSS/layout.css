@@ -27,7 +27,6 @@ body {
     min-height: 0;
     background-color: var(--placeholder-green);
     margin-bottom: 10px;
-    border-radius: 3vh;
     z-index: 1;
 }
 

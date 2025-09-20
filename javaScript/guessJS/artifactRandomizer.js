@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // Define timeframe years for filtering
             const timeframeYears = [
                 -5000000, -500000, -100000, -10000, -1000, 0,
-                500, 750, 1000, 1250, 1500, 1750, 1900, 2025
+                500, 1000, 1250, 1500, 1750, 1900, 2025
             ];
             
             // Get URL parameters
