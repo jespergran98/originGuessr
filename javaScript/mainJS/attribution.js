@@ -44,11 +44,22 @@ function updateAttribution(artifact) {
 // Convert license names to Creative Commons URLs
 function getLicenseUrl(license) {
     const licenseMap = {
-        'CC BY 2.0': 'https://creativecommons.org/licenses/by/2.0',
-        'CC BY 2.5': 'https://creativecommons.org/licenses/by/2.5',
-        'CC BY 4.0': 'https://creativecommons.org/licenses/by/4.0',
-        'CC BY-SA 3.0': 'https://creativecommons.org/licenses/by-sa/3.0',
-        'CC BY-SA 4.0': 'https://creativecommons.org/licenses/by-sa/4.0'
+        'CC BY 2.0': 'https://creativecommons.org/licenses/by/2.0/',
+        'CC BY 2.5': 'https://creativecommons.org/licenses/by/2.5/',
+        'CC BY 3.0': 'https://creativecommons.org/licenses/by/3.0/',
+        'CC BY 4.0': 'https://creativecommons.org/licenses/by/4.0/',
+        'CC BY 3.0': 'https://creativecommons.org/licenses/by/3.0/',
+        'CC BY-SA 2.5': 'https://creativecommons.org/licenses/by-sa/2.5/',
+        'CC BY-SA 3.0': 'https://creativecommons.org/licenses/by-sa/3.0/',
+        'CC BY-SA 4.0': 'https://creativecommons.org/licenses/by-sa/4.0/',
+
+        'CC BY-SA 2.0 de': 'https://creativecommons.org/licenses/by-sa/2.0/de/',
+        'CC BY-SA 3.0 de': 'https://creativecommons.org/licenses/by-sa/3.0/de/',
+
+        'CC BY-SA 2.0 fr': 'https://creativecommons.org/licenses/by-sa/2.0/fr/',
+        
+        'The Royal Library': 'https://web.archive.org/web/20050410211557/http://www.kb.se/ENG/Copyright.htm',
+        'OGL 3': 'https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/'       
     };
     
     return licenseMap[license] || null;

@@ -1669,18 +1669,6 @@
       "isPlayable": true
     },
     {
-      "title": "Moa Bone Hooks",
-      "image": "https://images.nzgeo.com/1970/01/104_Hooks_Bodyimage3-e1481227465464-600x399.jpg",
-      "lat": -43.53,
-      "lng": 172.63,
-      "year": 1200,
-      "description": "New Zealand tools made from extinct flightless bird bones - masterful Polynesian engineering.",
-      "author": "Te Papa",
-      "authorLink": null,
-      "license": "nzgeo",
-      "isPlayable": true
-    },
-    {
       "title": "Inca Quipu",
       "image": "https://upload.wikimedia.org/wikipedia/commons/a/a7/Inca_Quipu.jpg",
       "lat": -13.52,
@@ -4581,7 +4569,7 @@
       "description": "Behaim's Erdapfel is the oldest surviving terrestrial globe predating Columbus.",
       "author": "Martin Behaim",
       "authorLink": "https://en.wikipedia.org/wiki/en:Martin_Behaim",
-      "license": "CC BY-SA 2.0 DE",
+      "license": "CC BY-SA 2.0 de",
       "isPlayable": true
     },
     {
