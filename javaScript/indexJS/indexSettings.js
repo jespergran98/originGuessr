@@ -30,9 +30,14 @@ class IndexGameSettings {
         ];
         
         this.initializeElements();
+        this.loadPreviousSettings(); // Load any previous settings from URL
         this.setDefaultStates();
         this.bindEvents();
-        this.initializeSliders();
+        // Delay slider initialization to ensure DOM is ready
+        requestAnimationFrame(() => {
+            this.initializeSliders();
+            this.forceSliderUpdate();
+        });
         this.initializeAnimations();
         this.createTimeframeTicks();
         this.createTimerTicks();
@@ -210,11 +215,22 @@ class IndexGameSettings {
             letter.addEventListener('mouseenter', () => this.animateLetterHover(letter));
             letter.addEventListener('mouseleave', () => this.resetLetterHover(letter));
         });
+
+        // Add window load event to ensure everything is properly initialized
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                this.forceSliderUpdate();
+            }, 100);
+        });
     }
 
     handleTimerToggle(button) {
         if (button.dataset.timer === 'yes') {
             AnimationUtils.slideIn(this.timeSlider);
+            // Update slider visuals when shown
+            setTimeout(() => {
+                this.updateTimerSlider();
+            }, 100);
         } else {
             AnimationUtils.slideOut(this.timeSlider);
         }
@@ -223,6 +239,10 @@ class IndexGameSettings {
     handleTimeframeToggle(button) {
         if (button.dataset.timeframe === 'flexible') {
             AnimationUtils.slideIn(this.timeframeSlider);
+            // Update slider visuals when shown
+            setTimeout(() => {
+                this.updateTimeframeSlider();
+            }, 100);
         } else {
             AnimationUtils.slideOut(this.timeframeSlider);
         }
@@ -238,25 +258,48 @@ class IndexGameSettings {
     updateTimerSlider() {
         if (!this.timeRange || !this.timerFill || !this.timeLabel) return;
 
-        const index = parseInt(this.timeRange.value);
+        // Always get the current value from the DOM element
+        const currentValue = this.timeRange.value;
+        const index = parseInt(currentValue);
+        
+        // Validate the index is within bounds
+        if (index < 0 || index >= this.timerIncrements.length) return;
+        
         const seconds = this.timerIncrements[index];
         const maxIndex = this.timerIncrements.length - 1;
         const percentage = (index / maxIndex) * 100;
 
-        requestAnimationFrame(() => {
-            this.timerFill.style.width = `${percentage}%`;
-            if (this.timerGlow) {
-                this.timerGlow.style.width = `${percentage}%`;
-            }
-            this.updateLabel(this.timeLabel, this.formatTimeLabel(seconds));
-        });
+        // Force immediate update without animation for initialization
+        this.timerFill.style.width = `${percentage}%`;
+        if (this.timerGlow) {
+            this.timerGlow.style.width = `${percentage}%`;
+        }
+        this.updateLabel(this.timeLabel, this.formatTimeLabel(seconds));
+
+        // Debug logging
+        console.log(`Timer slider - Index: ${index}, Seconds: ${seconds}, Percentage: ${percentage}%`);
+
+        // Also trigger a repaint to ensure visual update
+        this.timerFill.offsetHeight;
+        if (this.timerGlow) {
+            this.timerGlow.offsetHeight;
+        }
     }
 
     updateTimeframeSlider() {
         if (!this.timeframeMin || !this.timeframeMax || !this.timeframeFill || !this.timeframeLabel) return;
 
-        let minIndex = parseInt(this.timeframeMin.value);
-        let maxIndex = parseInt(this.timeframeMax.value);
+        // Always get the current values from the DOM elements
+        const currentMinValue = this.timeframeMin.value;
+        const currentMaxValue = this.timeframeMax.value;
+        
+        let minIndex = parseInt(currentMinValue);
+        let maxIndex = parseInt(currentMaxValue);
+
+        // Validate indices are within bounds
+        const maxBoundIndex = this.timeframeIncrements.length - 1;
+        minIndex = Math.max(0, Math.min(minIndex, maxBoundIndex));
+        maxIndex = Math.max(0, Math.min(maxIndex, maxBoundIndex));
 
         // Ensure min is always less than max
         if (minIndex >= maxIndex) {
@@ -273,19 +316,27 @@ class IndexGameSettings {
         const minPercent = (minIndex / totalIncrements) * 100;
         const maxPercent = (maxIndex / totalIncrements) * 100;
 
-        requestAnimationFrame(() => {
-            this.timeframeFill.style.left = `${minPercent}%`;
-            this.timeframeFill.style.width = `${maxPercent - minPercent}%`;
-            if (this.timeframeGlow) {
-                this.timeframeGlow.style.left = `${minPercent}%`;
-                this.timeframeGlow.style.width = `${maxPercent - minPercent}%`;
-            }
-            
-            const minLabel = this.timeframeIncrements[minIndex];
-            const maxLabel = this.timeframeIncrements[maxIndex];
-            const labelText = `${minLabel} - ${maxLabel}`;
-            this.updateLabel(this.timeframeLabel, labelText);
-        });
+        // Force immediate update without animation for initialization
+        this.timeframeFill.style.left = `${minPercent}%`;
+        this.timeframeFill.style.width = `${maxPercent - minPercent}%`;
+        if (this.timeframeGlow) {
+            this.timeframeGlow.style.left = `${minPercent}%`;
+            this.timeframeGlow.style.width = `${maxPercent - minPercent}%`;
+        }
+        
+        const minLabel = this.timeframeIncrements[minIndex];
+        const maxLabel = this.timeframeIncrements[maxIndex];
+        const labelText = `${minLabel} - ${maxLabel}`;
+        this.updateLabel(this.timeframeLabel, labelText);
+
+        // Debug logging
+        console.log(`Timeframe slider - MinIndex: ${minIndex}, MaxIndex: ${maxIndex}, MinPercent: ${minPercent}%, MaxPercent: ${maxPercent}%`);
+
+        // Also trigger a repaint to ensure visual update
+        this.timeframeFill.offsetHeight;
+        if (this.timeframeGlow) {
+            this.timeframeGlow.offsetHeight;
+        }
     }
 
     updateLabel(labelElement, newText) {
@@ -295,8 +346,37 @@ class IndexGameSettings {
     }
 
     initializeSliders() {
-        this.updateTimerSlider();
-        this.updateTimeframeSlider();
+        // Wait for DOM to be fully ready
+        if (this.timeRange && this.timerFill) {
+            this.updateTimerSlider();
+        }
+        
+        if (this.timeframeMin && this.timeframeMax && this.timeframeFill) {
+            this.updateTimeframeSlider();
+        }
+    }
+
+    // Force update of all slider visuals - useful for ensuring sync
+    forceSliderUpdate() {
+        console.log('Forcing slider updates...');
+        
+        // Multiple calls with small delays to ensure proper rendering
+        setTimeout(() => {
+            this.refreshSliderVisuals();
+        }, 50);
+        
+        setTimeout(() => {
+            this.refreshSliderVisuals();
+        }, 150);
+        
+        setTimeout(() => {
+            this.refreshSliderVisuals();
+        }, 300);
+        
+        // Also add a longer delay for stubborn cases
+        setTimeout(() => {
+            this.refreshSliderVisuals();
+        }, 500);
     }
 
     initializeAnimations() {
@@ -330,9 +410,36 @@ class IndexGameSettings {
         letter.style.filter = 'brightness(1.2)';
     }
 
-    resetLetterHover(letter) {
-        letter.style.transform = 'translateY(0) scale(1) rotateZ(0deg)';
-        letter.style.filter = 'brightness(1)';
+    loadPreviousSettings() {
+        // Check if there are URL parameters that might contain previous slider settings
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        // Load timer settings if they exist
+        const timerSeconds = urlParams.get('timerSeconds');
+        if (timerSeconds && this.timeRange) {
+            const seconds = parseInt(timerSeconds);
+            const index = this.timerIncrements.indexOf(seconds);
+            if (index !== -1) {
+                this.timeRange.value = index;
+                console.log(`Loaded timer setting: ${seconds} seconds (index ${index})`);
+            }
+        }
+        
+        // Load timeframe settings if they exist
+        const timeframeMinIndex = urlParams.get('timeframeMinIndex');
+        const timeframeMaxIndex = urlParams.get('timeframeMaxIndex');
+        
+        if (timeframeMinIndex && timeframeMaxIndex && this.timeframeMin && this.timeframeMax) {
+            const minIndex = parseInt(timeframeMinIndex);
+            const maxIndex = parseInt(timeframeMaxIndex);
+            
+            if (minIndex >= 0 && minIndex < this.timeframeIncrements.length &&
+                maxIndex >= 0 && maxIndex < this.timeframeIncrements.length) {
+                this.timeframeMin.value = minIndex;
+                this.timeframeMax.value = maxIndex;
+                console.log(`Loaded timeframe settings: ${minIndex} to ${maxIndex}`);
+            }
+        }
     }
 
     // Utility method to get current timer selection as readable value
@@ -369,6 +476,7 @@ class IndexGameSettings {
         const activeTimer = this.buttonManager.getActiveButton(this.timerButtons);
         return activeTimer?.dataset.timer === 'yes';
     }
+
     startGame() {
         const activeTimeframe = this.buttonManager.getActiveButton(this.timeframeButtons);
         const timerEnabled = this.isTimerEnabled();
@@ -377,13 +485,7 @@ class IndexGameSettings {
         params.append('round', '1');
         params.append('totalScore', '0');
         params.append('scores', '[]');
-    
-        // CRITICAL FIX: Clear previous game state when starting a new game
-        // This ensures old timer/timeframe settings don't persist
-        sessionStorage.removeItem('gameState');
-        sessionStorage.removeItem('gameArtifacts');
-        sessionStorage.removeItem('finalScoreGameSettings');
-    
+
         // Add timeframe parameters if flexible timeframe is selected
         if (activeTimeframe && activeTimeframe.dataset.timeframe === 'flexible') {
             const selection = this.getTimeframeSelection();
@@ -392,8 +494,7 @@ class IndexGameSettings {
                 params.append('timeframeMaxIndex', selection.maxIndex.toString());
             }
         }
-        // IMPORTANT: No else clause needed here because we're not preserving old settings
-    
+
         // Add timer parameters if timer is enabled
         if (timerEnabled) {
             const timerSelection = this.getTimerSelection();
@@ -401,13 +502,7 @@ class IndexGameSettings {
                 params.append('timerSeconds', timerSelection.seconds.toString());
             }
         }
-        // IMPORTANT: No else clause needed here because we cleared sessionStorage above
-    
-        console.log('Starting new game with fresh settings:', {
-            timerEnabled: timerEnabled,
-            timeframeEnabled: activeTimeframe && activeTimeframe.dataset.timeframe === 'flexible'
-        });
-    
+
         window.location.href = `guess.html?${params.toString()}`;
     }
 }

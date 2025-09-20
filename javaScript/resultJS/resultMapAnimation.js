@@ -1,404 +1,490 @@
-class ResultMapAnimation {
+class IndexGameSettings {
     constructor() {
-        this.markers = { guess: null, correct: null };
-        this.lineOverlay = null;
-        this.map = null;
-        this.isAnimating = false;
-        this.eventListeners = [];
-        this.lineCoordinates = null;
-        this.isLineAnimationComplete = false;
-        this.noGuess = false; // Track if no guess was made
+        this.buttonManager = new ButtonManager();
         
-        this.init();
+        // Timer increments in seconds
+        this.timerIncrements = [15, 20, 30, 45, 60, 90, 120, 180, 240, 300, 420, 600];
+        
+        // Historical timeframe increments
+        this.timeframeIncrements = [
+            "5 Million BC",
+            "500,000 BC", 
+            "100,000 BC",
+            "10,000 BC",
+            "1,000 BC",
+            "0",
+            "500 AD",
+            "750 AD",
+            "1000 AD",
+            "1250 AD",
+            "1500 AD",
+            "1750 AD",
+            "1900 AD",
+            "2025 AD"
+        ];
+        
+        // Corresponding years for timeframe filtering
+        this.timeframeYears = [
+            -5000000, -500000, -100000, -10000, -1000, 0,
+            500, 750, 1000, 1250, 1500, 1750, 1900, 2025
+        ];
+        
+        this.initializeElements();
+        
+        // CRITICAL: Preserve any existing slider values before setting defaults
+        this.preservedTimerValue = this.timeRange ? this.timeRange.value : null;
+        this.preservedTimeframeMin = this.timeframeMin ? this.timeframeMin.value : null;
+        this.preservedTimeframeMax = this.timeframeMax ? this.timeframeMax.value : null;
+        
+        this.setDefaultStates();
+        
+        // Restore preserved values after setting defaults
+        this.restorePreservedValues();
+        
+        this.bindEvents();
+        this.createTimeframeTicks();
+        this.createTimerTicks();
+        
+        // Initialize sliders LAST to ensure all values are properly set
+        this.initializeSliders();
+        this.initializeAnimations();
     }
 
-    init() {
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', () => this.setupMap());
+    initializeElements() {
+        this.timerButtons = document.querySelectorAll('[data-timer]');
+        this.timeframeButtons = document.querySelectorAll('[data-timeframe]');
+        this.timeSlider = document.getElementById('timeSlider');
+        this.timeframeSlider = document.getElementById('timeframeSlider');
+        this.timeRange = document.getElementById('timeRange');
+        this.timeLabel = document.getElementById('timeLabel');
+        this.timerFill = document.getElementById('timerFill');
+        this.timerGlow = document.getElementById('timerGlow');
+        this.timeframeMin = document.getElementById('timeframeMin');
+        this.timeframeMax = document.getElementById('timeframeMax');
+        this.timeframeLabel = document.getElementById('timeframeLabel');
+        this.timeframeFill = document.getElementById('timeframeFill');
+        this.timeframeGlow = document.getElementById('timeframeGlow');
+        this.playBtn = document.querySelector('.play-btn');
+        this.titleLetters = document.querySelectorAll('.title-letter');
+    }
+
+    setDefaultStates() {
+        this.buttonManager.setDefaultActive(this.timerButtons, '[data-timer="no"]');
+        this.buttonManager.setDefaultActive(this.timeframeButtons, '[data-timeframe="unspecified"]');
+
+        // Set timer slider min/max and preserve current values if they exist
+        if (this.timeRange) {
+            const maxIndex = this.timerIncrements.length - 1;
+            const currentValue = this.timeRange.value; // Preserve any existing value
+            
+            // Set min and max values (0-based index)
+            this.timeRange.min = 0;
+            this.timeRange.max = maxIndex;
+            
+            // Only set default value if no value exists or it's empty
+            if (!currentValue || currentValue === '' || isNaN(parseInt(currentValue))) {
+                const defaultIndex = this.timerIncrements.indexOf(60);
+                this.timeRange.value = defaultIndex !== -1 ? defaultIndex : 4;
+            }
+        }
+
+        // Set timeframe slider min/max and preserve current values if they exist
+        if (this.timeframeMin && this.timeframeMax) {
+            const maxIndex = this.timeframeIncrements.length - 1;
+            const currentMinValue = this.timeframeMin.value; // Preserve any existing value
+            const currentMaxValue = this.timeframeMax.value; // Preserve any existing value
+            
+            // Set min and max values (0-based index)
+            this.timeframeMin.min = 0;
+            this.timeframeMin.max = maxIndex;
+            this.timeframeMax.min = 0;
+            this.timeframeMax.max = maxIndex;
+            
+            // Only set default values if no values exist or they're empty
+            if (!currentMinValue || currentMinValue === '' || isNaN(parseInt(currentMinValue))) {
+                this.timeframeMin.value = 0;
+            }
+            if (!currentMaxValue || currentMaxValue === '' || isNaN(parseInt(currentMaxValue))) {
+                this.timeframeMax.value = maxIndex;
+            }
+        }
+
+        const activeTimer = this.buttonManager.getActiveButton(this.timerButtons);
+        if (activeTimer?.dataset.timer === 'yes') {
+            AnimationUtils.slideIn(this.timeSlider);
         } else {
-            this.setupMap();
-        }
-    }
-
-    setupMap() {
-        this.waitForMap(() => this.startAnimation());
-    }
-
-    waitForMap(callback) {
-        if (typeof map !== 'undefined' && map) {
-            this.map = map;
-            callback();
-            return;
-        }
-        setTimeout(() => this.waitForMap(callback), 50);
-    }
-
-    async startAnimation() {
-        const coords = this.parseCoordinates();
-        if (!coords) {
-            console.warn('Invalid coordinates for result map animation');
-            return;
+            AnimationUtils.slideOut(this.timeSlider);
         }
 
-        this.isAnimating = true;
-        
-        // Check if no guess was made
-        const urlParams = new URLSearchParams(window.location.search);
-        this.noGuess = urlParams.get('noGuess') === 'true';
-
-        if (this.noGuess) {
-            // No guess was made - show only the correct location
-            console.log('No guess made - showing only correct location');
-            await this.animateNoGuessScenario(coords.correct);
+        const activeTimeframe = this.buttonManager.getActiveButton(this.timeframeButtons);
+        if (activeTimeframe?.dataset.timeframe === 'flexible') {
+            AnimationUtils.slideIn(this.timeframeSlider);
         } else {
-            // Normal animation with guess and correct location
-            console.log('Normal animation with guess');
-            await this.animateNormalScenario(coords);
-        }
-
-        this.isAnimating = false;
-    }
-
-    async animateNoGuessScenario(correct) {
-        try {
-            // Center the map on the correct location
-            this.map.setView([correct.lat, correct.lng], 8, { animate: false });
-            
-            await this.wait(300); // Brief pause
-            
-            // Show the correct location flag directly
-            this.addMarker('correct', correct.lat, correct.lng);
-            
-            // Zoom in slightly to focus on the correct location
-            this.map.flyTo([correct.lat, correct.lng], 10, {
-                duration: 1.5,
-                easeLinearity: 0.25
-            });
-            
-        } catch (error) {
-            console.error('Animation error (no guess):', error);
+            AnimationUtils.slideOut(this.timeframeSlider);
         }
     }
 
-    async animateNormalScenario(coords) {
-        this.lineCoordinates = coords;
-        const { guess, correct } = coords;
-
-        try {
-            // Calculate optimal view
-            const view = this.calculateOptimalView(guess, correct);
-            
-            // Step 1: Start at guess location with closer zoom
-            const initialZoom = Math.min(view.optimalZoom + 2, 16);
-            this.map.setView([guess.lat, guess.lng], initialZoom, { animate: false });
-            
-            // Step 2: Show guess marker immediately with splat
-            this.addMarkerWithSplat('guess', guess.lat, guess.lng);
-            
-            await this.wait(600);
-            
-            // Step 3: Quick zoom out and pan to optimal view
-            this.map.flyTo(view.center, view.optimalZoom, {
-                duration: 1.2,
-                easeLinearity: 0.2
-            });
-            
-            await this.wait(600);
-            
-            // Step 4: Draw line quickly
-            await this.animateLine(guess, correct);
-            
-            // Step 5: Show correct location and ensure proper layering
-            this.addMarker('correct', correct.lat, correct.lng);
-            this.enforceMarkerLayering();
-            
-        } catch (error) {
-            console.error('Animation error (normal):', error);
-        }
-    }
-
-    parseCoordinates() {
-        const params = new URLSearchParams(window.location.search);
-        const guessLat = parseFloat(params.get('guessLat'));
-        const guessLng = parseFloat(params.get('guessLng'));
-        const artifactParam = params.get('artifact');
-
-        if (isNaN(guessLat) || isNaN(guessLng) || !artifactParam) return null;
-
-        try {
-            const artifact = JSON.parse(decodeURIComponent(artifactParam));
-            const correctLat = parseFloat(artifact.lat);
-            const correctLng = parseFloat(artifact.lng);
-            
-            if (isNaN(correctLat) || isNaN(correctLng)) return null;
-
-            return {
-                guess: { lat: guessLat, lng: guessLng },
-                correct: { lat: correctLat, lng: correctLng }
-            };
-        } catch (error) {
-            console.error('Failed to parse coordinates:', error);
-            return null;
-        }
-    }
-
-    calculateOptimalView(guess, correct) {
-        const bounds = L.latLngBounds([
-            [guess.lat, guess.lng],
-            [correct.lat, correct.lng]
-        ]);
-
-        const paddedBounds = bounds.pad(0.15);
-        const center = paddedBounds.getCenter();
+    createTimerTicks() {
+        if (!this.timeSlider) return;
         
-        let optimalZoom = this.map.getBoundsZoom(paddedBounds, false);
-        optimalZoom = Math.max(3, Math.min(16, optimalZoom));
+        const tickContainer = document.createElement('div');
+        tickContainer.className = 'timer-ticks';
         
-        // For very close markers, ensure readable zoom
-        const distance = this.getDistance(guess.lat, guess.lng, correct.lat, correct.lng);
-        if (distance < 0.1) {
-            optimalZoom = Math.max(13, optimalZoom);
-        }
-
-        return {
-            center: [center.lat, center.lng],
-            optimalZoom
-        };
-    }
-
-    async animateLine(guess, correct) {
-        this.createLineOverlay();
-        return this.drawAnimatedLine(guess, correct);
-    }
-
-    createLineOverlay() {
-        this.removeLineOverlay();
-        
-        const overlay = document.createElement('div');
-        overlay.className = 'stippled-line-overlay';
-        overlay.innerHTML = '<svg class="line-svg"><path class="stippled-path"></path></svg>';
-        
-        this.map.getContainer().appendChild(overlay);
-        this.lineOverlay = overlay;
-    }
-
-    drawAnimatedLine(start, end) {
-        return new Promise(resolve => {
-            const steps = 30;
-            let currentStep = 0;
-            this.isLineAnimationComplete = false;
+        const sliderContainer = this.timeSlider.querySelector('.slider-container');
+        if (sliderContainer) {
+            sliderContainer.appendChild(tickContainer);
             
-            const animate = () => {
-                if (currentStep > steps) {
-                    this.isLineAnimationComplete = true;
-                    this.bindLineUpdates(start, end);
-                    resolve();
-                    return;
+            this.timerIncrements.forEach((seconds, index) => {
+                const percentage = (index / (this.timerIncrements.length - 1)) * 100;
+                
+                // Create tick mark - make every 3rd tick major
+                const tick = document.createElement('div');
+                tick.className = `tick-mark ${index % 3 === 0 ? 'major' : ''}`;
+                tick.style.left = `${percentage}%`;
+                tickContainer.appendChild(tick);
+                
+                // Create tick label for major ticks and last tick
+                if (index % 3 === 0 || index === this.timerIncrements.length - 1) {
+                    const label = document.createElement('div');
+                    label.className = 'tick-label';
+                    
+                    // Format label based on seconds
+                    if (seconds < 60) {
+                        label.textContent = `${seconds}s`;
+                    } else {
+                        const mins = Math.floor(seconds / 60);
+                        const rem = seconds % 60;
+                        label.textContent = rem === 0 ? `${mins}m` : `${mins}m${rem}s`;
+                    }
+                    
+                    label.style.left = `${percentage}%`;
+                    tickContainer.appendChild(label);
                 }
-                
-                const progress = this.easeOutCubic(currentStep / steps);
-                const currentLat = start.lat + (end.lat - start.lat) * progress;
-                const currentLng = start.lng + (end.lng - start.lng) * progress;
-                
-                this.updateLinePath(start, { lat: currentLat, lng: currentLng });
-                
-                currentStep++;
-                requestAnimationFrame(animate);
-            };
-            
-            requestAnimationFrame(animate);
-        });
-    }
-
-    updateLinePath(start, end) {
-        if (!this.lineOverlay) return;
-        
-        const startPoint = this.map.latLngToContainerPoint([start.lat, start.lng]);
-        const endPoint = this.map.latLngToContainerPoint([end.lat, end.lng]);
-        
-        const path = this.lineOverlay.querySelector('.stippled-path');
-        if (path) {
-            path.setAttribute('d', `M ${startPoint.x} ${startPoint.y} L ${endPoint.x} ${endPoint.y}`);
-        }
-    }
-
-    bindLineUpdates(start, end) {
-        const updateLine = () => {
-            if (!this.isLineAnimationComplete) return;
-            
-            requestAnimationFrame(() => {
-                this.updateLinePath(start, end);
             });
-        };
-        
-        const events = ['move', 'zoom', 'zoomstart', 'zoomend', 'viewreset', 'resize'];
-        
-        events.forEach(event => {
-            this.map.on(event, updateLine);
-            this.eventListeners.push({ event, handler: updateLine });
-        });
-
-        const handleZoomAnimation = () => {
-            if (this.map.isZooming && this.map.isZooming()) {
-                this.updateLinePath(start, end);
-                requestAnimationFrame(handleZoomAnimation);
-            }
-        };
-
-        const zoomStartHandler = () => {
-            requestAnimationFrame(handleZoomAnimation);
-        };
-
-        this.map.on('zoomstart', zoomStartHandler);
-        this.eventListeners.push({ event: 'zoomstart', handler: zoomStartHandler });
-    }
-
-    addMarkerWithSplat(type, lat, lng) {
-        const markerConfig = this.getMarkerConfig(type);
-        
-        const icon = L.divIcon({
-            html: markerConfig.html.replace('custom-marker', 'custom-marker marker-splat'),
-            className: markerConfig.className,
-            iconSize: markerConfig.size,
-            iconAnchor: markerConfig.anchor
-        });
-
-        this.markers[type] = L.marker([lat, lng], { 
-            icon,
-            zIndexOffset: markerConfig.zIndex
-        }).addTo(this.map);
-
-        setTimeout(() => this.enforceMarkerLayering(), 10);
-    }
-
-    addMarker(type, lat, lng) {
-        const markerConfig = this.getMarkerConfig(type);
-        
-        const icon = L.divIcon({
-            html: markerConfig.html,
-            className: markerConfig.className,
-            iconSize: markerConfig.size,
-            iconAnchor: markerConfig.anchor
-        });
-
-        this.markers[type] = L.marker([lat, lng], { 
-            icon,
-            zIndexOffset: markerConfig.zIndex
-        }).addTo(this.map);
-
-        setTimeout(() => this.enforceMarkerLayering(), 10);
-    }
-
-    enforceMarkerLayering() {
-        Object.values(this.markers).forEach(marker => {
-            if (marker && marker._icon) {
-                marker._icon.style.zIndex = marker.options.zIndexOffset || 1000;
-                marker.bringToFront && marker.bringToFront();
-            }
-        });
-
-        if (this.lineOverlay) {
-            this.lineOverlay.style.zIndex = '500';
         }
     }
 
-    getMarkerConfig(type) {
-        const configs = {
-            guess: {
-                html: `
-                    <div class="custom-marker">
-                        <svg viewBox="0 0 32 48" class="marker-svg">
-                            <path class="marker-body" d="M16 2C23 2 29 8 29 16C29 24 16 46 16 46C16 46 3 24 3 16C3 8 9 2 16 2Z"/>
-                            <circle class="marker-pin" cx="16" cy="16" r="5"/>
-                        </svg>
-                    </div>
-                `,
-                className: 'guess-marker-container',
-                size: [32, 48],
-                anchor: [16, 48],
-                zIndex: 1000
-            },
-            correct: {
-                html: `
-                    <div class="correct-location-marker flag-entrance">
-                        <svg viewBox="0 0 36 48" class="flag-svg">
-                            <rect class="flag-pole" x="6" y="8" width="2.5" height="40"/>
-                            <path class="flag-fabric" d="M8.5 10 L28 10 L25 16 L28 22 L8.5 22 Z"/>
-                            <circle class="flag-pole" cx="7.25" cy="8" r="1.5"/>
-                        </svg>
-                    </div>
-                `,
-                className: 'correct-marker-container',
-                size: [36, 48],
-                anchor: [7.25, 48],
-                zIndex: 2000
-            }
-        };
+    createTimeframeTicks() {
+        if (!this.timeframeSlider) return;
         
-        return configs[type];
-    }
-
-    // Utility methods
-    getDistance(lat1, lng1, lat2, lng2) {
-        const R = 6371; // Earth's radius in km
-        const dLat = this.toRadians(lat2 - lat1);
-        const dLng = this.toRadians(lng2 - lng1);
-
-        const a = Math.sin(dLat / 2) ** 2 + 
-                  Math.cos(this.toRadians(lat1)) * Math.cos(this.toRadians(lat2)) * 
-                  Math.sin(dLng / 2) ** 2;
-
-        return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-    }
-
-    toRadians(degrees) {
-        return degrees * (Math.PI / 180);
-    }
-
-    easeOutCubic(t) {
-        return 1 - Math.pow(1 - t, 3);
-    }
-
-    wait(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    }
-
-    // Cleanup methods
-    removeLineOverlay() {
-        if (this.lineOverlay) {
-            this.lineOverlay.remove();
-            this.lineOverlay = null;
+        const tickContainer = document.createElement('div');
+        tickContainer.className = 'timeframe-ticks';
+        
+        const sliderContainer = this.timeframeSlider.querySelector('.dual-slider-container');
+        if (sliderContainer) {
+            sliderContainer.appendChild(tickContainer);
+            
+            this.timeframeIncrements.forEach((increment, index) => {
+                const percentage = (index / (this.timeframeIncrements.length - 1)) * 100;
+                
+                // Create tick mark
+                const tick = document.createElement('div');
+                tick.className = `tick-mark ${index % 4 === 0 ? 'major' : ''}`;
+                tick.style.left = `${percentage}%`;
+                tickContainer.appendChild(tick);
+                
+                // Create tick label for major ticks only
+                if (index % 4 === 0 || index === this.timeframeIncrements.length - 1) {
+                    const label = document.createElement('div');
+                    label.className = 'tick-label';
+                    label.textContent = increment;
+                    label.style.left = `${percentage}%`;
+                    tickContainer.appendChild(label);
+                }
+            });
         }
     }
 
-    cleanup() {
-        this.eventListeners.forEach(({ event, handler }) => {
-            this.map && this.map.off(event, handler);
+    bindEvents() {
+        this.buttonManager.initializeButtonGroup(
+            this.timerButtons,
+            (button) => this.handleTimerToggle(button),
+            'timer'
+        );
+
+        this.buttonManager.initializeButtonGroup(
+            this.timeframeButtons,
+            (button) => this.handleTimeframeToggle(button),
+            'timeframe'
+        );
+
+        if (this.timeRange) {
+            ['input', 'change'].forEach(event =>
+                this.timeRange.addEventListener(event, () => this.updateTimerSlider())
+            );
+        }
+
+        if (this.timeframeMin && this.timeframeMax) {
+            ['input', 'change'].forEach(event => {
+                this.timeframeMin.addEventListener(event, () => this.updateTimeframeSlider());
+                this.timeframeMax.addEventListener(event, () => this.updateTimeframeSlider());
+            });
+        }
+
+        if (this.playBtn) {
+            this.buttonManager.initializeRippleEffect([this.playBtn]);
+            this.playBtn.addEventListener('click', () => this.startGame());
+        }
+
+        this.titleLetters.forEach((letter, index) => {
+            letter.style.setProperty('--i', index);
+            letter.addEventListener('mouseenter', () => this.animateLetterHover(letter));
+            letter.addEventListener('mouseleave', () => this.resetLetterHover(letter));
         });
-        this.eventListeners = [];
-        
-        Object.values(this.markers).forEach(marker => {
-            if (marker && this.map) this.map.removeLayer(marker);
-        });
-        this.markers = { guess: null, correct: null };
-        
-        this.removeLineOverlay();
-        this.lineCoordinates = null;
-        this.isLineAnimationComplete = false;
     }
 
-    restart() {
-        if (this.isAnimating) return;
-        
-        this.cleanup();
-        this.startAnimation();
+    handleTimerToggle(button) {
+        if (button.dataset.timer === 'yes') {
+            AnimationUtils.slideIn(this.timeSlider);
+        } else {
+            AnimationUtils.slideOut(this.timeSlider);
+        }
     }
-}
 
-// Initialize
-const resultMapAnimation = new ResultMapAnimation();
+    handleTimeframeToggle(button) {
+        if (button.dataset.timeframe === 'flexible') {
+            AnimationUtils.slideIn(this.timeframeSlider);
+        } else {
+            AnimationUtils.slideOut(this.timeframeSlider);
+        }
+    }
 
-// Export restart function
-if (typeof window !== 'undefined') {
-    window.restartResultAnimation = () => resultMapAnimation.restart();
+    formatTimeLabel(seconds) {
+        if (seconds < 60) return seconds + " seconds";
+        let mins = Math.floor(seconds / 60);
+        let rem = seconds % 60;
+        return (rem === 0) ? (mins + " minute" + (mins > 1 ? "s" : "")) : (mins + " minute" + (mins > 1 ? "s" : "") + " " + rem + " seconds");
+    }
+
+    updateTimerSlider() {
+        if (!this.timeRange || !this.timerFill || !this.timeLabel) return;
+
+        // FIXED: Always get the actual current value from the slider handle
+        const index = parseInt(this.timeRange.value);
+        const seconds = this.timerIncrements[index];
+        const maxIndex = this.timerIncrements.length - 1;
+        
+        // Calculate percentage based on the actual handle position
+        const percentage = (index / maxIndex) * 100;
+
+        requestAnimationFrame(() => {
+            // Update fill and glow to match the actual handle position
+            this.timerFill.style.width = `${percentage}%`;
+            if (this.timerGlow) {
+                this.timerGlow.style.width = `${percentage}%`;
+            }
+            this.updateLabel(this.timeLabel, this.formatTimeLabel(seconds));
+        });
+    }
+
+    updateTimeframeSlider() {
+        if (!this.timeframeMin || !this.timeframeMax || !this.timeframeFill || !this.timeframeLabel) return;
+
+        // FIXED: Always get the actual current values from the slider handles
+        let minIndex = parseInt(this.timeframeMin.value);
+        let maxIndex = parseInt(this.timeframeMax.value);
+
+        // Ensure min is always less than max
+        if (minIndex >= maxIndex) {
+            if (minIndex === 0) {
+                maxIndex = 1;
+                this.timeframeMax.value = maxIndex;
+            } else {
+                minIndex = maxIndex - 1;
+                this.timeframeMin.value = minIndex;
+            }
+        }
+
+        const totalIncrements = this.timeframeIncrements.length - 1;
+        
+        // Calculate percentages based on actual handle positions
+        const minPercent = (minIndex / totalIncrements) * 100;
+        const maxPercent = (maxIndex / totalIncrements) * 100;
+
+        requestAnimationFrame(() => {
+            // Update fill and glow to match the actual handle positions
+            this.timeframeFill.style.left = `${minPercent}%`;
+            this.timeframeFill.style.width = `${maxPercent - minPercent}%`;
+            if (this.timeframeGlow) {
+                this.timeframeGlow.style.left = `${minPercent}%`;
+                this.timeframeGlow.style.width = `${maxPercent - minPercent}%`;
+            }
+            
+            const minLabel = this.timeframeIncrements[minIndex];
+            const maxLabel = this.timeframeIncrements[maxIndex];
+            const labelText = `${minLabel} - ${maxLabel}`;
+            this.updateLabel(this.timeframeLabel, labelText);
+        });
+    }
+
+    updateLabel(labelElement, newText) {
+        if (labelElement?.textContent !== newText) {
+            labelElement.textContent = newText;
+        }
+    }
+
+    initializeSliders() {
+        // CRITICAL FIX: Force update sliders after all elements are initialized
+        // This ensures the visual fill always matches the actual handle positions
+        
+        // Immediate sync to handle restored values
+        this.syncSliderVisuals();
+        
+        // Additional sync after DOM is fully ready
+        requestAnimationFrame(() => {
+            this.syncSliderVisuals();
+        });
+        
+        // Final check after a brief moment to handle any race conditions
+        setTimeout(() => {
+            this.syncSliderVisuals();
+        }, 100);
+    }
+
+    // NEW METHOD: Restore preserved slider values
+    restorePreservedValues() {
+        if (this.preservedTimerValue !== null && this.preservedTimerValue !== '' && !isNaN(parseInt(this.preservedTimerValue))) {
+            if (this.timeRange) {
+                this.timeRange.value = this.preservedTimerValue;
+            }
+        }
+        
+        if (this.preservedTimeframeMin !== null && this.preservedTimeframeMin !== '' && !isNaN(parseInt(this.preservedTimeframeMin))) {
+            if (this.timeframeMin) {
+                this.timeframeMin.value = this.preservedTimeframeMin;
+            }
+        }
+        
+        if (this.preservedTimeframeMax !== null && this.preservedTimeframeMax !== '' && !isNaN(parseInt(this.preservedTimeframeMax))) {
+            if (this.timeframeMax) {
+                this.timeframeMax.value = this.preservedTimeframeMax;
+            }
+        }
+    }
+
+    // NEW METHOD: Force sync visual elements with slider positions
+    syncSliderVisuals() {
+        if (this.timeRange) {
+            // Trigger update based on current handle position
+            this.updateTimerSlider();
+        }
+        
+        if (this.timeframeMin && this.timeframeMax) {
+            // Trigger update based on current handle positions
+            this.updateTimeframeSlider();
+        }
+    }
+
+    initializeAnimations() {
+        this.titleLetters.forEach((letter, index) => {
+            letter.style.opacity = '0';
+            letter.style.transform = 'translateY(30px)';
+            setTimeout(() => {
+                letter.style.transition = 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)';
+                letter.style.opacity = '1';
+                letter.style.transform = 'translateY(0)';
+            }, index * 50 + 300);
+        });
+
+        const cards = document.querySelectorAll('.glass-card');
+        AnimationUtils.staggerAnimation(cards, 150, 600);
+
+        if (this.playBtn) {
+            this.playBtn.style.opacity = '0';
+            this.playBtn.style.transform = 'scale(0.9)';
+            setTimeout(() => {
+                this.playBtn.style.transition = 'all 0.5s cubic-bezier(0.4, 0, 0.2, 1)';
+                this.playBtn.style.opacity = '1';
+                this.playBtn.style.transform = 'scale(1)';
+            }, 400);
+        }
+    }
+
+    animateLetterHover(letter) {
+        letter.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+        letter.style.transform = 'translateY(-10px) scale(1.1) rotateZ(5deg)';
+        letter.style.filter = 'brightness(1.2)';
+    }
+
+    resetLetterHover(letter) {
+        letter.style.transform = 'translateY(0) scale(1) rotateZ(0deg)';
+        letter.style.filter = 'brightness(1)';
+    }
+
+    // Utility method to get current timer selection as readable value
+    getTimerSelection() {
+        if (!this.timeRange) return null;
+        
+        const index = parseInt(this.timeRange.value);
+        const seconds = this.timerIncrements[index];
+        
+        return {
+            seconds: seconds,
+            formatted: this.formatTimeLabel(seconds),
+            index: index
+        };
+    }
+
+    // Utility method to get current timeframe selection as readable values
+    getTimeframeSelection() {
+        if (!this.timeframeMin || !this.timeframeMax) return null;
+        
+        const minIndex = parseInt(this.timeframeMin.value);
+        const maxIndex = parseInt(this.timeframeMax.value);
+        
+        return {
+            min: this.timeframeIncrements[minIndex],
+            max: this.timeframeIncrements[maxIndex],
+            minIndex: minIndex,
+            maxIndex: maxIndex
+        };
+    }
+
+    // Check if timer is enabled
+    isTimerEnabled() {
+        const activeTimer = this.buttonManager.getActiveButton(this.timerButtons);
+        return activeTimer?.dataset.timer === 'yes';
+    }
+
+    startGame() {
+        const activeTimeframe = this.buttonManager.getActiveButton(this.timeframeButtons);
+        const timerEnabled = this.isTimerEnabled();
+        
+        let params = new URLSearchParams();
+        params.append('round', '1');
+        params.append('totalScore', '0');
+        params.append('scores', '[]');
+    
+        // CRITICAL FIX: Clear previous game state when starting a new game
+        // This ensures old timer/timeframe settings don't persist
+        sessionStorage.removeItem('gameState');
+        sessionStorage.removeItem('gameArtifacts');
+        sessionStorage.removeItem('finalScoreGameSettings');
+    
+        // Add timeframe parameters if flexible timeframe is selected
+        if (activeTimeframe && activeTimeframe.dataset.timeframe === 'flexible') {
+            const selection = this.getTimeframeSelection();
+            if (selection) {
+                params.append('timeframeMinIndex', selection.minIndex.toString());
+                params.append('timeframeMaxIndex', selection.maxIndex.toString());
+            }
+        }
+        // IMPORTANT: No else clause needed here because we're not preserving old settings
+    
+        // Add timer parameters if timer is enabled
+        if (timerEnabled) {
+            const timerSelection = this.getTimerSelection();
+            if (timerSelection) {
+                params.append('timerSeconds', timerSelection.seconds.toString());
+            }
+        }
+        // IMPORTANT: No else clause needed here because we cleared sessionStorage above
+    
+        console.log('Starting new game with fresh settings:', {
+            timerEnabled: timerEnabled,
+            timeframeEnabled: activeTimeframe && activeTimeframe.dataset.timeframe === 'flexible'
+        });
+    
+        window.location.href = `guess.html?${params.toString()}`;
+    }
 }
