@@ -14,14 +14,14 @@
     },
     {
       "title": "Rosetta Stone",
-      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/The_Rosetta_Stone_%285276860305%29.jpg/640px-The_Rosetta_Stone_%285276860305%29.jpg",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ae/Stein_von_Rosetta_-196.JPG/1024px-Stein_von_Rosetta_-196.JPG",
       "lat": 31.401388,
       "lng": 30.418055,
       "year": -196,
       "description": "The Rosetta Stone, inscribed in three scripts, was key to deciphering Egyptian hieroglyphs.",
-      "author": "McKay Savage",
-      "authorLink": "https://www.flickr.com/people/56796376@N00",
-      "license": "CC BY 2.0",
+      "author": "Aiwok",
+      "authorLink": "https://commons.wikimedia.org/wiki/User:Aiwok",
+      "license": "CC BY-SA 3.0",
       "isPlayable": true
     },
     {
@@ -74,13 +74,13 @@
     },
     {
       "title": "Piri Reis Map",
-      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Piri_reis_world_map_01.jpg/640px-Piri_reis_world_map_01.jpg",
+      "image": "https://thebrainchamber.com/wp-content/uploads/2023/11/Piri-reis-world-map.jpg",
       "lat": 41.01,
       "lng": 28.98,
       "year": 1513,
       "description": "The Piri Reis Map, compiled in 1513, accurately depicts parts of the Americas and Africa.",
-      "author": "Public Domain",
-      "authorLink": null,
+      "author": "thebrainchamber",
+      "authorLink": "https://thebrainchamber.com/the-piri-reis-map",
       "license": null,
       "isPlayable": true
     },
@@ -110,7 +110,7 @@
     },
     {
       "title": "Nebra Sky Disc",
-      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/96/1600_Himmelsscheibe_von_Nebra_sky_disk_anagoria.jpg/600px-1600_Himmelsscheibe_von_Nebra_sky_disk_anagoria.jpg?20121211180621",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Nebra_disc_1.jpg/1920px-Nebra_disc_1.jpg",
       "lat": 51.354444,
       "lng": 11.774722,
       "year": -1600,
@@ -182,14 +182,14 @@
     },
     {
       "title": "Imperial Crown (Vienna Treasury)",
-      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Weltliche_Schatzkammer_Wien_%28169%29pano2.jpg/640px-Weltliche_Schatzkammer_Wien_%28169%29pano2.jpg",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Imperial_Crown_Orb_and_Sceptre_of_Austria_%28Imperial_Treasury%29.jpg/1920px-Imperial_Crown_Orb_and_Sceptre_of_Austria_%28Imperial_Treasury%29.jpg",
       "lat": 48.2,
       "lng": 16.37,
       "year": 950,
       "description": "Imperial Crown: Key regalia of Holy Roman Emperors. A treasured medieval symbol, Vienna Treasury collection.",
-      "author": "Public Domain",
-      "authorLink": null,
-      "license": null,
+      "author": "Bede735c",
+      "authorLink": "https://commons.wikimedia.org/wiki/User:Bede735c",
+      "license": "CC BY-SA 3.0",
       "isPlayable": true
     },
     {
@@ -206,14 +206,14 @@
     },
     {
       "title": "Lion Man",
-      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f8/Lion_man_photo.jpg/640px-Lion_man_photo.jpg",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/c/c5/L%C3%B6wenmensch_2022_02.jpg",
       "lat": 48.5533,
       "lng": 10.1769,
       "year": -35500,
       "description": "The Lion Man is a prehistoric ivory sculpture depicting a human-lion hybrid.",
-      "author": "Public Domain",
-      "authorLink": null,
-      "license": null,
+      "author": "Chatsam",
+      "authorLink": "https://commons.wikimedia.org/wiki/User:Chatsam",
+      "license": "CC BY-SA 3.0",
       "isPlayable": true
     },
     {
@@ -1141,18 +1141,6 @@
       "isPlayable": true
     },
     {
-      "title": "Aboriginal Message Stick",
-      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/Unidentified_object%2C_Australia%2C_c._1912_-_Etnografiska_museet_-_Stockholm%2C_Sweden_-_DSC01366.JPG/640px-Unidentified_object%2C_Australia%2C_c._1912_-_Etnografiska_museet_-_Stockholm%2C_Sweden_-_DSC01366.JPG",
-      "lat": -23.698056,
-      "lng": 133.883056,
-      "year": 1700,
-      "description": "Aboriginal Message Sticks: carved wooden communication tools from Australia.",
-      "author": "Public Domain",
-      "authorLink": null,
-      "license": null,
-      "isPlayable": true
-    },
-    {
       "title": "Hittite Lion Gate",
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Lion_Gate%2C_Hattusa_13_%28cropped%29.jpg/1920px-Lion_Gate%2C_Hattusa_13_%28cropped%29.jpg",
       "lat": 40.02,
@@ -1226,14 +1214,14 @@
     },
     {
       "title": "Serpent Mound",
-      "image": "https://upload.wikimedia.org/wikipedia/commons/e/e9/Serpent_Mound_%28aerial_view%29.jpg",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/The_Great_Serpent_Mound.jpg/2560px-The_Great_Serpent_Mound.jpg",
       "lat": 43.3289,
       "lng": -91.1308,
       "year": 800,
       "description": "Effigy Mounds: earthworks shaped like animals in North America.",
-      "author": "Timothy A. Price and Nichole I",
-      "authorLink": null,
-      "license": "CC BY 2.5",
+      "author": "Eric Ewing",
+      "authorLink": "https://commons.wikimedia.org/w/index.php?title=User:Eeewing&action=edit&redlink=1",
+      "license": "CC BY-SA 3.0",
       "isPlayable": true
     },
     {
@@ -1405,15 +1393,15 @@
       "isPlayable": true
     },
     {
-      "title": "Waitangi Treaty Grounds",
+      "title": "Treaty of Waitangi",
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/Treatyofwaitangi.jpg/800px-Treatyofwaitangi.jpg",
       "lat": -35.26,
       "lng": 174.08,
       "year": 1840,
-      "description": "Waitangi Treaty Grounds: where Māori chiefs signed founding NZ document.",
-      "author": "Public Domain",
-      "authorLink": null,
-      "license": null,
+      "description": "treaty signed by Māori chiefs of central importance to the history of New Zealand, its constitution, and its national mythos.",
+      "author": "Archives New Zealand",
+      "authorLink": "https://www.flickr.com/people/35759981@N08",
+      "license": "CC BY-SA 4.0",
       "isPlayable": true
     },
     {
@@ -1538,14 +1526,14 @@
     },
     {
       "title": "Shigir Idol",
-      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9c/Shigir_Idol_22.jpg/640px-Shigir_Idol_22.jpg",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/UOLE_museum-15.JPG/1280px-UOLE_museum-15.JPG",
       "lat": 57.8556,
       "lng": 60.6056,
       "year": -7500,
       "description": "Shigir Idol: world's oldest wooden sculpture with encrypted messages.",
-      "author": "Public Domain",
-      "authorLink": null,
-      "license": null,
+      "author": "Vyacheslav Bukharov",
+      "authorLink": "https://commons.wikimedia.org/wiki/User:Vyacheslav_Bukharov",
+      "license": "CC BY-SA 4.0",
       "isPlayable": true
     },
     {
@@ -1687,18 +1675,6 @@
       "lng": -91.06,
       "year": 790,
       "description": "Vivid Maya wall paintings showing courtly life and ritual warfare in Mexico.",
-      "author": "Public Domain",
-      "authorLink": null,
-      "license": null,
-      "isPlayable": true
-    },
-    {
-      "title": "Atocha Star Emerald",
-      "image": "https://upload.wikimedia.org/wikipedia/en/c/c7/Close_view_of_the_Atocha_Star_emerald.jpg",
-      "lat": 24.5250,
-      "lng": -81.7667,
-      "year": 1622,
-      "description": "Atocha Star, a 400-year-old emerald, weighed 25.87 carats before being cut to 12.72. Valued at $3.2-$5M, it was aboard the sunken treasure galleon Nuestra Señora de Atocha.",
       "author": "Public Domain",
       "authorLink": null,
       "license": null,
@@ -1862,14 +1838,14 @@
     },
     {
       "title": "Quimbaya Artifacts",
-      "image": "https://upload.wikimedia.org/wikipedia/commons/1/16/Precolombina_cultura_prc.jpg",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/ad/Code_of_Hammurabi_42.jpg/1024px-Code_of_Hammurabi_42.jpg",
       "lat": 4.7100,
       "lng": -75.7500,
       "year": 1000,
       "description": "Quimbaya Jets: Colombian gold artifacts resembling modern aircraft designs.",
-      "author": "Santandergrl",
-      "authorLink": "https://commons.wikimedia.org/w/index.php?title=User:Santandergrl&action=edit&redlink=1",
-      "license": "CC BY-SA 4.0",
+      "author": "Leon Reed",
+      "authorLink": "https://www.flickr.com/photos/leonandloisphotos/5985675352/",
+      "license": "CC BY-SA 2.0",
       "isPlayable": true
     },
     {
@@ -2065,15 +2041,15 @@
       "isPlayable": true
     },
     {
-      "title": "Roman Dice Tower",
-      "image": "https://upload.wikimedia.org/wikipedia/commons/a/a9/Vettweiss-Froitzheim_Dice_Tower.jpg",
+      "title": "Vettweiss-Froitzheim dice tower",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Roman_dice_tower_%28pyrgus_or_turricula%29_with_the_inscription_%22Pictos_victos%2C_Hostis_deleta%2C_Ludite_securi%22%2C_from_Vettweiss-Froitzheim%2C_4th_century_AD%2C_LVR-LandesMuseum_Bonn_%2846341519812%29.jpg/2560px-thumbnail.jpg",
       "lat": 50.1109,
       "lng": 8.6821,
-      "year": 200,
-      "description": "Roman Dice Tower: Bronze game accessory that rolls dice 'fairly'.",
-      "author": "Public Domain",
-      "authorLink": null,
-      "license": null,
+      "year": 350,
+      "description": "4th century Roman bronze dice tower discovered in 1985 Germany, with Latin inscriptions, baffles, and bells for gaming.",
+      "author": "Carole Raddato",
+      "authorLink": "https://www.flickr.com/people/41523983@N08",
+      "license": "CC BY-SA 2.0",
       "isPlayable": true
     },
     {
@@ -2250,7 +2226,7 @@
       "lat": 51.5194,
       "lng": 35.4422,
       "year": -7000,
-      "description": "Jericho Skull: Neolithic plastered cranium with shell eyes - early portrait.",
+      "description": "Neolithic skull with plaster features and shell eyes, evidence of early ancestor veneration.",
       "author": "Zunkir",
       "authorLink": "https://commons.wikimedia.org/wiki/User:Zunkir",
       "license": "CC BY-SA 4.0",
@@ -2318,13 +2294,13 @@
     },
     {
       "title": "Merneptah Stele",
-      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Merneptah_Steli_%28cropped%29.jpg/800px-Merneptah_Steli_%28cropped%29.jpg",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Merneptah_Stele_2022_09.jpg/1920px-Merneptah_Stele_2022_09.jpg",
       "lat": 26.2393,
       "lng": 32.8726,
       "year": -1207,
       "description": "Merneptah Stele: Egyptian monument with earliest mention of Israel.",
-      "author": "𐰇𐱅𐰚𐰤",
-      "authorLink": "https://commons.wikimedia.org/wiki/User:%F0%90%B0%87%F0%90%B1%85%F0%90%B0%9A%F0%90%B0%A4",
+      "author": "Onceinawhile",
+      "authorLink": "https://commons.wikimedia.org/wiki/User:Onceinawhile",
       "license": "CC BY-SA 4.0",
       "isPlayable": true
     },
@@ -2426,13 +2402,13 @@
     },
     {
       "title": "Golden Stool of the Ashanti",
-      "image": "https://live.staticflickr.com/3474/3294676359_edd36b7215_w.jpg",
+      "image": "https://live.staticflickr.com/65535/54068347315_c260e28155_o_d.png",
       "lat": 6.67,
       "lng": -1.62,
       "year": 1700,
       "description": "A sacred golden stool believed to house the soul of Ghana's Ashanti Kingdom.",
-      "author": "imknowmadic2",
-      "authorLink": "https://www.flickr.com/photos/imknowmadic2/",
+      "author": null,
+      "authorLink": null,
       "license": null,
       "isPlayable": true
     },
@@ -3085,12 +3061,12 @@
       "isPlayable": true
     },
     {
-      "title": "Motorola DynaTAC 8000x",
+      "title": "Motorola DynaTAC 8000X",
       "image": "https://upload.wikimedia.org/wikipedia/commons/7/74/DynaTAC8000X.jpg",
       "lat": 42.0833,
       "lng": -87.8333,
       "year": 1983,
-      "description": "The Motorola DynaTAC 8000x was the first commercial mobile phone released in 1983.",
+      "description": "The Motorola DynaTAC 8000X ($3,995 in 1984, ~$12,500 today) was the first commercial mobile phone, released in 1983.",
       "author": "Redrum0486",
       "authorLink": "https://en.wikipedia.org/wiki/File:DynaTAC8000X.jpg",
       "license": "CC BY-SA 3.0",
@@ -3162,7 +3138,7 @@
       "lat": 40.56,
       "lng": -74.34,
       "year": 1879,
-      "description": "Original light bulb from Thomas Edison's shop from 1879",
+      "description": "Original carbon-filament bulb from Thomas Edison's shop in Menlo Park",
       "author": "Terren",
       "authorLink": "https://www.flickr.com/photos/8136496@N05/2196367244/",
       "license": "CC BY 2.0",
@@ -3338,13 +3314,13 @@
     },
     {
       "title": "Super Mario Bros NES Cartridge",
-      "image": "https://live.staticflickr.com/8274/29616273124_b83ffd4182_z.jpg",
+      "image": "https://media.techeblog.com/images/sealed-unopened-graded-super-mario-bros-rally-2-million-most-expensive.jpg",
       "lat": 34.9858,
       "lng": 135.7689,
       "year": 1985,
       "description": "NES classic Super Mario Bros, a platforming legend, redefined gaming history. A rare sealed copy famously sold for $2 million!",
-      "author": "Public Domain",
-      "authorLink": null,
+      "author": "Rally",
+      "authorLink": "https://rallyrd.com/",
       "license": null,
       "isPlayable": true
     },
@@ -3865,18 +3841,6 @@
       "isPlayable": true
     },
     {
-      "title": "The Weeping Woman",
-      "image": "https://upload.wikimedia.org/wikipedia/en/1/14/Picasso_The_Weeping_Woman_Tate_identifier_T05010_10.jpg",
-      "lat": 48.8566,
-      "lng": 2.3522,
-      "year": 1937,
-      "description": "The Weeping Woman by Picasso portrays anguish during the Spanish Civil War.",
-      "author": "Public Domain",
-      "authorLink": null,
-      "license": null,
-      "isPlayable": true
-    },
-    {
       "title": "The Last Supper",
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/The_Last_Supper_-_Leonardo_Da_Vinci_-_High_Resolution_32x16.jpg/2560px-The_Last_Supper_-_Leonardo_Da_Vinci_-_High_Resolution_32x16.jpg",
       "lat": 45.4660,
@@ -4274,7 +4238,7 @@
     },
     {
       "title": "Anglepoise Lamp",
-      "image": "https://upload.wikimedia.org/wikipedia/commons/5/53/Anglepoise1227.jpg",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Type_1227_desk_lamp%2C_Anglepoise%2C_designed_by_George_Carwardine%2C_manufactured_by_Herbert_Terry_and_Sons%2C_1935_-_Design_Museum%2C_Kensington_-_London_-_DSC01571.jpg/1280px-Type_1227_desk_lamp%2C_Anglepoise%2C_designed_by_George_Carwardine%2C_manufactured_by_Herbert_Terry_and_Sons%2C_1935_-_Design_Museum%2C_Kensington_-_London_-_DSC01571.jpg",
       "lat": 51.5074,
       "lng": -0.1278,
       "year": 1932,
@@ -4286,14 +4250,14 @@
     },
     {
       "title": "Cloud Gate",
-      "image": "https://upload.wikimedia.org/wikipedia/en/c/c1/Cloud_Gate_%28The_Bean%29_from_east%27.jpg",
+      "image": "https://upload.wikimedia.org/wikipedia/de/thumb/e/e5/Chicago_Big_Bean1.JPG/1920px-Chicago_Big_Bean1.JPG",
       "lat": 41.8827,
       "lng": -87.6233,
       "year": 2006,
       "description": "Cloud Gate is a polished stainless steel sculpture reflecting Chicago's skyline in Millennium Park.",
-      "author": "biskuit",
-      "authorLink": "https://www.flickr.com/photos/kaplanbr/1538113210/",
-      "license": "CC BY-SA 2.0",
+      "author": "Pentachlorphenol",
+      "authorLink": "https://de.wikipedia.org/wiki/Benutzer:Pentachlorphenol",
+      "license": "CC BY-SA 3.0",
       "isPlayable": true
     },
     {
@@ -4489,14 +4453,14 @@
       "isPlayable": true
     },
     {
-      "title": "Salaminische Tablet (Oldest Abacus)",
-      "image": "https://upload.wikimedia.org/wikipedia/commons/f/f2/Salaminische_Tafel_Salamis_Tablet_nach_Wilhelm_Kubitschek_Numismatische_Zeitschrift_Bd_31_Wien_1899_p._394_ff.jpg",
+      "title": "Salamis Tablet (Oldest Abacus)",
+      "image": "https://i.redd.it/xw7s346d6bg81.jpg",
       "lat": 37.9333,
       "lng": 23.5000,
       "year": -300,
-      "description": "The oldest abacus is a counting device used for arithmetic in ancient civilizations.",
-      "author": "Public Domain",
-      "authorLink": null,
+      "description": "The Salamis Tablet is the world's oldest counting board. It's made of marble and is now on display at the National Museum of Epigraphy in Athens",
+      "author": "Fuckoff555",
+      "authorLink": "https://www.reddit.com/r/ArtefactPorn/comments/smcrrj/the_salamis_tablet_is_the_worlds_oldest_surviving",
       "license": null,
       "isPlayable": true
     },
@@ -4562,14 +4526,14 @@
     },
     {
       "title": "Behaim's Erdapfel Globe",
-      "image": "https://upload.wikimedia.org/wikipedia/commons/b/b8/Behaims_Erdapfel.jpg",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Erdglobus%2C_sogenannter_Behaim-Globus.jpg/1024px-Erdglobus%2C_sogenannter_Behaim-Globus.jpg",
       "lat": 49.4539,
       "lng": 11.0775,
       "year": 1492,
       "description": "Behaim's Erdapfel is the oldest surviving terrestrial globe predating Columbus.",
-      "author": "Martin Behaim",
-      "authorLink": "https://en.wikipedia.org/wiki/en:Martin_Behaim",
-      "license": "CC BY-SA 2.0 de",
+      "author": "Germanisches Nationalmuseum",
+      "authorLink": "https://commons.wikimedia.org/w/index.php?title=User:GNM-MA&action=edit&redlink=1",
+      "license": "CC BY-SA 4.0",
       "isPlayable": true
     },
     {
@@ -4730,14 +4694,14 @@
     },
     {
       "title": "Blombos Engraved Ochre",
-      "image": "https://upload.wikimedia.org/wikipedia/commons/4/4a/Blombo.jpg",
+      "image": "https://www.donsmaps.com/images37/blombosalvarez.jpg",
       "lat": -34.4094,
       "lng": 21.2108,
       "year": -77000,
       "description": "The Blombos Engraved Ochre M1-1 bears abstract crosshatch designs from South Africa's Middle Stone Age.",
-      "author": "Chris S. Henshilwood",
-      "authorLink": "https://en.wikipedia.org/wiki/User:Chenshilwood",
-      "license": "CC BY-SA 4.0",
+      "author": "Stephen Alvarez",
+      "authorLink": "https://www.alvarezphotography.com",
+      "license": null,
       "isPlayable": true
     },
     {
@@ -4842,7 +4806,7 @@
       "lat": 32.6683,
       "lng": 34.9600,
       "year": -100000,
-      "description": "The Skhul V Cranium is an early Homo sapiens fossil from Mount Carmel Israel.",
+      "description": "Crucial evidence of our species' first migrations out of Africa, important to our understanding of human evolutionary history.",
       "author": "Wapondaponda",
       "authorLink": "https://commons.wikimedia.org/wiki/User:Wapondaponda",
       "license": "CC BY-SA 3.0",
@@ -4854,7 +4818,7 @@
       "lat": 32.6833,
       "lng": 35.3000,
       "year": -92000,
-      "description": "The Qafzeh 9 Cranium is a key early modern human fossil from Nazareth Israel.",
+      "description": " Israeli fossil of early modern human, key evidence of Homo sapiens expansion from Africa.",
       "author": "Wapondaponda",
       "authorLink": null,
       "license": "CC BY-SA 3.0",
@@ -4874,14 +4838,14 @@
     },
     {
       "title": "Mungo Man",
-      "image": "https://upload.wikimedia.org/wikipedia/commons/f/fc/Mungo_Man.jpg",
+      "image": "https://i.guim.co.uk/img/media/294e52c7e6404e441f2a96012325dd9742f6198d/0_0_1912_2862/master/1912.jpg?width=620&dpr=1&s=none&crop=none",
       "lat": -33.7167,
       "lng": 143.1667,
-      "year": -42000,
+      "year": -40000,
       "description": "The Mungo Man is the oldest anatomically modern human remains found in Australia.",
-      "author": "James Maurice Bowler",
-      "authorLink": null,
-      "license": "CC BY-SA 3.0",
+      "author": "University of Melbourne",
+      "authorLink": "https://findanexpert.unimelb.edu.au/news/4161-mungo-man-moves-to-national-museum--but-he%27s-still-not-home",
+      "license": null,
       "isPlayable": true
     },
     {
@@ -5026,18 +4990,6 @@
       "author": "Pueblopassingby",
       "authorLink": "https://commons.wikimedia.org/wiki/User:Pueblopassingby",
       "license": "CC BY-SA 4.0",
-      "isPlayable": true
-    },
-    {
-      "title": "Kariandusi Homo Erectus Remains",
-      "image": "https://upload.wikimedia.org/wikipedia/commons/2/2d/Turkana_Boy.jpg",
-      "lat": -0.4333,
-      "lng": 36.2833,
-      "year": -1000000,
-      "description": "Homo Erectus found in Kariandusi in Kenya, the species that used and manufactured Mode 2 tools",
-      "author": "Claire Houck",
-      "authorLink": "https://www.flickr.com/people/8435962@N06",
-      "license": "CC BY-SA 2.0",
       "isPlayable": true
     },
     {
@@ -5206,18 +5158,6 @@
       "author": "UKinUSA",
       "authorLink": "https://www.flickr.com/photos/ukinusa/52994464221/",
       "license": "OGL 3",
-      "isPlayable": true
-    },
-    {
-      "title": "Tutankhamun's Gold Pectoral",
-      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Paris_-_Tout%C3%A2nkhamon%2C_le_Tr%C3%A9sor_du_Pharaon_-_Pectoral%2C_cha%C3%AEne_et_contrepoids_avec_scarab%C3%A9e_-_001.jpg/800px-Paris_-_Tout%C3%A2nkhamon%2C_le_Tr%C3%A9sor_du_Pharaon_-_Pectoral%2C_cha%C3%AEne_et_contrepoids_avec_scarab%C3%A9e_-_001.jpg",
-      "lat": 25.7417,
-      "lng": 32.6047,
-      "year": -1323,
-      "description": "Tutankhamun's Gold Pectoral displays a winged scarab symbolizing rebirth in Egyptian funerary art.",
-      "author": "Thesupermat",
-      "authorLink": "https://commons.wikimedia.org/wiki/User:Thesupermat",
-      "license": "CC BY-SA 4.0",
       "isPlayable": true
     },
     {
@@ -5918,14 +5858,14 @@
     },
     {
       "title": "Kumaragupta I's Gold Coin",
-      "image": "https://upload.wikimedia.org/wikipedia/commons/d/d6/Gold_dinar_of_Kumaragupta_I%2C_414-455_AD.jpg",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/0/0e/Gjermundbu_helmet_-_cropped.jpg",
       "lat": 25.6150,
       "lng": 85.1353,
       "year": 415,
       "description": "Kumaragupta I's Gold Coins illustrate Gupta Empire numismatic art from India",
-      "author": "CNG Coins",
-      "authorLink": "http://www.cngcoins.com/Coin.aspx?CoinID=80150",
-      "license": "CC BY-SA 2.5",
+      "author": "Public Domain",
+      "authorLink": null,
+      "license": null,
       "isPlayable": true
     },
     {
