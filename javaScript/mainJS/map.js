@@ -23,11 +23,7 @@ function initMap() {
 
     const innerBox = document.getElementById('map').parentElement;
     const resizeObserver = new ResizeObserver(entries => {
-        // Debounce the invalidation
-        clearTimeout(window.mapResizeTimeout);
-        window.mapResizeTimeout = setTimeout(() => {
-            map.invalidateSize();
-        }, 100);
+        map.invalidateSize();
     });
     resizeObserver.observe(innerBox);
 }
