@@ -8,128 +8,178 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: linear-gradient(135deg, 
-        rgba(var(--light-green-rgb), 0.15) 0%,
-        rgba(var(--light-green-rgb), 0.25) 100%);
-    border: 1px solid var(--light-green);
+    background: rgba(4, 8, 3, 0.315);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(153, 238, 153, 0.3);
     border-radius: 0.6rem;
     padding: 0.5rem 2rem;
-    backdrop-filter: blur(8px);
     box-shadow: 
-        0 3px 12px rgba(0, 0, 0, 0.25),
-        0 0 15px rgba(var(--light-green-rgb), 0.15),
+        0 8px 32px rgba(0, 0, 0, 0.3),
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     animation: timerPulse 2s ease-in-out infinite;
     min-width: 140px;
+    overflow: hidden;
+}
+
+.countdown-timer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgb(88, 110, 83), transparent);
+}
+
+.countdown-timer::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at 50% 0%, rgba(153, 238, 153, 0.05), transparent 50%);
+    pointer-events: none;
 }
 
 .timer-label {
     font-size: 0.9rem;
-    font-weight: 600;
-    letter-spacing: 0.05em;
-    opacity: 0.9;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    opacity: 0.85;
     margin-bottom: 0.15rem;
     color: inherit;
+    position: relative;
+    z-index: 1;
+    line-height: 1.3;
 }
 
 .timer-value {
     font-size: 2rem;
-    font-weight: 700;
+    font-weight: 600;
     font-family: 'Courier New', monospace;
     color: inherit;
     line-height: 1;
     margin-bottom: 0.3rem;
+    position: relative;
+    z-index: 1;
+    text-shadow: 0 0 8px rgba(153, 238, 153, 0.3);
 }
 
 .timer-progress {
     width: 100%;
     height: 5px;
-    background: rgba(0, 0, 0, 0.3);
+    background: rgba(153, 238, 153, 0.1);
     border-radius: 1px;
     overflow: hidden;
     position: relative;
+    z-index: 1;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .timer-progress-bar {
     height: 100%;
-    background: linear-gradient(90deg, 
-        var(--light-green) 0%, 
-        rgba(var(--light-green-rgb), 0.8) 100%);
+    background: linear-gradient(90deg, var(--light-green), var(--light-green-hover));
     border-radius: 1px;
     transition: width 1s linear;
-    box-shadow: 0 0 8px rgba(var(--light-green-rgb), 0.5);
+    box-shadow: 0 0 8px rgba(153, 238, 153, 0.4);
+    position: relative;
 }
 
 .countdown-timer.normal {
     color: var(--light-green);
-    border-color: var(--light-green);
-    background: linear-gradient(135deg, 
-        rgba(var(--light-green-rgb), 0.15) 0%,
-        rgba(var(--light-green-rgb), 0.25) 100%);
+    border-color: rgba(153, 238, 153, 0.3);
+    background: rgba(4, 8, 3, 0.315);
 }
 
 .countdown-timer.normal .timer-progress-bar {
-    background: linear-gradient(90deg, 
-        var(--light-green) 0%, 
-        rgba(var(--light-green-rgb), 0.8) 100%);
+    background: linear-gradient(90deg, var(--light-green), var(--light-green-hover));
+    box-shadow: 0 0 12px rgba(153, 238, 153, 0.4);
+}
+
+.countdown-timer.normal .timer-value {
+    text-shadow: 0 0 8px rgba(153, 238, 153, 0.3);
 }
 
 .countdown-timer.warning {
     color: #ffcc02;
-    border-color: #ffcc02;
-    background: linear-gradient(135deg, 
-        rgba(255, 204, 2, 0.15) 0%,
-        rgba(255, 204, 2, 0.25) 100%);
+    border-color: rgba(255, 204, 2, 0.4);
+    background: rgba(4, 8, 3, 0.315);
     box-shadow: 
-        0 3px 12px rgba(0, 0, 0, 0.25),
-        0 0 20px rgba(255, 204, 2, 0.25),
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        0 0 20px rgba(255, 204, 2, 0.2),
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
     animation: timerWarningPulse 1.5s ease-in-out infinite;
 }
 
+.countdown-timer.warning::before {
+    background: linear-gradient(90deg, transparent, rgba(255, 204, 2, 0.5), transparent);
+}
+
+.countdown-timer.warning::after {
+    background: radial-gradient(circle at 50% 0%, rgba(255, 204, 2, 0.05), transparent 50%);
+}
+
 .countdown-timer.warning .timer-progress-bar {
-    background: linear-gradient(90deg, 
-        #ffcc02 0%, 
-        rgba(255, 204, 2, 0.8) 100%);
-    box-shadow: 0 0 8px rgba(255, 204, 2, 0.5);
+    background: linear-gradient(90deg, #ffcc02, rgba(255, 204, 2, 0.8));
+    box-shadow: 0 0 12px rgba(255, 204, 2, 0.5);
+}
+
+.countdown-timer.warning .timer-value {
+    text-shadow: 0 0 8px rgba(255, 204, 2, 0.4);
 }
 
 .countdown-timer.critical {
     color: #ff4757;
-    border-color: #ff4757;
-    background: linear-gradient(135deg, 
-        rgba(255, 71, 87, 0.15) 0%,
-        rgba(255, 71, 87, 0.25) 100%);
+    border-color: rgba(255, 71, 87, 0.4);
+    background: rgba(4, 8, 3, 0.315);
     box-shadow: 
-        0 3px 12px rgba(0, 0, 0, 0.25),
-        0 0 25px rgba(255, 71, 87, 0.35),
+        0 8px 32px rgba(0, 0, 0, 0.3),
+        0 0 25px rgba(255, 71, 87, 0.25),
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
     animation: timerCriticalPulse 1s ease-in-out infinite;
 }
 
+.countdown-timer.critical::before {
+    background: linear-gradient(90deg, transparent, rgba(255, 71, 87, 0.5), transparent);
+}
+
+.countdown-timer.critical::after {
+    background: radial-gradient(circle at 50% 0%, rgba(255, 71, 87, 0.05), transparent 50%);
+}
+
 .countdown-timer.critical .timer-progress-bar {
-    background: linear-gradient(90deg, 
-        #ff4757 0%, 
-        rgba(255, 71, 87, 0.8) 100%);
-    box-shadow: 0 0 8px rgba(255, 71, 87, 0.5);
+    background: linear-gradient(90deg, #ff4757, rgba(255, 71, 87, 0.8));
+    box-shadow: 0 0 12px rgba(255, 71, 87, 0.5);
+}
+
+.countdown-timer.critical .timer-value {
+    text-shadow: 0 0 8px rgba(255, 71, 87, 0.4);
 }
 
 .countdown-timer.time-up {
     color: #ff3838;
-    border-color: #ff3838;
-    background: linear-gradient(135deg, 
-        rgba(255, 56, 56, 0.2) 0%,
-        rgba(255, 56, 56, 0.3) 100%);
+    border-color: rgba(255, 56, 56, 0.5);
+    background: rgba(4, 8, 3, 0.315);
     box-shadow: 
-        0 3px 15px rgba(0, 0, 0, 0.35),
-        0 0 30px rgba(255, 56, 56, 0.5),
+        0 8px 32px rgba(0, 0, 0, 0.4),
+        0 0 30px rgba(255, 56, 56, 0.3),
         inset 0 1px 0 rgba(255, 255, 255, 0.1);
     animation: timeUpFlash 0.5s ease-in-out infinite alternate;
 }
 
+.countdown-timer.time-up::before {
+    background: linear-gradient(90deg, transparent, rgba(255, 56, 56, 0.6), transparent);
+}
+
+.countdown-timer.time-up::after {
+    background: radial-gradient(circle at 50% 0%, rgba(255, 56, 56, 0.08), transparent 50%);
+}
+
 .countdown-timer.time-up .timer-value {
     font-size: 1.2rem;
+    text-shadow: 0 0 10px rgba(255, 56, 56, 0.5);
 }
 
 /* Timer Animations */
@@ -148,16 +198,16 @@
     0%, 100% {
         transform: translateX(-50%) scale(1);
         box-shadow: 
-            0 3px 12px rgba(0, 0, 0, 0.25),
-            0 0 20px rgba(255, 204, 2, 0.25),
+            0 8px 32px rgba(0, 0, 0, 0.3),
+            0 0 20px rgba(255, 204, 2, 0.2),
             inset 0 1px 0 rgba(255, 255, 255, 0.1);
     }
     50% {
         transform: translateX(-50%) scale(1.02);
         box-shadow: 
-            0 3px 15px rgba(0, 0, 0, 0.35),
-            0 0 30px rgba(255, 204, 2, 0.4),
-            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            0 10px 40px rgba(0, 0, 0, 0.4),
+            0 0 30px rgba(255, 204, 2, 0.3),
+            inset 0 1px 0 rgba(255, 255, 255, 0.15);
     }
 }
 
@@ -165,16 +215,16 @@
     0%, 100% {
         transform: translateX(-50%) scale(1);
         box-shadow: 
-            0 3px 12px rgba(0, 0, 0, 0.25),
-            0 0 25px rgba(255, 71, 87, 0.35),
+            0 8px 32px rgba(0, 0, 0, 0.3),
+            0 0 25px rgba(255, 71, 87, 0.25),
             inset 0 1px 0 rgba(255, 255, 255, 0.1);
     }
     50% {
         transform: translateX(-50%) scale(1.03);
         box-shadow: 
-            0 3px 15px rgba(0, 0, 0, 0.35),
-            0 0 35px rgba(255, 71, 87, 0.6),
-            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            0 12px 48px rgba(0, 0, 0, 0.4),
+            0 0 35px rgba(255, 71, 87, 0.4),
+            inset 0 1px 0 rgba(255, 255, 255, 0.15);
     }
 }
 
@@ -245,5 +295,9 @@
     
     .countdown-timer.time-up {
         animation: none;
+    }
+    
+    .timer-progress-bar::after {
+        display: none;
     }
 }

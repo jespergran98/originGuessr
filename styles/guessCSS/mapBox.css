@@ -3,16 +3,42 @@
   position: absolute;
   right: 2vw;
   bottom: 175px;
-  background: var(--dark-green);
-  padding: 1vh;
-  border-radius: 1.75vh;
+  background: rgba(4, 8, 3, 0.315);
+  backdrop-filter: blur(10px);
+  padding: clamp(1rem, 1.5vh, 1.5rem);
+  border-radius: 20px;
   width: 25vw;
   height: 35vh;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   flex-direction: column;
-  border: var(--light-green) 3px solid;
+  border: 1px solid rgba(153, 238, 153, 0.3);
   z-index: 100;
+  box-shadow: 
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.mapBox::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgb(88, 110, 83), transparent);
+}
+
+.mapBox::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 50% 0%, rgba(153, 238, 153, 0.05), transparent 50%);
+  pointer-events: none;
 }
 
 .mapBox:hover {
@@ -20,79 +46,118 @@
   height: 70vh;
   right: 2vw;
   bottom: 175px;
+  box-shadow: 
+    0 12px 48px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(153, 238, 153, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  border-color: rgba(153, 238, 153, 0.5);
 }
 
 #map {
   height: 100%;
   width: 100%;
-  border-radius: 1vh;
+  border-radius: clamp(8px, 1vh, 12px);
   background-color: #215c63;
+  position: relative;
+  z-index: 1;
 }
+
 /* Game Control Elements */
 .slider-container {
-  height: 1.25vh;
-  background-color: var(--dark-green);
-  border-radius: 10px;
-  margin-top: 0.5vh;
-  margin-bottom: 0.25vh;
-  margin-left: 2%;
-  margin-right: 2%;
+  height: clamp(8px, 1.25vh, 12px);
+  background: rgba(153, 238, 153, 0.1);
+  border-radius: 4px;
+  margin: clamp(0.25rem, 0.5vh, 0.5rem) 2% clamp(0.125rem, 0.25vh, 0.25rem) 2%;
   position: relative;
   flex-shrink: 0;
-  border: var(--light-green) 3px solid;
+  border: none;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 2;
 }
 
 .slider-handle {
-  width: 45px;
-  height: 45px;
-  background-color: var(--light-green);
+  width: clamp(32px, 45px, 48px);
+  height: clamp(32px, 45px, 48px);
+  background: radial-gradient(circle at 30% 30%, var(--light-green), var(--light-green-hover));
   border: 3px solid var(--dark-green);
   border-radius: 50%;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
-  z-index: 500;
-  /* Use percentage-based positioning to maintain relative position */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 
+    0 4px 12px rgba(153, 238, 153, 0.4),
+    0 0 0 0 rgba(153, 238, 153, 0.3);
   left: 0%;
-  /* Adjust for handle width so it centers properly at edges */
-  margin-left: calc(-22.5px);
+  margin-left: calc(-50% * clamp(32px, 45px, 48px) / clamp(32px, 45px, 48px));
   z-index: 1000;
+}
+
+.slider-handle:hover {
+  transform: translateY(-50%) scale(1.2);
+  box-shadow: 
+    0 6px 20px rgba(153, 238, 153, 0.5),
+    0 0 0 8px rgba(153, 238, 153, 0.1);
 }
 
 /* Year Display */
 .year-display {
   color: var(--light-green);
-  font-weight: bold;
-  font-size: 2.5vh;
+  font-weight: 500;
+  font-size: clamp(1.2rem, 2.5vh, 1.8rem);
   text-align: center;
   flex-shrink: 0;
-  margin-bottom: 0.25vh;
+  margin-bottom: clamp(0.125rem, 0.25vh, 0.25rem);
+  opacity: 0.95;
+  line-height: 1.3;
+  letter-spacing: 0.02em;
+  position: relative;
+  z-index: 2;
+  text-shadow: 0 0 8px rgba(153, 238, 153, 0.3);
 }
 
 /* Make Guess Button - Default State (before marker placement) */
 .makeGuess-button {
-  height: 2vh;
-  background-color: var(--dark-green);
+  height: clamp(2rem, 2vh, 2.5rem);
+  background: transparent;
   border: none;
   border-radius: 10px;
   flex-shrink: 0;
-  cursor: pointer;
+  cursor: default;
   color: var(--light-green);
-  font-weight: bold;
+  font-weight: 500;
   font-family: inherit;
   display: flex;
   align-items: center;
   justify-content: center;
   text-align: center;
-  transition: all 0.2s ease-in-out;
-  font-size: 1.75vh;
-  margin-left: 2%;
-  margin-right: 2%;
+  transition: none;
+  font-size: clamp(0.9rem, 1.75vh, 1.2rem);
+  margin: 0 2%;
+  position: relative;
+  z-index: 2;
+  opacity: 0.7;
+  letter-spacing: 0.02em;
 }
 
 /* Make Guess Button - Active State (after marker placement) */
 .makeGuess-button.active {
-  background-color: var(--light-green);
+  background: linear-gradient(135deg, var(--light-green), var(--light-green-hover));
   color: var(--dark-green);
+  border-color: var(--light-green);
+  opacity: 1;
+  font-weight: 600;
+  box-shadow: 
+    0 4px 16px rgba(153, 238, 153, 0.4),
+    0 0 20px rgba(153, 238, 153, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.makeGuess-button.active:hover {
+  transform: translateY(-1px);
+  box-shadow: 
+    0 6px 20px rgba(153, 238, 153, 0.5),
+    0 0 25px rgba(153, 238, 153, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.25);
 }
