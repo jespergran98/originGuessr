@@ -19,12 +19,36 @@ class SummaryHandler {
         if (this.isInitializing) return;
         this.isInitializing = true;
         
+        // Ensure buttons are visible immediately
+        this.makeButtonsVisible();
+        
         // Wait for the final score display to be ready
         this.waitForFinalScoreDisplay(() => {
             this.attachSummaryListener();
             this.loadDependencies();
             this.isInitializing = false;
         });
+    }
+
+    makeButtonsVisible() {
+        // Force buttons to be visible immediately on page load
+        const makeVisible = () => {
+            const buttons = document.querySelectorAll('.final-score-button');
+            buttons.forEach(button => {
+                button.style.opacity = '1';
+                button.style.transform = 'scale(1) translateY(0px)';
+                button.style.pointerEvents = 'auto';
+            });
+        };
+        
+        // Try immediately and also after DOM is ready
+        makeVisible();
+        
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', makeVisible);
+        } else {
+            setTimeout(makeVisible, 50); // Small delay to ensure elements exist
+        }
     }
 
     waitForFinalScoreDisplay(callback, retries = 0) {
@@ -168,6 +192,17 @@ class SummaryHandler {
             return;
         }
 
+        // Special handling for button container to animate individual buttons
+        const buttonContainer = this.originalElements.buttonContainer;
+        if (buttonContainer) {
+            const buttons = buttonContainer.querySelectorAll('.final-score-button');
+            buttons.forEach((button, index) => {
+                setTimeout(() => {
+                    button.classList.add('animate-out');
+                }, index * (this.staggerDelay / 2));
+            });
+        }
+
         // Animate each element out with stagger
         elementsToAnimate.forEach((element, index) => {
             setTimeout(() => {
@@ -187,6 +222,19 @@ class SummaryHandler {
         if (elementsToAnimate.length === 0) {
             console.warn('No elements found to animate in');
             return;
+        }
+
+        // Special handling for button container to animate individual buttons
+        const buttonContainer = this.originalElements.buttonContainer;
+        if (buttonContainer) {
+            const buttons = buttonContainer.querySelectorAll('.final-score-button');
+            buttons.forEach((button, index) => {
+                // Remove animate-out class and add animate-in
+                button.classList.remove('animate-out');
+                setTimeout(() => {
+                    button.classList.add('animate-in');
+                }, index * (this.staggerDelay / 2));
+            });
         }
 
         // Animate each element in with reverse stagger
@@ -446,11 +494,11 @@ class SummaryHandler {
                             <span class="summary-stat-value">${this.formatNumber(scores.totalScore || 0)}</span>
                         </div>
                         <div class="summary-stat distance">
-                            <span class="summary-stat-label">Distance:</span>
+                            <span class="summary-stat-label">Distance away:</span>
                             <span class="summary-stat-value">${this.escapeHtml(distanceError)}</span>
                         </div>
                         <div class="summary-stat year">
-                            <span class="summary-stat-label">Year:</span>
+                            <span class="summary-stat-label">Years off:</span>
                             <span class="summary-stat-value">${this.escapeHtml(yearError)}</span>
                         </div>
                     </div>
@@ -733,6 +781,15 @@ class SummaryHandler {
             }
             if (this.summaryPanel && this.summaryPanel.parentNode) {
                 this.summaryPanel.parentNode.removeChild(this.summaryPanel);
+            }
+            
+            // Clean up animation classes from buttons
+            const buttonContainer = document.querySelector('.button-container');
+            if (buttonContainer) {
+                const buttons = buttonContainer.querySelectorAll('.final-score-button');
+                buttons.forEach(button => {
+                    button.classList.remove('animate-in', 'animate-out');
+                });
             }
         } catch (error) {
             console.warn('Error during cleanup:', error);
