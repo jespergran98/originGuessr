@@ -173,8 +173,8 @@
       "image": "https://upload.wikimedia.org/wikipedia/commons/d/dd/Vinland_Map_HiRes.jpg",
       "lat": 41.31,
       "lng": 70.69,
-      "year": 1440,
-      "description": "Vinland map: hotly debated 15th-century chart. Shows Vinland, pre-Columbus, but ink analysis fuels authenticity questions.",
+      "year": 1957,
+      "description": "Medieval-style map showing pre-Columbus Vinland. Yale study proved it's a 20th-century forgery.",
       "author": "Public Domain",
       "authorLink": null,
       "license": null,
@@ -2678,7 +2678,7 @@
       "isPlayable": true
     },
     {
-      "title": "Armor of George Clifford, 3rd Earl of Cumberland",
+      "title": "Armor of George Clifford",
       "image": "https://upload.wikimedia.org/wikipedia/commons/3/3e/Armor_Garniture_of_George_Clifford_%281558%E2%80%931605%29%2C_Third_Earl_of_Cumberland_MET_DP299017.jpg",
       "lat": 51.4827,
       "lng": 0.0016,
@@ -3293,9 +3293,9 @@
       "title": "Super Mario Bros NES Cartridge",
       "image": "https://media.techeblog.com/images/sealed-unopened-graded-super-mario-bros-rally-2-million-most-expensive.jpg",
       "lat": 34.9858,
-      "lng": 135.7689,
+      "lng": 135.7689, 
       "year": 1985,
-      "description": "NES classic Super Mario Bros, a platforming legend, redefined gaming history. A rare sealed copy famously sold for $2 million!",
+      "description": "NES classic that redefined gaming history. A rare sealed copy famously sold for $2 million at auction.",
       "author": "Rally",
       "authorLink": "https://rallyrd.com/",
       "license": null,
@@ -3319,7 +3319,7 @@
       "lat": 40.7253,
       "lng": -73.9953,
       "year": 2016,
-      "description": "Supreme brick: yes, a literal brick.  Not for building, but a hyped collectible novelty item. Resells for hundreds, originally $30.",
+      "description": "Supreme brick: literal brick sold as novelty collectible. Originally $30, resells for hundreds.",
       "author": "Public Domain",
       "authorLink": null,
       "license": null,
@@ -3391,7 +3391,7 @@
       "lat": 34.9858,
       "lng": 135.7689,
       "year": 1990,
-      "description": "Rare Nintendo World Championships NES cartridge.  A '90 contest prize; very few were made for event staff, making it highly valuable.",
+      "description": "Rare Nintendo World Championships NES cartridge from 1990 contest; only 116 made for competitors.",
       "author": "Public Domain",
       "authorLink": null,
       "license": null,
@@ -5587,7 +5587,7 @@
       "lat": 31.3247,
       "lng": 45.6353,
       "year": -3050,
-      "description": "A cuneiform lists barley, emmer, and beer rations, acting as an ancient 'beer order' and highlighting beer's significance",
+      "description": "Ancient Mesopotamian cuneiform tablet listing barley, emmer, and beer rations - world's oldest beer recipe.",
       "author": "Jim Kuhn",
       "authorLink": "https://www.flickr.com/photos/38782010@N00",
       "license": "CC BY 2.0",
@@ -6626,7 +6626,7 @@
       "isPlayable": true
     },
     {
-      "title": "AZ-5 Control Rod Button (Chernobyl Unit 4)",
+      "title": "AZ-5 Control Rod Button",
       "image": "https://i.redd.it/m5jac7b5jqt31.jpg",
       "lat": 51.3886,
       "lng": 30.0994,
@@ -6950,7 +6950,7 @@
       "isPlayable": true
     },
     {
-      "title": "Cave Canem Mosaic (House of the Tragic Poet)",
+      "title": "Cave Canem Mosaic",
       "image": "https://upload.wikimedia.org/wikipedia/commons/2/2f/Cave_canem_-_beware_of_the_dog.jpg",
       "lat": 40.7511,
       "lng": 14.4847,
@@ -7130,7 +7130,7 @@
       "isPlayable": true
     },
     {
-      "title": "Salvator Mundi (attributed to Leonardo da Vinci)",
+      "title": "Salvator Mundi",
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Leonardo_da_Vinci%2C_Salvator_Mundi%2C_c.1500%2C_oil_on_walnut%2C_45.4_%C3%97_65.6_cm.jpg/1024px-Leonardo_da_Vinci%2C_Salvator_Mundi%2C_c.1500%2C_oil_on_walnut%2C_45.4_%C3%97_65.6_cm.jpg",
       "lat": 45.4773,
       "lng": 9.1815,
@@ -7466,7 +7466,7 @@
       "isPlayable": true
     },
     {
-      "title": "Arrangement in Grey and Black No.1 (Whistler's Mother)",
+      "title": "Whistler's Mother",
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Whistlers_Mother_high_res.jpg/1920px-Whistlers_Mother_high_res.jpg",
       "lat": 51.4817,
       "lng": -0.1728,
