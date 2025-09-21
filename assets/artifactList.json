@@ -87,10 +87,10 @@
     {
       "title": "Shroud of Turin",
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Full_length_negatives_of_the_shroud_of_Turin.jpg/1280px-Full_length_negatives_of_the_shroud_of_Turin.jpg",
-      "lat": 45.0703,
-      "lng": 7.6869,
-      "year": 1325,
-      "description": "Linen cloth bearing faint image of crucified man, claimed as Jesus' burial shroud, debated authenticity.",
+      "lat": 45.0733,
+      "lng": 7.6854,
+      "year": 0,
+      "description": "Linen bearing mysterious human imprint sparking religious debate; radiocarbon dates it medieval, newer studies suggest year 0.",
       "author": "Public Domain",
       "authorLink": null,
       "license": null,
@@ -350,14 +350,14 @@
     },
     {
       "title": "Phaistos Disc",
-      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fd/Diskos_von_Phaistos_%28Seite_A%29_01.jpg/640px-Diskos_von_Phaistos_%28Seite_A%29_01.jpg",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d1/Phaistos_Disc_-_Side_A_-_6380_-_crop1.jpg/2175px-Phaistos_Disc_-_Side_A_-_6380_-_crop1.jpg",
       "lat": 35.05,
       "lng": 24.81,
       "year": -1850,
       "description": "Mysterious Minoan clay disc with unique spiral script that remains completely undeciphered today.",
-      "author": "Olaf Tausch",
-      "authorLink": "https://commons.wikimedia.org/wiki/User:Oltau",
-      "license": "CC BY 3.0",
+      "author": "C messier",
+      "authorLink": "https://commons.wikimedia.org/wiki/User:C_messier",
+      "license": "CC BY-SA 4.0",
       "isPlayable": true
     },
     {
@@ -814,18 +814,6 @@
       "author": "Richard Mortel",
       "authorLink": "https://www.flickr.com/photos/prof_richard/31050135517/",
       "license": "CC BY 2.0",
-      "isPlayable": true
-    },
-    {
-      "title": "Jōmon Pottery",
-      "image": "https://upload.wikimedia.org/wikipedia/commons/9/9f/JomonPottery.JPG",
-      "lat": 35.6762,
-      "lng": 139.6503,
-      "year": -10000,
-      "description": "World's oldest pottery tradition featuring intricate cord-marked patterns and elaborate forms.",
-      "author": "Public Domain",
-      "authorLink": null,
-      "license": null,
       "isPlayable": true
     },
     {
@@ -2535,14 +2523,14 @@
     },
     {
       "title": "Enigma Machine",
-      "image": "https://upload.wikimedia.org/wikipedia/commons/6/6c/Bundesarchiv_Bild_146-2006-0188%2C_Verschl%C3%BCsselungsger%C3%A4t_%22Enigma%22.jpg",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/af/Enigma_04.jpg/1920px-Enigma_04.jpg",
       "lat": 52.5200,
       "lng": 13.4050,
       "year": 1923,
       "description": "German-engineered cipher machine that encrypted Nazi communications during World War II.",
-      "author": "Bundesarchiv",
-      "authorLink": null,
-      "license": "CC BY-SA 3.0",
+      "author": "Punishar",
+      "authorLink": "https://commons.wikimedia.org/wiki/User:Punishar",
+      "license": "CC BY-SA 4.0",
       "isPlayable": true
     },
     {
@@ -2920,10 +2908,10 @@
     {
       "title": "Apollo Guidance Computer",
       "image": "https://upload.wikimedia.org/wikipedia/commons/7/79/Agc_view.jpg",
-      "lat": 42.3889,
-      "lng": -71.1389,
-      "year": 1966,
-      "description": "The Apollo Guidance Computer navigated NASA's lunar missions in the 1960s.",
+      "lat": 42.3600,
+      "lng": -71.0920,
+      "year": 1961,
+      "description": "Revolutionary miniaturized computer using integrated circuits, navigated NASA's lunar missions in the 1960s.",
       "author": "Public Domain",
       "authorLink": null,
       "license": null,
@@ -3879,7 +3867,7 @@
     },
     {
       "title": "Acropolis of Athens",
-      "image": "https://upload.wikimedia.org/wikipedia/commons/2/2f/Erechtheum_Acropolis_Athens.jpg",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Erechtheum_Acropolis_Athens.jpg/2560px-Erechtheum_Acropolis_Athens.jpg",
       "lat": 37.9715,
       "lng": 23.7257,
       "year": -450,
@@ -3999,14 +3987,14 @@
     },
     {
       "title": "Jelling Stones",
-      "image": "https://upload.wikimedia.org/wikipedia/commons/6/66/Jelling_gr_Stein_3.JPG",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/The_Jelling_Stone_-_VIKING_exhibition_at_the_National_Museum_of_Denmark_-_Photo_The_National_Museum_of_Denmark_%289084035770%29.jpg/1024px-The_Jelling_Stone_-_VIKING_exhibition_at_the_National_Museum_of_Denmark_-_Photo_The_National_Museum_of_Denmark_%289084035770%29.jpg",
       "lat": 55.7558,
       "lng": 9.4194,
       "year": 965,
       "description": "The Jelling Stones are runestones erected by Harald Bluetooth to commemorate Denmark's Christianization.",
-      "author": "Casiopeia",
-      "authorLink": "https://de.wikipedia.org/wiki/Benutzer:Casiopeia",
-      "license": "CC BY-SA 2.0 de",
+      "author": "Nationalmuseet",
+      "authorLink": "https://www.flickr.com/people/29246403@N03",
+      "license": "CC BY-SA 2.0",
       "isPlayable": true
     },
     {
@@ -4718,18 +4706,6 @@
       "isPlayable": true
     },
     {
-      "title": "Cosquer Cave Hand Stencil",
-      "image": "https://upload.wikimedia.org/wikipedia/commons/e/ed/Prehistoric_Hand_Outline_Cosquer_Cave.JPG",
-      "lat": 43.2044,
-      "lng": 5.4400,
-      "year": -27000,
-      "description": "The Cosquer Cave Hand Stencil shows unique fingerless outlines from a submerged cave near Marseille France.",
-      "author": "SiefkinDR",
-      "authorLink": "https://commons.wikimedia.org/wiki/User:SiefkinDR",
-      "license": "CC BY-SA 3.0",
-      "isPlayable": true
-    },
-    {
       "title": "La Madeleine Bison Carving",
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/F07_0054.Ma.JPG/1920px-F07_0054.Ma.JPG",
       "lat": 44.9686,
@@ -4859,18 +4835,6 @@
       "author": "Gerbil",
       "authorLink": "https://commons.wikimedia.org/wiki/User:Gerbil",
       "license": "CC BY 3.0",
-      "isPlayable": true
-    },
-    {
-      "title": "Boxgrove Tibia",
-      "image": "https://upload.wikimedia.org/wikipedia/commons/1/1e/Boxgrove-Tibia.jpg",
-      "lat": 50.8597,
-      "lng": -0.7050,
-      "year": -500000,
-      "description": "Oldest British human bone revealing robust build and active lifestyle of early Europeans.",
-      "author": "Locutus Borg",
-      "authorLink": "https://commons.wikimedia.org/wiki/User:Locutus_Borg",
-      "license": "CC BY-SA 4.0",
       "isPlayable": true
     },
     {
@@ -6098,18 +6062,6 @@
       "isPlayable": true
     },
     {
-      "title": "Inca Gold Llama",
-      "image": "https://upload.wikimedia.org/wikipedia/commons/d/d0/AHOTWgold_lama.JPG",
-      "lat": -13.532,
-      "lng": -71.9675,
-      "year": 1500,
-      "description": "Inca gold llama figurines symbolizing Andean wealth from Cusco, Peru.",
-      "author": "geni",
-      "authorLink": null,
-      "license": "CC BY-SA 4.0",
-      "isPlayable": true
-    },
-    {
       "title": "Timurid Jade Dragon Cup",
       "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/Jade_dragon_cup_4.jpg/2560px-Jade_dragon_cup_4.jpg",
       "lat": 39.6542,
@@ -6519,13 +6471,13 @@
     },
     {
       "title": "Gold Mask of Amenemope",
-      "image": "https://upload.wikimedia.org/wikipedia/commons/c/c6/Amenemope_Mask_Crop.jpg",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/63/Mask_of_pharaoh_Amenemope_cropped.jpg/1280px-Mask_of_pharaoh_Amenemope_cropped.jpg",
       "lat": 30.9667,
       "lng": 31.8833,
       "year": -990,
       "description": "Exquisite Third Intermediate Period funerary mask showcasing ancient Egyptian goldwork mastery.",
-      "author": "John Campana",
-      "authorLink": "https://www.flickr.com/people/10647023@N04/",
+      "author": "Dale Cruise",
+      "authorLink": null,
       "license": "CC BY 2.0",
       "isPlayable": true
     },
@@ -6987,14 +6939,14 @@
     },
     {
       "title": "Koh Ker Pyramid",
-      "image": "https://upload.wikimedia.org/wikipedia/commons/6/6d/0505280017PThompyramid.jpg",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/04-Koh_Ker-nX-19.jpg/1920px-04-Koh_Ker-nX-19.jpg",
       "lat": 14.3833,
       "lng": 104.6833,
       "year": 928,
       "description": "Unique seven-tiered step pyramid built by Khmer King Jayavarman IV in Cambodia.",
-      "author": "Public Domain",
-      "authorLink": null,
-      "license": null,
+      "author": "PsamatheM",
+      "authorLink": "https://commons.wikimedia.org/wiki/User:PsamatheM",
+      "license": "CC BY-SA 4.0",
       "isPlayable": true
     },
     {
