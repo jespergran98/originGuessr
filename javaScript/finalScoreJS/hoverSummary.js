@@ -3,12 +3,10 @@ class HoverSummaryHandler {
     constructor() {
         this.tooltip = null;
         this.currentRound = null;
-        this.hideTimeout = null;
         this.showTimeout = null;
         this.isVisible = false;
         this.isDestroyed = false;
         this.hoverDelay = 300;
-        this.hideDelay = 150;
         this.roundResultStorage = null;
         this.summaryHandler = null;
         
@@ -69,12 +67,6 @@ class HoverSummaryHandler {
             return;
         }
 
-        // Clear any pending hide timeout
-        if (this.hideTimeout) {
-            clearTimeout(this.hideTimeout);
-            this.hideTimeout = null;
-        }
-
         // Extract round data
         const roundData = this.extractRoundData(summaryRound);
         if (!roundData) {
@@ -93,30 +85,17 @@ class HoverSummaryHandler {
         if (this.isDestroyed) return;
         
         const summaryRound = event.target.closest('.summary-round');
-        const tooltip = event.target.closest('.hover-summary-tooltip');
         
-        // If leaving a summary round or the tooltip itself
-        if (summaryRound || tooltip) {
+        // If leaving a summary round, hide tooltip immediately
+        if (summaryRound) {
             // Clear show timeout
             if (this.showTimeout) {
                 clearTimeout(this.showTimeout);
                 this.showTimeout = null;
             }
 
-            // Don't hide if moving to tooltip
-            const relatedTarget = event.relatedTarget;
-            if (relatedTarget && 
-                (relatedTarget.closest('.hover-summary-tooltip') || 
-                 relatedTarget.closest('.summary-round'))) {
-                return;
-            }
-
-            // Set hide timeout
-            this.hideTimeout = setTimeout(() => {
-                if (!this.isDestroyed) {
-                    this.hideTooltip();
-                }
-            }, this.hideDelay);
+            // Hide tooltip immediately
+            this.hideTooltip();
         }
     }
 
@@ -202,25 +181,6 @@ class HoverSummaryHandler {
         // Add to body but keep hidden
         document.body.appendChild(this.tooltip);
         
-        // Setup tooltip mouse events to keep it visible
-        this.tooltip.addEventListener('mouseenter', () => {
-            if (this.hideTimeout) {
-                clearTimeout(this.hideTimeout);
-                this.hideTimeout = null;
-            }
-        });
-        
-        this.tooltip.addEventListener('mouseleave', (event) => {
-            const relatedTarget = event.relatedTarget;
-            if (!relatedTarget || !relatedTarget.closest('.summary-round')) {
-                this.hideTimeout = setTimeout(() => {
-                    if (!this.isDestroyed) {
-                        this.hideTooltip();
-                    }
-                }, this.hideDelay);
-            }
-        });
-        
         console.log('Hover tooltip created');
     }
 
@@ -231,10 +191,6 @@ class HoverSummaryHandler {
         if (this.showTimeout) {
             clearTimeout(this.showTimeout);
             this.showTimeout = null;
-        }
-        if (this.hideTimeout) {
-            clearTimeout(this.hideTimeout);
-            this.hideTimeout = null;
         }
 
         // Update tooltip content
@@ -410,14 +366,19 @@ class HoverSummaryHandler {
         // Show loading state
         img.className = 'hover-tooltip-image hover-tooltip-image-loading';
         
-        // Create a new image to test loading
+        // Create a new image to test loading and get dimensions
         const testImg = new Image();
         
         testImg.onload = () => {
             if (this.isDestroyed || !img.parentElement) return;
             
+            // Set the image source
             img.src = imageUrl;
             img.className = 'hover-tooltip-image';
+            
+            // Store original dimensions for proper display
+            img.setAttribute('data-original-width', testImg.width);
+            img.setAttribute('data-original-height', testImg.height);
         };
         
         testImg.onerror = () => {
@@ -453,95 +414,22 @@ class HoverSummaryHandler {
     positionTooltip(summaryRound) {
         if (this.isDestroyed || !this.tooltip) return;
         
-        const targetElement = summaryRound || this.getCurrentSummaryRound();
-        if (!targetElement) return;
+        // Simple positioning: to the right of the summary panel, same bottom positioning
+        const summaryPanel = document.querySelector('.summary-panel');
+        if (!summaryPanel) return;
         
-        const targetRect = targetElement.getBoundingClientRect();
-        const tooltipRect = this.tooltip.getBoundingClientRect();
-        const viewportWidth = window.innerWidth;
-        const viewportHeight = window.innerHeight;
+        const summaryRect = summaryPanel.getBoundingClientRect();
         
-        // Reset positioning classes
+        // Position to the right of the summary panel with 20px gap
+        const left = summaryRect.right + 20;
+        
+        // Use fixed bottom positioning just like the summary panel: bottom: 20px
+        this.tooltip.style.left = `${left}px`;
+        this.tooltip.style.bottom = '20px';
+        this.tooltip.style.top = 'auto'; // Clear any top positioning
+        
+        // Remove all positioning classes since we're using fixed positioning
         this.tooltip.classList.remove('tooltip-left', 'tooltip-above', 'tooltip-below');
-        
-        // Default positioning: to the right of the target
-        let left = targetRect.right + 20;
-        let top = targetRect.top + (targetRect.height / 2) - (tooltipRect.height / 2);
-        
-        // Check if tooltip would go off-screen horizontally
-        if (left + tooltipRect.width > viewportWidth - 20) {
-            // Position to the left instead
-            left = targetRect.left - tooltipRect.width - 20;
-            this.tooltip.classList.add('tooltip-left');
-            
-            // If still off-screen on left, position above or below
-            if (left < 20) {
-                left = Math.max(20, targetRect.left + (targetRect.width / 2) - (tooltipRect.width / 2));
-                
-                // Check vertical space - prefer positioning above since summary is in bottom-left
-                const spaceAbove = targetRect.top - 20;
-                const spaceBelow = viewportHeight - targetRect.bottom - 20;
-                
-                if (spaceAbove >= tooltipRect.height || spaceAbove > spaceBelow) {
-                    // Position above
-                    top = targetRect.top - tooltipRect.height - 20;
-                    this.tooltip.classList.remove('tooltip-left');
-                    this.tooltip.classList.add('tooltip-above');
-                } else {
-                    // Position below
-                    top = targetRect.bottom + 20;
-                    this.tooltip.classList.remove('tooltip-left');
-                    this.tooltip.classList.add('tooltip-below');
-                }
-            }
-        }
-        
-        // Adjust vertical position if tooltip would go off-screen vertically
-        if (!this.tooltip.classList.contains('tooltip-above') && !this.tooltip.classList.contains('tooltip-below')) {
-            // For left/right positioning, adjust vertical as needed
-            if (top < 20) {
-                top = 20;
-            } else if (top + tooltipRect.height > viewportHeight - 20) {
-                // If summary panel is in bottom-left, prioritize showing above it
-                const summaryPanel = document.querySelector('.summary-panel');
-                if (summaryPanel) {
-                    const summaryRect = summaryPanel.getBoundingClientRect();
-                    const preferredTop = summaryRect.top - tooltipRect.height - 20;
-                    if (preferredTop >= 20) {
-                        top = preferredTop;
-                        // Change to above positioning with centered arrow
-                        this.tooltip.classList.remove('tooltip-left');
-                        this.tooltip.classList.add('tooltip-above');
-                        left = Math.max(20, Math.min(viewportWidth - tooltipRect.width - 20, 
-                                                   targetRect.left + (targetRect.width / 2) - (tooltipRect.width / 2)));
-                    } else {
-                        top = Math.max(20, viewportHeight - tooltipRect.height - 20);
-                    }
-                } else {
-                    top = Math.max(20, viewportHeight - tooltipRect.height - 20);
-                }
-            }
-        }
-        
-        // Ensure tooltip doesn't go off-screen horizontally for above/below positioning
-        if (this.tooltip.classList.contains('tooltip-above') || this.tooltip.classList.contains('tooltip-below')) {
-            if (left < 20) {
-                left = 20;
-            } else if (left + tooltipRect.width > viewportWidth - 20) {
-                left = viewportWidth - tooltipRect.width - 20;
-            }
-        }
-        
-        // Apply position
-        this.tooltip.style.left = `${Math.max(20, left)}px`;
-        this.tooltip.style.top = `${Math.max(20, top)}px`;
-        
-        // Update arrow position for left/right positioning
-        if (!this.tooltip.classList.contains('tooltip-above') && !this.tooltip.classList.contains('tooltip-below')) {
-            const arrowOffset = targetRect.top + (targetRect.height / 2) - top;
-            const clampedOffset = Math.max(30, Math.min(tooltipRect.height - 30, arrowOffset));
-            this.tooltip.style.setProperty('--arrow-offset', `${clampedOffset}px`);
-        }
     }
 
     getCurrentSummaryRound() {
@@ -570,10 +458,6 @@ class HoverSummaryHandler {
         if (this.showTimeout) {
             clearTimeout(this.showTimeout);
             this.showTimeout = null;
-        }
-        if (this.hideTimeout) {
-            clearTimeout(this.hideTimeout);
-            this.hideTimeout = null;
         }
 
         // Hide tooltip
@@ -630,10 +514,6 @@ class HoverSummaryHandler {
         if (this.showTimeout) {
             clearTimeout(this.showTimeout);
             this.showTimeout = null;
-        }
-        if (this.hideTimeout) {
-            clearTimeout(this.hideTimeout);
-            this.hideTimeout = null;
         }
         
         // Remove event listeners
@@ -696,52 +576,19 @@ class HoverSummaryHandler {
         });
     }
 
-    // Update tooltip position for left-side arrow
+    // Update tooltip position for simple left positioning
     updateArrowPosition() {
-        if (this.isDestroyed || !this.tooltip) return;
-        
-        const isLeftPositioned = this.tooltip.classList.contains('tooltip-left');
-        const arrowOffset = this.tooltip.style.getPropertyValue('--arrow-offset') || '50%';
-        
-        if (isLeftPositioned) {
-            // Flip arrow to point right when tooltip is on the left
-            this.tooltip.style.setProperty('--arrow-direction', 'right');
-        } else {
-            // Default arrow points left
-            this.tooltip.style.setProperty('--arrow-direction', 'left');
-        }
-        
-        this.tooltip.style.setProperty('--arrow-top', arrowOffset);
+        // No longer needed with simplified positioning
+        return;
     }
 }
 
-// Enhanced CSS variables support for dynamic arrow positioning
+// Enhanced CSS for simplified positioning
 const hoverSummaryStyleSheet = document.createElement('style');
 hoverSummaryStyleSheet.textContent = `
-    .hover-summary-tooltip.tooltip-left::before {
-        left: auto;
-        right: -12px;
-        border-width: 12px 0 12px 12px;
-        border-color: transparent transparent transparent rgba(43, 124, 43, 0.5);
-        top: var(--arrow-top, 50%);
-        transform: translateY(-50%);
-    }
-    
-    .hover-summary-tooltip.tooltip-left::after {
-        left: auto;
-        right: -10px;
-        border-width: 10px 0 10px 10px;
-        border-color: transparent transparent transparent rgba(4, 8, 3, 0.95);
-        top: var(--arrow-top, 50%);
-        transform: translateY(-50%);
-    }
-    
-    .hover-summary-tooltip::before {
-        top: var(--arrow-top, 50%);
-    }
-    
-    .hover-summary-tooltip::after {
-        top: var(--arrow-top, 50%);
+    /* Simple positioning - no arrows needed */
+    .hover-summary-tooltip {
+        /* All styling is handled in the main CSS file */
     }
 `;
 document.head.appendChild(hoverSummaryStyleSheet);

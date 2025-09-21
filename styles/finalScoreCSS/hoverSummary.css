@@ -1,27 +1,29 @@
-/* Hover Summary Tooltip for Final Score Page */
+/* Improved Hover Summary Tooltip - Full Image Display with Fixed Positioning */
 
-/* Tooltip Container */
+/* Tooltip Container - Maintains compact design with flexible image space */
 .hover-summary-tooltip {
     position: fixed;
     z-index: 10001;
-    width: clamp(300px, 35vw, 450px);
-    max-height: calc(100vh - 40px);
-    background: rgba(4, 8, 3, 0.95);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(43, 124, 43, 0.5);
-    border-radius: 2vh;
-    padding: clamp(1rem, 2vw, 1.5rem);
+    width: clamp(320px, 28vw, 380px);
+    max-height: calc(100vh - 40px); /* Ensure 20px from top and bottom */
+    min-height: 200px;
+    background: rgba(4, 8, 3, 0.315);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(43, 124, 43, 0.3);
+    border-radius: 3vh;
+    padding: 1rem;
     box-shadow: 
-        0 12px 80px rgba(0, 0, 0, 0.8),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1),
-        0 6px 24px rgba(153, 238, 153, 0.2);
+        0 8px 64px rgba(0, 0, 0, 0.7),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
     opacity: 0;
     transform: translateX(-20px) scale(0.95);
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     pointer-events: none;
     overflow-y: auto;
     overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 .hover-summary-tooltip.visible {
@@ -30,55 +32,50 @@
     pointer-events: auto;
 }
 
-/* Tooltip Arrow */
+/* Glass effect matching result page */
 .hover-summary-tooltip::before {
     content: '';
     position: absolute;
-    left: -12px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: 12px 12px 12px 0;
-    border-color: transparent rgba(43, 124, 43, 0.5) transparent transparent;
-    filter: drop-shadow(-1px 0 0 rgba(4, 8, 3, 0.95));
-    z-index: 1;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(
+        90deg, 
+        transparent, 
+        rgb(88, 110, 83), 
+        transparent
+    );
 }
 
-/* Tooltip Arrow Inner */
-.hover-summary-tooltip::after {
-    content: '';
-    position: absolute;
-    left: -10px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 0;
-    height: 0;
-    border-style: solid;
-    border-width: 10px 10px 10px 0;
-    border-color: transparent rgba(4, 8, 3, 0.95) transparent transparent;
-    z-index: 2;
-}
-
-/* Tooltip Header */
+/* Compact Header */
 .hover-tooltip-header {
-    margin-bottom: clamp(1rem, 2vw, 1.5rem);
-    padding-bottom: 0.75rem;
+    margin-bottom: 0.75rem;
+    padding-bottom: 0.5rem;
     border-bottom: 1px solid rgba(153, 238, 153, 0.2);
+    flex-shrink: 0;
 }
 
 .hover-tooltip-title {
-    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
-    font-weight: 700;
+    font-size: 1.1rem;
+    font-weight: bold;
     color: var(--light-green);
-    margin: 0 0 0.5rem 0;
-    line-height: 1.3;
-    text-shadow: 0 0 10px rgba(153, 238, 153, 0.3);
+    margin: 0 0 0.25rem 0;
+    line-height: 1.2;
+    text-shadow: 0 0 8px rgba(255, 255, 0, 0.3);
+    background: linear-gradient(45deg, #ffff00, #ffd700);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2; /* Standard property for compatibility */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
 .hover-tooltip-round {
-    font-size: clamp(0.8rem, 1.8vw, 0.9rem);
+    font-size: 0.75rem;
     color: rgba(153, 238, 153, 0.7);
     font-weight: 500;
     text-transform: uppercase;
@@ -86,100 +83,96 @@
     margin: 0;
 }
 
-/* Tooltip Image Container */
+/* Full-size Image Container - Dynamic height based on image aspect ratio */
 .hover-tooltip-image-container {
     position: relative;
-    margin-bottom: clamp(1rem, 2vw, 1.5rem);
-    border-radius: 12px;
+    margin-bottom: 0.75rem;
+    border-radius: 8px;
     overflow: hidden;
-    border: 2px solid rgba(153, 238, 153, 0.2);
-    transition: all 0.3s ease;
+    border: 1px solid rgba(153, 238, 153, 0.2);
     min-height: 120px;
+    max-height: 300px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: linear-gradient(45deg, rgba(153, 238, 153, 0.1), rgba(153, 238, 153, 0.05));
-}
-
-.hover-tooltip-image-container:hover {
-    border-color: rgba(88, 110, 83, 0.6);
-    transform: scale(1.02);
+    background: rgba(153, 238, 153, 0.05);
+    flex-shrink: 0;
 }
 
 .hover-tooltip-image {
     width: 100%;
     height: auto;
-    min-height: 120px;
     max-height: 300px;
-    object-fit: contain;
+    object-fit: contain; /* Changed from cover to contain to show full image */
     display: block;
     transition: all 0.3s ease;
 }
 
 .hover-tooltip-image:hover {
-    filter: brightness(1.1) contrast(1.05);
+    filter: brightness(1.05);
 }
 
-/* Image Loading State */
+/* Image States */
 .hover-tooltip-image-loading {
     width: 100%;
-    height: 150px;
+    height: 120px;
     background: linear-gradient(45deg, 
         rgba(153, 238, 153, 0.1) 25%, 
         rgba(153, 238, 153, 0.05) 50%, 
         rgba(153, 238, 153, 0.1) 75%);
-    background-size: 40px 40px;
+    background-size: 20px 20px;
     animation: loadingShimmer 1.5s ease-in-out infinite;
     display: flex;
     align-items: center;
     justify-content: center;
     color: rgba(153, 238, 153, 0.6);
-    font-size: 0.9rem;
+    font-size: 0.75rem;
 }
 
 @keyframes loadingShimmer {
-    0% { background-position: -40px 0; }
-    100% { background-position: 40px 0; }
+    0% { background-position: -20px 0; }
+    100% { background-position: 20px 0; }
 }
 
-/* Image Error State */
 .hover-tooltip-image-error {
     width: 100%;
-    height: 150px;
+    height: 120px;
     background: rgba(153, 238, 153, 0.05);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    color: rgba(153, 238, 153, 0.6);
-    font-size: 0.85rem;
+    color: rgba(153, 238, 153, 0.5);
+    font-size: 0.7rem;
     text-align: center;
-    border: 1px dashed rgba(153, 238, 153, 0.3);
-    border-radius: 8px;
 }
 
 .hover-tooltip-image-error::before {
     content: '🖼️';
-    font-size: 2rem;
-    margin-bottom: 0.5rem;
+    font-size: 1.5rem;
+    margin-bottom: 0.25rem;
     opacity: 0.5;
 }
 
-/* Tooltip Content */
+/* Scrollable Content */
 .hover-tooltip-content {
     display: flex;
     flex-direction: column;
-    gap: clamp(0.75rem, 1.5vw, 1rem);
+    gap: 0.5rem;
+    flex: 1;
+    overflow-y: auto;
 }
 
-/* Description Section */
+/* Description - Expandable */
 .hover-tooltip-description {
-    color: rgba(153, 238, 153, 0.9);
-    font-size: clamp(0.85rem, 1.8vw, 0.95rem);
-    line-height: 1.6;
-    text-align: justify;
+    color: var(--light-green);
+    font-size: 0.8rem;
+    line-height: 1.4;
     margin: 0;
-    padding: 0;
+    max-height: none; /* Remove height restriction to show full description */
+    overflow: visible;
+    text-overflow: initial;
+    display: block; /* Remove webkit-box to show full text */
 }
 
 .hover-tooltip-description:empty::before {
@@ -188,116 +181,113 @@
     font-style: italic;
 }
 
-/* Metadata Section */
-.hover-tooltip-metadata {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    padding-top: 0.75rem;
-    border-top: 1px solid rgba(153, 238, 153, 0.15);
-}
-
-.hover-tooltip-meta-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 0.5rem;
-    font-size: clamp(0.75rem, 1.6vw, 0.85rem);
-}
-
-.hover-tooltip-meta-label {
-    font-weight: 600;
-    color: rgba(153, 238, 153, 0.7);
-    min-width: 60px;
+/* Compact Year Display */
+.hover-tooltip-year {
+    text-align: center;
+    padding: 0.5rem;
+    background: rgba(4, 8, 3, 0.315);
+    border-radius: 8px;
+    border: 1px solid rgba(43, 124, 43, 0.3);
     flex-shrink: 0;
 }
 
-.hover-tooltip-meta-value {
-    color: var(--light-green-hover);
-    word-break: break-word;
-    flex: 1;
+.hover-tooltip-year-label {
+    font-size: 0.6rem;
+    color: rgba(153, 238, 153, 0.6);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.125rem;
 }
 
-.hover-tooltip-meta-value.link {
-    color: var(--light-green);
-    text-decoration: underline;
-    cursor: pointer;
-    transition: color 0.3s ease;
+.hover-tooltip-year-value {
+    font-size: 1rem;
+    font-weight: bold;
+    text-shadow: 0 0 8px rgba(255, 255, 0, 0.3);
+    background: linear-gradient(45deg, #ffff00, #ffd700);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
-.hover-tooltip-meta-value.link:hover {
-    color: var(--light-green-hover);
-}
-
-/* Coordinates Display */
+/* Compact Coordinates - Side by Side */
 .hover-tooltip-coordinates {
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-    padding: 0.75rem;
-    background: rgba(153, 238, 153, 0.05);
-    border-radius: 8px;
-    margin-top: 0.5rem;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    font-size: 0.7rem;
+    flex-shrink: 0;
 }
 
 .hover-tooltip-coord {
     display: flex;
     flex-direction: column;
     align-items: center;
-    flex: 1;
+    padding: 0.375rem;
+    background: rgba(153, 238, 153, 0.05);
+    border-radius: 6px;
 }
 
 .hover-tooltip-coord-label {
-    font-size: 0.7rem;
+    font-size: 0.6rem;
     color: rgba(153, 238, 153, 0.6);
     text-transform: uppercase;
     letter-spacing: 0.05em;
-    margin-bottom: 0.25rem;
+    margin-bottom: 0.125rem;
 }
 
 .hover-tooltip-coord-value {
-    font-size: 0.85rem;
+    font-size: 0.7rem;
     font-weight: 600;
-    color: var(--light-green-hover);
+    color: var(--light-green);
     font-family: monospace;
 }
 
-/* Year Display */
-.hover-tooltip-year {
-    text-align: center;
-    padding: 0.5rem;
-    background: linear-gradient(135deg, rgba(153, 238, 153, 0.1), rgba(153, 238, 153, 0.05));
-    border-radius: 8px;
-    border: 1px solid rgba(153, 238, 153, 0.2);
+/* Compact Attribution */
+.hover-tooltip-metadata {
+    margin-top: 0.5rem;
+    padding-top: 0.5rem;
+    border-top: 1px solid rgba(153, 238, 153, 0.15);
+    flex-shrink: 0;
 }
 
-.hover-tooltip-year-label {
+.hover-tooltip-meta-item {
     font-size: 0.7rem;
+    color: rgba(153, 238, 153, 0.7);
+}
+
+.hover-tooltip-meta-label {
+    font-weight: 600;
     color: rgba(153, 238, 153, 0.6);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 0.25rem;
 }
 
-.hover-tooltip-year-value {
-    font-size: 1.1rem;
-    font-weight: 700;
+.hover-tooltip-meta-value {
     color: var(--light-green);
-    text-shadow: 0 0 10px rgba(153, 238, 153, 0.3);
+    margin-top: 0.125rem;
 }
 
-/* Scrollbar */
+.hover-tooltip-meta-value a {
+    color: var(--light-green);
+    text-decoration: underline;
+    transition: color 0.3s ease;
+}
+
+.hover-tooltip-meta-value a:hover {
+    color: #ffff00;
+}
+
+/* Scrollbar - Compact */
 .hover-summary-tooltip::-webkit-scrollbar {
-    width: 4px;
+    width: 3px;
 }
 
 .hover-summary-tooltip::-webkit-scrollbar-track {
     background: rgba(153, 238, 153, 0.1);
-    border-radius: 2px;
+    border-radius: 1.5px;
 }
 
 .hover-summary-tooltip::-webkit-scrollbar-thumb {
     background: rgba(153, 238, 153, 0.3);
-    border-radius: 2px;
+    border-radius: 1.5px;
     transition: background 0.3s ease;
 }
 
@@ -305,157 +295,143 @@
     background: rgba(153, 238, 153, 0.5);
 }
 
-/* Glass Effect Enhancement */
-.hover-summary-tooltip {
-    position: relative;
-    overflow: hidden;
+/* Scrollbar for content area */
+.hover-tooltip-content::-webkit-scrollbar {
+    width: 3px;
 }
 
-.hover-summary-tooltip .tooltip-glass-overlay {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(88, 110, 83, 0.8), transparent);
-    pointer-events: none;
+.hover-tooltip-content::-webkit-scrollbar-track {
+    background: rgba(153, 238, 153, 0.1);
+    border-radius: 1.5px;
 }
 
-.hover-summary-tooltip .tooltip-glass-radial {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: radial-gradient(circle at 20% 20%, rgba(153, 238, 153, 0.08), transparent 50%);
-    pointer-events: none;
-    border-radius: 20px;
+.hover-tooltip-content::-webkit-scrollbar-thumb {
+    background: rgba(153, 238, 153, 0.3);
+    border-radius: 1.5px;
 }
 
-/* Responsive Design */
-@media (max-width: 1200px) {
-    .hover-summary-tooltip {
-        width: clamp(280px, 40vw, 400px);
-    }
-    
-    .hover-tooltip-image {
-        max-height: 200px;
-    }
-}
-
+/* Responsive Design - Maintains full image display */
 @media (max-width: 768px) {
     .hover-summary-tooltip {
-        width: clamp(250px, 50vw, 320px);
-        padding: clamp(0.75rem, 1.5vw, 1rem);
+        width: clamp(280px, 40vw, 320px);
+        padding: 0.75rem;
+        max-height: calc(100vh - 40px);
+    }
+    
+    .hover-tooltip-image-container {
+        max-height: 250px;
     }
     
     .hover-tooltip-image {
-        max-height: 150px;
+        max-height: 250px;
+    }
+    
+    .hover-tooltip-title {
+        font-size: 1rem;
+    }
+    
+    .hover-tooltip-description {
+        font-size: 0.75rem;
     }
     
     .hover-tooltip-coordinates {
-        flex-direction: column;
-        gap: 0.5rem;
-    }
-    
-    .hover-tooltip-coord {
-        flex-direction: row;
-        justify-content: space-between;
+        font-size: 0.65rem;
     }
 }
 
 @media (max-width: 480px) {
     .hover-summary-tooltip {
         width: calc(100vw - 40px);
-        max-width: 280px;
-        left: 20px !important;
-        transform: translateX(0) !important;
+        max-width: 300px;
+        padding: 0.625rem;
+        max-height: calc(100vh - 40px);
     }
     
-    .hover-summary-tooltip::before,
+    .hover-tooltip-image-container {
+        max-height: 200px;
+    }
+    
+    .hover-tooltip-image {
+        max-height: 200px;
+    }
+    
+    .hover-tooltip-title {
+        font-size: 0.9rem;
+        -webkit-line-clamp: 1;
+        line-clamp: 1; /* Standard property for compatibility */
+    }
+    
+    .hover-tooltip-description {
+        font-size: 0.7rem;
+    }
+    
+    .hover-tooltip-coordinates {
+        grid-template-columns: 1fr;
+        font-size: 0.6rem;
+    }
+    
+    .hover-tooltip-coord {
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 0.25rem;
+    }
+    
+    /* Remove arrow on mobile for cleaner look */
     .hover-summary-tooltip::after {
         display: none;
     }
-    
-    .hover-tooltip-image {
-        max-height: 120px;
-    }
 }
 
-/* High DPI displays */
-@media (min-resolution: 2dppx) {
-    .hover-summary-tooltip {
-        backdrop-filter: blur(30px);
-    }
-}
-
-/* Reduced motion accessibility */
-@media (prefers-reduced-motion: reduce) {
-    .hover-summary-tooltip,
-    .hover-tooltip-image-container,
-    .hover-tooltip-image {
-        transition: none;
-        animation: none;
-    }
-    
-    .hover-tooltip-image-container:hover {
-        transform: none;
-    }
-    
-    .hover-tooltip-image:hover {
-        filter: none;
-    }
-}
-
-/* Dark theme adjustments for high contrast */
+/* High contrast mode */
 @media (prefers-contrast: high) {
     .hover-summary-tooltip {
-        background: rgba(0, 0, 0, 0.98);
+        background: rgba(0, 0, 0, 0.95);
         border-color: rgba(153, 238, 153, 0.8);
     }
     
     .hover-tooltip-title {
         text-shadow: none;
+        background: #ffff00;
+        -webkit-text-fill-color: #000000;
     }
     
     .hover-tooltip-year-value {
         text-shadow: none;
+        background: #ffff00;
+        -webkit-text-fill-color: #000000;
     }
 }
 
-/* Animation for tooltip appearance */
-@keyframes tooltipSlideIn {
-    from {
-        opacity: 0;
-        transform: translateX(-30px) scale(0.9);
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .hover-summary-tooltip,
+    .hover-tooltip-image {
+        transition: none;
+        animation: none;
     }
-    to {
-        opacity: 1;
-        transform: translateX(0) scale(1);
+    
+    .hover-tooltip-image:hover {
+        filter: none;
+    }
+    
+    .hover-tooltip-image-loading {
+        animation: none;
+        background: rgba(153, 238, 153, 0.1);
     }
 }
 
-.hover-summary-tooltip.animate-in {
-    animation: tooltipSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-}
-
-/* Loading state for entire tooltip */
+/* Loading state for tooltip */
 .hover-summary-tooltip.loading {
     pointer-events: none;
+    opacity: 0.8;
 }
 
 .hover-summary-tooltip.loading * {
     opacity: 0.6;
 }
 
-/* Focus management for accessibility */
-.hover-summary-tooltip[tabindex] {
-    outline: 2px solid rgba(153, 238, 153, 0.5);
-    outline-offset: 2px;
-}
-
+/* Focus management */
 .hover-summary-tooltip[tabindex]:focus {
-    outline-color: var(--light-green);
+    outline: 2px solid var(--light-green);
+    outline-offset: 2px;
 }
