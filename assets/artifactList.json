@@ -122,7 +122,7 @@
     },
     {
       "title": "Sutton Hoo Helmet",
-      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Sutton_Hoo_burial_helmet_%289080233614%29.jpg/640px-Sutton_Hoo_burial_helmet_%289080233614%29.jpg",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/2/28/British_Museum_-_Room_41_%2820821373941%29.jpg",
       "lat": 52.35,
       "lng": 1.38,
       "year": 750,
@@ -494,14 +494,14 @@
     },
     {
       "title": "Dancing Girl Statuette",
-      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Bronze_%22Dancing_Girl%2C%22_Mohenjo-daro%2C_c._2500_BC.jpg/1365px-Bronze_%22Dancing_Girl%2C%22_Mohenjo-daro%2C_c._2500_BC.jpg",
-      "lat": 27.308333,
-      "lng": 68.129167,
-      "year": -2500,
-      "description": "Masterful bronze casting from Indus Valley Civilization showcasing advanced metallurgical skills.",
-      "author": "Public Domain",
-      "authorLink": null,
-      "license": null,
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/90/The_Dancing_Lady%2C_Indus_Valley.jpg/1920px-The_Dancing_Lady%2C_Indus_Valley.jpg",
+      "lat": 27.3242,
+      "lng": 68.1367,
+      "year": -2300,
+      "description": "Bronze figurine from Mohenjo-daro demonstrating sophisticated lost-wax casting techniques.",
+      "author": "Dr Sandip Roy",
+      "authorLink": "https://commons.wikimedia.org/w/index.php?title=User:Dr_Sandip_Roy&action=edit&redlink=1",
+      "license": "CC BY 3.0",
       "isPlayable": true
     },
     {
@@ -3587,7 +3587,7 @@
       "author": "Public Domain",
       "authorLink": null,
       "license": null,
-      "isPlayable": true
+      "isPlayable": false
     },
     {
       "title": "Apple Macintosh 128K",
@@ -6855,10 +6855,10 @@
     },
     {
       "title": "Codex Buranus (Carmina Burana)",
-      "image": "https://upload.wikimedia.org/wikipedia/commons/8/8a/Codex_Buranus-92-scacchi.jpg",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/43/CarminaBurana_wheel.jpg/1024px-CarminaBurana_wheel.jpg",
       "lat": 47.7072,
       "lng": 11.4078,
-      "year": 1230,
+      "year": 1200,
       "description": "Medieval manuscript containing secular songs and poems celebrating earthly pleasures.",
       "author": "Public Domain",
       "authorLink": null,
