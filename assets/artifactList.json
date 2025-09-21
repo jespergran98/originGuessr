@@ -4683,14 +4683,14 @@
     },
     {
       "title": "Apollo 11 Cave Stone Plaque",
-      "image": "https://upload.wikimedia.org/wikipedia/commons/5/5d/Apollo-11-cave-therianthrope.jpg",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Apollo_11_Cave_painting_1.jpg/2560px-Apollo_11_Cave_painting_1.jpg",
       "lat": -27.7500,
       "lng": 17.6000,
       "year": -26000,
       "description": "Ancient rock art featuring therianthropic figures, representing Africa's oldest known figurative art.",
-      "author": "Public Domain",
-      "authorLink": null,
-      "license": null,
+      "author": "Thilo Parg",
+      "authorLink": "https://commons.wikimedia.org/wiki/User:Thilo_Parg",
+      "license": "CC BY-SA 4.0",
       "isPlayable": true
     },
     {
@@ -7034,7 +7034,7 @@
       "isPlayable": true
     },
     {
-      "title": "Colossus of Rhodes (reconstruction)",
+      "title": "Colossus of Rhodes",
       "image": "https://upload.wikimedia.org/wikipedia/commons/6/6f/Colossus_of_Rhodes2.jpg",
       "lat": 36.4511,
       "lng": 28.2278,
