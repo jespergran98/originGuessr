@@ -9,6 +9,7 @@ class HoverSummaryHandler {
         this.hoverDelay = 300;
         this.roundResultStorage = null;
         this.summaryHandler = null;
+        this.currentSummaryRound = null;
         
         this.initialize();
     }
@@ -46,6 +47,7 @@ class HoverSummaryHandler {
         // Use event delegation to handle dynamically created summary rounds
         document.addEventListener('mouseenter', this.handleMouseEnter.bind(this), true);
         document.addEventListener('mouseleave', this.handleMouseLeave.bind(this), true);
+        document.addEventListener('mousemove', this.handleMouseMove.bind(this), true);
         
         // Handle summary panel visibility changes
         document.addEventListener('summaryToggled', this.handleSummaryToggle.bind(this));
@@ -67,6 +69,9 @@ class HoverSummaryHandler {
             return;
         }
 
+        // Store the current summary round
+        this.currentSummaryRound = summaryRound;
+
         // Extract round data
         const roundData = this.extractRoundData(summaryRound);
         if (!roundData) {
@@ -75,7 +80,7 @@ class HoverSummaryHandler {
 
         // Set show timeout
         this.showTimeout = setTimeout(() => {
-            if (!this.isDestroyed) {
+            if (!this.isDestroyed && this.currentSummaryRound === summaryRound) {
                 this.showTooltip(summaryRound, roundData);
             }
         }, this.hoverDelay);
@@ -86,17 +91,36 @@ class HoverSummaryHandler {
         
         const summaryRound = event.target.closest('.summary-round');
         
-        // If leaving a summary round, hide tooltip immediately
-        if (summaryRound) {
-            // Clear show timeout
-            if (this.showTimeout) {
-                clearTimeout(this.showTimeout);
-                this.showTimeout = null;
-            }
-
-            // Hide tooltip immediately
-            this.hideTooltip();
+        // If leaving a summary round, hide tooltip
+        if (summaryRound && summaryRound === this.currentSummaryRound) {
+            this.clearCurrentHover();
         }
+    }
+
+    handleMouseMove(event) {
+        if (this.isDestroyed || !this.isVisible) return;
+        
+        // Check if mouse is still over the current summary round
+        const summaryRound = event.target.closest('.summary-round');
+        
+        // If we're not over the current summary round anymore, hide tooltip
+        if (summaryRound !== this.currentSummaryRound) {
+            this.clearCurrentHover();
+        }
+    }
+
+    clearCurrentHover() {
+        // Clear show timeout
+        if (this.showTimeout) {
+            clearTimeout(this.showTimeout);
+            this.showTimeout = null;
+        }
+
+        // Clear current summary round
+        this.currentSummaryRound = null;
+
+        // Hide tooltip
+        this.hideTooltip();
     }
 
     handleSummaryToggle(event) {
@@ -104,7 +128,7 @@ class HoverSummaryHandler {
         
         // Hide tooltip when summary panel is toggled off
         if (!event.detail?.isActive) {
-            this.hideTooltip();
+            this.clearCurrentHover();
         }
     }
 
@@ -119,7 +143,7 @@ class HoverSummaryHandler {
         if (this.isDestroyed || !this.isVisible) return;
         
         // Hide tooltip on scroll for better UX
-        this.hideTooltip();
+        this.clearCurrentHover();
     }
 
     extractRoundData(summaryRound) {
@@ -168,6 +192,10 @@ class HoverSummaryHandler {
         this.tooltip.className = 'hover-summary-tooltip';
         this.tooltip.setAttribute('role', 'tooltip');
         this.tooltip.setAttribute('aria-hidden', 'true');
+        
+        // Completely disable all mouse interactions on the tooltip
+        this.tooltip.style.pointerEvents = 'none';
+        this.tooltip.style.userSelect = 'none';
         
         // Add glass overlay elements
         const glassOverlay = document.createElement('div');
@@ -314,7 +342,7 @@ class HoverSummaryHandler {
         return `
             <div class="hover-tooltip-metadata">
                 <div class="hover-tooltip-meta-item">
-                    <span class="hover-tooltip-meta-label">Attribution:</span>
+                    <span class="hover-tooltip-meta-label"></span>
                     <span class="hover-tooltip-meta-value">${attributionHTML}</span>
                 </div>
             </div>
@@ -396,21 +424,6 @@ class HoverSummaryHandler {
         testImg.src = imageUrl;
     }
 
-    setupExternalLinks() {
-        if (this.isDestroyed || !this.tooltip) return;
-        
-        const linkElements = this.tooltip.querySelectorAll('[data-link]');
-        linkElements.forEach(element => {
-            const link = element.getAttribute('data-link');
-            if (link) {
-                element.style.cursor = 'pointer';
-                element.addEventListener('click', () => {
-                    window.open(link, '_blank', 'noopener,noreferrer');
-                });
-            }
-        });
-    }
-
     positionTooltip(summaryRound) {
         if (this.isDestroyed || !this.tooltip) return;
         
@@ -432,33 +445,8 @@ class HoverSummaryHandler {
         this.tooltip.classList.remove('tooltip-left', 'tooltip-above', 'tooltip-below');
     }
 
-    getCurrentSummaryRound() {
-        if (!this.currentRound) return null;
-        
-        // Find the summary round element for the current round
-        const summaryRounds = document.querySelectorAll('.summary-round');
-        for (const round of summaryRounds) {
-            const roundNumberElement = round.querySelector('.summary-round-number');
-            if (roundNumberElement) {
-                const roundText = roundNumberElement.textContent.trim();
-                const roundMatch = roundText.match(/round\s+(\d+)/i);
-                if (roundMatch && parseInt(roundMatch[1]) === this.currentRound.roundNumber) {
-                    return round;
-                }
-            }
-        }
-        
-        return null;
-    }
-
     hideTooltip() {
         if (this.isDestroyed || !this.tooltip || !this.isVisible) return;
-
-        // Clear any pending timeouts
-        if (this.showTimeout) {
-            clearTimeout(this.showTimeout);
-            this.showTimeout = null;
-        }
 
         // Hide tooltip
         this.tooltip.classList.remove('visible', 'animate-in');
@@ -501,7 +489,7 @@ class HoverSummaryHandler {
     }
 
     forceHide() {
-        this.hideTooltip();
+        this.clearCurrentHover();
     }
 
     // Cleanup and destroy
@@ -519,6 +507,7 @@ class HoverSummaryHandler {
         // Remove event listeners
         document.removeEventListener('mouseenter', this.handleMouseEnter.bind(this), true);
         document.removeEventListener('mouseleave', this.handleMouseLeave.bind(this), true);
+        document.removeEventListener('mousemove', this.handleMouseMove.bind(this), true);
         document.removeEventListener('summaryToggled', this.handleSummaryToggle.bind(this));
         window.removeEventListener('resize', this.handleResize.bind(this));
         document.removeEventListener('scroll', this.handleScroll.bind(this), true);
@@ -535,6 +524,7 @@ class HoverSummaryHandler {
         // Clear references
         this.tooltip = null;
         this.currentRound = null;
+        this.currentSummaryRound = null;
         this.roundResultStorage = null;
         this.summaryHandler = null;
         
@@ -555,40 +545,16 @@ class HoverSummaryHandler {
             }
         }
     }
-
-    // Handle accessibility
-    setupAccessibility() {
-        if (this.isDestroyed || !this.tooltip) return;
-        
-        // Make tooltip focusable for keyboard users
-        this.tooltip.setAttribute('tabindex', '0');
-        
-        // Handle keyboard events
-        this.tooltip.addEventListener('keydown', (event) => {
-            if (event.key === 'Escape') {
-                this.hideTooltip();
-            }
-        });
-        
-        // Announce tooltip to screen readers when shown
-        this.tooltip.addEventListener('focus', () => {
-            this.tooltip.setAttribute('aria-live', 'polite');
-        });
-    }
-
-    // Update tooltip position for simple left positioning
-    updateArrowPosition() {
-        // No longer needed with simplified positioning
-        return;
-    }
 }
 
 // Enhanced CSS for simplified positioning
 const hoverSummaryStyleSheet = document.createElement('style');
 hoverSummaryStyleSheet.textContent = `
-    /* Simple positioning - no arrows needed */
-    .hover-summary-tooltip {
-        /* All styling is handled in the main CSS file */
+    /* Ensure tooltip cannot receive any mouse events */
+    .hover-summary-tooltip,
+    .hover-summary-tooltip * {
+        pointer-events: none !important;
+        user-select: none !important;
     }
 `;
 document.head.appendChild(hoverSummaryStyleSheet);

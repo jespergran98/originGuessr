@@ -165,7 +165,6 @@ class FinalScoreMap {
                         <path class="marker-body" d="M16 2C23 2 29 8 29 16C29 24 16 46 16 46C16 46 3 24 3 16C3 8 9 2 16 2Z"/>
                         <circle class="marker-pin" cx="16" cy="16" r="5"/>
                     </svg>
-                    <div class="marker-label">${roundNumber}</div>
                 </div>
             `,
             className: `guess-marker-container round-${roundNumber}`,
@@ -190,7 +189,6 @@ class FinalScoreMap {
                         <path class="flag-fabric" d="M8.5 10 L28 10 L25 16 L28 22 L8.5 22 Z"/>
                         <circle class="flag-pole" cx="7.25" cy="8" r="1.5"/>
                     </svg>
-                    <div class="flag-label">${roundNumber}</div>
                 </div>
             `,
             className: `correct-marker-container round-${roundNumber}`,
@@ -249,6 +247,20 @@ class FinalScoreMap {
             console.warn('Could not set optimal view:', error);
             this.map.setView([20, 0], 2);
         }
+    }
+
+    isValidRoundData(round) {
+        return round && 
+               round.artifact && 
+               round.userGuess &&
+               typeof round.artifact.lat === 'number' &&
+               typeof round.artifact.lng === 'number' &&
+               typeof round.userGuess.lat === 'number' &&
+               typeof round.userGuess.lng === 'number' &&
+               !isNaN(round.artifact.lat) &&
+               !isNaN(round.artifact.lng) &&
+               !isNaN(round.userGuess.lat) &&
+               !isNaN(round.userGuess.lng);
     }
 
     isValidRoundData(round) {

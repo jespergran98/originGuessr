@@ -1,437 +1,580 @@
-/* Improved Hover Summary Tooltip - Full Image Display with Fixed Positioning */
+/* Modern Hover Summary Tooltip - Stunning Design Overhaul */
 
-/* Tooltip Container - Maintains compact design with flexible image space */
+/* Main Tooltip Container */
 .hover-summary-tooltip {
     position: fixed;
     z-index: 10001;
-    width: clamp(320px, 28vw, 380px);
-    max-height: calc(100vh - 40px); /* Ensure 20px from top and bottom */
-    min-height: 200px;
-    background: rgba(4, 8, 3, 0.315);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(43, 124, 43, 0.3);
-    border-radius: 3vh;
-    padding: 1rem;
+    width: clamp(360px, 32vw, 420px);
+    max-height: calc(100vh - 60px);
+    min-height: 280px;
+    
+    /* Modern glass morphism design */
+    background: linear-gradient(135deg, 
+        rgba(10, 25, 15, 0.95) 0%,
+        rgba(5, 15, 10, 0.92) 50%,
+        rgba(15, 35, 20, 0.95) 100%);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    
+    /* Premium border and shadows */
+    border: 1px solid rgba(255, 255, 0, 0.2);
+    border-radius: 16px;
+    
+    /* Multi-layered shadows for depth */
     box-shadow: 
-        0 8px 64px rgba(0, 0, 0, 0.7),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        0 25px 50px rgba(0, 0, 0, 0.6),
+        0 12px 25px rgba(0, 0, 0, 0.4),
+        0 6px 12px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1),
+        inset 0 0 0 1px rgba(255, 255, 0, 0.05);
+    
+    /* Smooth animations */
     opacity: 0;
-    transform: translateX(-20px) scale(0.95);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transform: translateX(-30px) translateY(10px) scale(0.9);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     pointer-events: none;
-    overflow-y: auto;
-    overflow-x: hidden;
+    
+    /* Layout */
     display: flex;
     flex-direction: column;
+    overflow: hidden;
+    
+    /* Subtle glow effect */
+    filter: drop-shadow(0 0 20px rgba(255, 255, 0, 0.1));
 }
 
 .hover-summary-tooltip.visible {
     opacity: 1;
-    transform: translateX(0) scale(1);
+    transform: translateX(0) translateY(0) scale(1);
     pointer-events: auto;
 }
 
-/* Glass effect matching result page */
+/* Animated border glow */
 .hover-summary-tooltip::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    right: -1px;
+    bottom: -1px;
+    border-radius: 16px;
+    background: linear-gradient(45deg, 
+        rgba(255, 255, 0, 0.3),
+        rgba(255, 215, 0, 0.2),
+        rgba(255, 255, 0, 0.1),
+        rgba(255, 215, 0, 0.2),
+        rgba(255, 255, 0, 0.3));
+    background-size: 400% 400%;
+    animation: borderGlow 4s ease-in-out infinite;
+    z-index: -1;
+    opacity: 0.6;
+}
+
+@keyframes borderGlow {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+}
+
+/* Header Section - Elegant and Compact */
+.hover-tooltip-header {
+    padding: 20px 20px 16px 20px;
+    border-bottom: 1px solid rgba(255, 255, 0, 0.15);
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 0, 0.08) 0%,
+        rgba(255, 215, 0, 0.05) 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+.hover-tooltip-header::after {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
     right: 0;
     height: 1px;
-    background: linear-gradient(
-        90deg, 
+    background: linear-gradient(90deg, 
         transparent, 
-        rgb(88, 110, 83), 
-        transparent
-    );
-}
-
-/* Compact Header */
-.hover-tooltip-header {
-    margin-bottom: 0.75rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid rgba(153, 238, 153, 0.2);
-    flex-shrink: 0;
+        rgba(255, 255, 0, 0.4), 
+        transparent);
 }
 
 .hover-tooltip-title {
-    font-size: 1.1rem;
-    font-weight: bold;
-    color: var(--light-green);
-    margin: 0 0 0.25rem 0;
-    line-height: 1.2;
-    text-shadow: 0 0 8px rgba(255, 255, 0, 0.3);
-    background: linear-gradient(45deg, #ffff00, #ffd700);
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin: 0 0 6px 0;
+    line-height: 1.3;
+    
+    /* Stunning gold gradient text */
+    background: linear-gradient(135deg, 
+        #FFD700 0%,
+        #FFFF00 25%,
+        #FFA500 50%,
+        #FFD700 75%,
+        #FFFF00 100%);
+    background-size: 200% 200%;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    animation: textShine 3s ease-in-out infinite;
+    
+    /* Subtle glow */
+    filter: drop-shadow(0 0 8px rgba(255, 255, 0, 0.3));
+    
+    /* Elegant text overflow */
     display: -webkit-box;
     -webkit-line-clamp: 2;
-    line-clamp: 2; /* Standard property for compatibility */
+    line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
 
-.hover-tooltip-round {
-    font-size: 0.75rem;
-    color: rgba(153, 238, 153, 0.7);
-    font-weight: 500;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin: 0;
+@keyframes textShine {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
 }
 
-/* Full-size Image Container - Dynamic height based on image aspect ratio */
+.hover-tooltip-round {
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.7);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin: 0;
+    opacity: 0.9;
+}
+
+/* Image Section - Adaptive and Beautiful */
 .hover-tooltip-image-container {
     position: relative;
-    margin-bottom: 0.75rem;
-    border-radius: 8px;
+    margin: 0;
+    border-radius: 0;
     overflow: hidden;
-    border: 1px solid rgba(153, 238, 153, 0.2);
-    min-height: 120px;
-    max-height: 300px;
+    background: linear-gradient(135deg, 
+        rgba(0, 0, 0, 0.4) 0%,
+        rgba(0, 0, 0, 0.2) 100%);
+    
+    /* Dynamic height based on content */
+    min-height: 200px;
+    max-height: 320px;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: rgba(153, 238, 153, 0.05);
-    flex-shrink: 0;
+    
+    /* Subtle inner shadow */
+    box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.3);
 }
 
 .hover-tooltip-image {
     width: 100%;
     height: auto;
-    max-height: 300px;
-    object-fit: contain; /* Changed from cover to contain to show full image */
+    max-height: 320px;
+    object-fit: contain;
     display: block;
-    transition: all 0.3s ease;
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    filter: brightness(0.95) contrast(1.05) saturate(1.1);
 }
 
 .hover-tooltip-image:hover {
-    filter: brightness(1.05);
+    filter: brightness(1.02) contrast(1.08) saturate(1.15);
+    transform: scale(1.02);
 }
 
-/* Image States */
+/* Loading State - Elegant Animation */
 .hover-tooltip-image-loading {
-    width: 100%;
-    height: 120px;
     background: linear-gradient(45deg, 
-        rgba(153, 238, 153, 0.1) 25%, 
-        rgba(153, 238, 153, 0.05) 50%, 
-        rgba(153, 238, 153, 0.1) 75%);
-    background-size: 20px 20px;
-    animation: loadingShimmer 1.5s ease-in-out infinite;
+        rgba(255, 255, 0, 0.1) 0%,
+        rgba(255, 215, 0, 0.15) 25%,
+        rgba(255, 255, 0, 0.1) 50%,
+        rgba(255, 215, 0, 0.15) 75%,
+        rgba(255, 255, 0, 0.1) 100%);
+    background-size: 400% 400%;
+    animation: loadingGlow 2s ease-in-out infinite;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: rgba(153, 238, 153, 0.6);
-    font-size: 0.75rem;
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 0.9rem;
+    font-weight: 500;
 }
 
-@keyframes loadingShimmer {
-    0% { background-position: -20px 0; }
-    100% { background-position: 20px 0; }
+@keyframes loadingGlow {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
 }
 
 .hover-tooltip-image-error {
-    width: 100%;
-    height: 120px;
-    background: rgba(153, 238, 153, 0.05);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    color: rgba(153, 238, 153, 0.5);
-    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 0.85rem;
+    font-weight: 500;
     text-align: center;
+    padding: 40px 20px;
 }
 
 .hover-tooltip-image-error::before {
     content: '🖼️';
-    font-size: 1.5rem;
-    margin-bottom: 0.25rem;
-    opacity: 0.5;
+    font-size: 2.5rem;
+    margin-bottom: 12px;
+    opacity: 0.6;
+    filter: grayscale(30%);
 }
 
-/* Scrollable Content */
+/* Content Section - Clean and Organized */
 .hover-tooltip-content {
+    padding: 20px;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 16px;
     flex: 1;
     overflow-y: auto;
+    
+    /* Subtle scroll fade */
+    mask-image: linear-gradient(to bottom, 
+        transparent 0%, 
+        black 20px, 
+        black calc(100% - 20px), 
+        transparent 100%);
+    -webkit-mask-image: linear-gradient(to bottom, 
+        transparent 0%, 
+        black 20px, 
+        black calc(100% - 20px), 
+        transparent 100%);
 }
 
-/* Description - Expandable */
+/* Description - Readable and Elegant */
 .hover-tooltip-description {
-    color: var(--light-green);
-    font-size: 0.8rem;
-    line-height: 1.4;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.95rem;
+    line-height: 1.6;
     margin: 0;
-    max-height: none; /* Remove height restriction to show full description */
-    overflow: visible;
-    text-overflow: initial;
-    display: block; /* Remove webkit-box to show full text */
+    font-weight: 400;
+    text-align: justify;
+    hyphens: auto;
+    word-wrap: break-word;
 }
 
 .hover-tooltip-description:empty::before {
     content: 'No description available';
-    color: rgba(153, 238, 153, 0.5);
+    color: rgba(255, 255, 255, 0.4);
     font-style: italic;
+    font-size: 0.9rem;
 }
 
-/* Compact Year Display */
+/* Year Display - Prominent and Beautiful */
 .hover-tooltip-year {
     text-align: center;
-    padding: 0.5rem;
-    background: rgba(4, 8, 3, 0.315);
-    border-radius: 8px;
-    border: 1px solid rgba(43, 124, 43, 0.3);
-    flex-shrink: 0;
+    padding: 16px;
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 0, 0.12) 0%,
+        rgba(255, 215, 0, 0.08) 50%,
+        rgba(255, 255, 0, 0.12) 100%);
+    border: 1px solid rgba(255, 255, 0, 0.2);
+    border-radius: 12px;
+    position: relative;
+    overflow: hidden;
+}
+
+.hover-tooltip-year::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(255, 255, 0, 0.1), 
+        transparent);
+    animation: yearShine 3s ease-in-out infinite;
+}
+
+@keyframes yearShine {
+    0% { left: -100%; }
+    50% { left: 100%; }
+    100% { left: 100%; }
 }
 
 .hover-tooltip-year-label {
-    font-size: 0.6rem;
-    color: rgba(153, 238, 153, 0.6);
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.6);
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 0.125rem;
+    letter-spacing: 0.1em;
+    margin-bottom: 6px;
+    font-weight: 600;
 }
 
 .hover-tooltip-year-value {
-    font-size: 1rem;
-    font-weight: bold;
-    text-shadow: 0 0 8px rgba(255, 255, 0, 0.3);
-    background: linear-gradient(45deg, #ffff00, #ffd700);
+    font-size: 1.3rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, 
+        #FFD700 0%,
+        #FFFF00 50%,
+        #FFA500 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    filter: drop-shadow(0 0 6px rgba(255, 255, 0, 0.4));
+    position: relative;
 }
 
-/* Compact Coordinates - Side by Side */
+/* Coordinates - Modern Grid Layout */
 .hover-tooltip-coordinates {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 0.5rem;
-    font-size: 0.7rem;
-    flex-shrink: 0;
+    gap: 12px;
 }
 
 .hover-tooltip-coord {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 0.375rem;
-    background: rgba(153, 238, 153, 0.05);
-    border-radius: 6px;
+    padding: 12px;
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 255, 0.08) 0%,
+        rgba(255, 255, 255, 0.04) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.hover-tooltip-coord:hover {
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 0, 0.1) 0%,
+        rgba(255, 215, 0, 0.05) 100%);
+    border-color: rgba(255, 255, 0, 0.2);
+    transform: translateY(-1px);
 }
 
 .hover-tooltip-coord-label {
-    font-size: 0.6rem;
-    color: rgba(153, 238, 153, 0.6);
+    font-size: 0.65rem;
+    color: rgba(255, 255, 255, 0.6);
     text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: 0.125rem;
+    letter-spacing: 0.08em;
+    margin-bottom: 4px;
+    font-weight: 600;
 }
 
 .hover-tooltip-coord-value {
-    font-size: 0.7rem;
-    font-weight: 600;
-    color: var(--light-green);
-    font-family: monospace;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.95);
+    font-family: 'SF Mono', 'Monaco', 'Inconsolata', monospace;
+    text-shadow: 0 0 4px rgba(255, 255, 0, 0.2);
 }
 
-/* Compact Attribution */
+/* Attribution - Subtle and Professional */
 .hover-tooltip-metadata {
-    margin-top: 0.5rem;
-    padding-top: 0.5rem;
-    border-top: 1px solid rgba(153, 238, 153, 0.15);
-    flex-shrink: 0;
+    margin-top: 8px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .hover-tooltip-meta-item {
-    font-size: 0.7rem;
-    color: rgba(153, 238, 153, 0.7);
+    font-size: 0.75rem;
+    line-height: 1.4;
 }
 
 .hover-tooltip-meta-label {
     font-weight: 600;
-    color: rgba(153, 238, 153, 0.6);
+    color: rgba(255, 255, 255, 0.6);
+    margin-bottom: 2px;
+    display: block;
 }
 
 .hover-tooltip-meta-value {
-    color: var(--light-green);
-    margin-top: 0.125rem;
+    color: rgba(255, 255, 255, 0.8);
 }
 
 .hover-tooltip-meta-value a {
-    color: var(--light-green);
-    text-decoration: underline;
-    transition: color 0.3s ease;
+    color: rgba(255, 255, 0, 0.9);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(255, 255, 0, 0.3);
+    transition: all 0.3s ease;
+    padding-bottom: 1px;
 }
 
 .hover-tooltip-meta-value a:hover {
-    color: #ffff00;
+    color: #FFD700;
+    border-bottom-color: #FFD700;
+    text-shadow: 0 0 6px rgba(255, 215, 0, 0.4);
 }
 
-/* Scrollbar - Compact */
-.hover-summary-tooltip::-webkit-scrollbar {
-    width: 3px;
-}
-
-.hover-summary-tooltip::-webkit-scrollbar-track {
-    background: rgba(153, 238, 153, 0.1);
-    border-radius: 1.5px;
-}
-
-.hover-summary-tooltip::-webkit-scrollbar-thumb {
-    background: rgba(153, 238, 153, 0.3);
-    border-radius: 1.5px;
-    transition: background 0.3s ease;
-}
-
-.hover-summary-tooltip::-webkit-scrollbar-thumb:hover {
-    background: rgba(153, 238, 153, 0.5);
-}
-
-/* Scrollbar for content area */
+/* Custom Scrollbar - Elegant Design */
+.hover-summary-tooltip::-webkit-scrollbar,
 .hover-tooltip-content::-webkit-scrollbar {
-    width: 3px;
+    width: 6px;
 }
 
+.hover-summary-tooltip::-webkit-scrollbar-track,
 .hover-tooltip-content::-webkit-scrollbar-track {
-    background: rgba(153, 238, 153, 0.1);
-    border-radius: 1.5px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
 }
 
+.hover-summary-tooltip::-webkit-scrollbar-thumb,
 .hover-tooltip-content::-webkit-scrollbar-thumb {
-    background: rgba(153, 238, 153, 0.3);
-    border-radius: 1.5px;
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 0, 0.4) 0%,
+        rgba(255, 215, 0, 0.6) 100%);
+    border-radius: 3px;
+    transition: all 0.3s ease;
 }
 
-/* Responsive Design - Maintains full image display */
+.hover-summary-tooltip::-webkit-scrollbar-thumb:hover,
+.hover-tooltip-content::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, 
+        rgba(255, 255, 0, 0.6) 0%,
+        rgba(255, 215, 0, 0.8) 100%);
+}
+
+/* Responsive Design - Maintains Beauty Across Devices */
 @media (max-width: 768px) {
     .hover-summary-tooltip {
-        width: clamp(280px, 40vw, 320px);
-        padding: 0.75rem;
+        width: clamp(300px, 45vw, 360px);
+        padding: 0;
         max-height: calc(100vh - 40px);
     }
     
-    .hover-tooltip-image-container {
-        max-height: 250px;
-    }
-    
-    .hover-tooltip-image {
-        max-height: 250px;
+    .hover-tooltip-header {
+        padding: 16px 16px 12px 16px;
     }
     
     .hover-tooltip-title {
-        font-size: 1rem;
+        font-size: 1.2rem;
+    }
+    
+    .hover-tooltip-content {
+        padding: 16px;
+        gap: 14px;
+    }
+    
+    .hover-tooltip-image-container {
+        max-height: 280px;
     }
     
     .hover-tooltip-description {
-        font-size: 0.75rem;
-    }
-    
-    .hover-tooltip-coordinates {
-        font-size: 0.65rem;
+        font-size: 0.9rem;
     }
 }
 
 @media (max-width: 480px) {
     .hover-summary-tooltip {
         width: calc(100vw - 40px);
-        max-width: 300px;
-        padding: 0.625rem;
+        max-width: 320px;
         max-height: calc(100vh - 40px);
     }
     
-    .hover-tooltip-image-container {
-        max-height: 200px;
-    }
-    
-    .hover-tooltip-image {
-        max-height: 200px;
+    .hover-tooltip-header {
+        padding: 14px 14px 10px 14px;
     }
     
     .hover-tooltip-title {
-        font-size: 0.9rem;
+        font-size: 1.1rem;
         -webkit-line-clamp: 1;
-        line-clamp: 1; /* Standard property for compatibility */
+        line-clamp: 1;
+    }
+    
+    .hover-tooltip-content {
+        padding: 14px;
+        gap: 12px;
+    }
+    
+    .hover-tooltip-image-container {
+        max-height: 240px;
     }
     
     .hover-tooltip-description {
-        font-size: 0.7rem;
+        font-size: 0.85rem;
     }
     
     .hover-tooltip-coordinates {
         grid-template-columns: 1fr;
-        font-size: 0.6rem;
+        gap: 8px;
     }
     
     .hover-tooltip-coord {
         flex-direction: row;
         justify-content: space-between;
-        padding: 0.25rem;
-    }
-    
-    /* Remove arrow on mobile for cleaner look */
-    .hover-summary-tooltip::after {
-        display: none;
+        padding: 10px 12px;
     }
 }
 
-/* High contrast mode */
+/* High Contrast Mode Support */
 @media (prefers-contrast: high) {
     .hover-summary-tooltip {
-        background: rgba(0, 0, 0, 0.95);
-        border-color: rgba(153, 238, 153, 0.8);
+        background: rgba(0, 0, 0, 0.98);
+        border: 2px solid #FFD700;
+        backdrop-filter: none;
     }
     
-    .hover-tooltip-title {
-        text-shadow: none;
-        background: #ffff00;
-        -webkit-text-fill-color: #000000;
-    }
-    
+    .hover-tooltip-title,
     .hover-tooltip-year-value {
-        text-shadow: none;
-        background: #ffff00;
+        background: #FFFF00;
         -webkit-text-fill-color: #000000;
+        text-shadow: none;
+        filter: none;
+    }
+    
+    .hover-tooltip-description {
+        color: #FFFFFF;
     }
 }
 
-/* Reduced motion */
+/* Reduced Motion Support */
 @media (prefers-reduced-motion: reduce) {
     .hover-summary-tooltip,
-    .hover-tooltip-image {
+    .hover-tooltip-image,
+    .hover-tooltip-coord,
+    .hover-tooltip-meta-value a {
         transition: none;
         animation: none;
     }
     
-    .hover-tooltip-image:hover {
-        filter: none;
+    .hover-summary-tooltip::before,
+    .hover-tooltip-year::before {
+        animation: none;
+        opacity: 0.3;
     }
     
-    .hover-tooltip-image-loading {
+    .hover-tooltip-title {
         animation: none;
-        background: rgba(153, 238, 153, 0.1);
+        background: #FFD700;
+        -webkit-text-fill-color: #000000;
     }
 }
 
-/* Loading state for tooltip */
+/* Loading State */
 .hover-summary-tooltip.loading {
     pointer-events: none;
-    opacity: 0.8;
 }
 
-.hover-summary-tooltip.loading * {
-    opacity: 0.6;
+.hover-summary-tooltip.loading::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(1px);
+    border-radius: inherit;
 }
 
-/* Focus management */
+/* Focus Management */
 .hover-summary-tooltip[tabindex]:focus {
-    outline: 2px solid var(--light-green);
-    outline-offset: 2px;
+    outline: 2px solid #FFD700;
+    outline-offset: 4px;
+    box-shadow: 
+        0 25px 50px rgba(0, 0, 0, 0.6),
+        0 12px 25px rgba(0, 0, 0, 0.4),
+        0 6px 12px rgba(0, 0, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1),
+        inset 0 0 0 1px rgba(255, 255, 0, 0.05),
+        0 0 0 4px rgba(255, 215, 0, 0.3);
 }

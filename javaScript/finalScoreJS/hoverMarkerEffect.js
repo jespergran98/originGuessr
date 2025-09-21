@@ -168,24 +168,28 @@ class SummaryMapHighlighter {
         const isLine = element.classList.contains('stippled-line-overlay');
 
         if (isMarker) {
-            // Marker highlighting effects - NO TRANSFORM TO PRESERVE ANCHOR POINTS
-            element.style.filter = 'drop-shadow(0 0 20px rgba(255, 255, 255, 1)) drop-shadow(0 0 30px rgba(0, 0, 0, 0.8)) drop-shadow(0 0 40px rgba(153, 238, 153, 0.9)) brightness(1.4) saturate(1.3)';
+            // Enhanced marker highlighting - scale up and add glow while preserving anchor
+            element.style.filter = 'drop-shadow(0 0 20px rgba(255, 255, 255, 1)) drop-shadow(0 0 30px rgba(16, 185, 129, 0.8)) drop-shadow(0 0 40px rgba(16, 185, 129, 0.6)) brightness(1.3) saturate(1.4)';
             element.style.zIndex = (parseInt(element.style.zIndex) || 1000) + 10000;
             
-            // Add a pulsing glow class for animation
+            // Scale the marker while maintaining anchor point (bottom center)
+            const currentTransform = element.style.transform || '';
+            element.style.transform = `${currentTransform} scale(1.3)`;
+            
+            // Add highlight classes for animations
             element.classList.add('map-highlight-active');
             
-            // Add enhanced visibility by modifying the marker's SVG elements directly
+            // Enhance colors while keeping original design
             this.enhanceMarkerVisibility(element);
             
         } else if (isLine) {
-            // Line highlighting effects - make it stand out against light backgrounds
+            // Line highlighting effects - make it stand out
             const linePath = element.querySelector('.stippled-path');
             if (linePath) {
-                linePath.style.stroke = '#000000'; // Black for contrast on light map
+                linePath.style.stroke = '#10b981'; // Bright green for visibility
                 linePath.style.strokeWidth = '5';
                 linePath.style.strokeOpacity = '1';
-                linePath.style.filter = 'drop-shadow(0 0 8px rgba(255, 255, 255, 1)) drop-shadow(0 0 12px rgba(0, 0, 0, 0.8))';
+                linePath.style.filter = 'drop-shadow(0 0 8px rgba(16, 185, 129, 1)) drop-shadow(0 0 12px rgba(255, 255, 255, 0.8))';
                 linePath.style.animation = 'stippled-glow 1.5s ease-in-out infinite alternate';
             }
             
@@ -209,9 +213,9 @@ class SummaryMapHighlighter {
                 element.dataset.originalBodyStrokeWidth = markerBody.getAttribute('stroke-width') || markerBody.style.strokeWidth || '';
             }
             
-            // Apply high-contrast highlighting
-            markerBody.style.fill = '#ffffff';
-            markerBody.style.stroke = '#000000';
+            // Enhance colors instead of making white - keep design but more vibrant
+            markerBody.style.fill = '#06d6a0'; // Bright teal-green
+            markerBody.style.stroke = '#000000'; // Black outline for contrast
             markerBody.style.strokeWidth = '3';
         }
 
@@ -219,7 +223,7 @@ class SummaryMapHighlighter {
             if (!element.dataset.originalPinFill) {
                 element.dataset.originalPinFill = markerPin.getAttribute('fill') || markerPin.style.fill || '';
             }
-            markerPin.style.fill = '#000000';
+            markerPin.style.fill = '#003d29'; // Dark green for contrast
         }
 
         if (flagFabric) {
@@ -228,8 +232,9 @@ class SummaryMapHighlighter {
                 element.dataset.originalFlagStroke = flagFabric.getAttribute('stroke') || flagFabric.style.stroke || '';
                 element.dataset.originalFlagStrokeWidth = flagFabric.getAttribute('stroke-width') || flagFabric.style.strokeWidth || '';
             }
-            flagFabric.style.fill = '#ffffff';
-            flagFabric.style.stroke = '#000000';
+            // Enhanced red flag with better contrast
+            flagFabric.style.fill = '#ff1744'; // Bright red
+            flagFabric.style.stroke = '#000000'; // Black outline
             flagFabric.style.strokeWidth = '2';
         }
 
@@ -238,8 +243,8 @@ class SummaryMapHighlighter {
                 element.dataset.originalPoleFill = flagPole.getAttribute('fill') || flagPole.style.fill || '';
                 element.dataset.originalPoleStroke = flagPole.getAttribute('stroke') || flagPole.style.stroke || '';
             }
-            flagPole.style.fill = '#000000';
-            flagPole.style.stroke = '#ffffff';
+            flagPole.style.fill = '#3e2723'; // Darker brown
+            flagPole.style.stroke = '#000000'; // Black outline for definition
         }
     }
 
@@ -367,22 +372,23 @@ if (document.readyState === 'loading') {
 // Add dynamic CSS for highlight animations
 const highlightStyleSheet = document.createElement('style');
 highlightStyleSheet.textContent = `
-    /* Marker highlight animations */
+    /* Enhanced marker highlight animations */
     .map-highlight-active {
-        animation: marker-highlight-pulse 1.2s ease-in-out infinite alternate !important;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        animation: marker-highlight-pulse 1.8s ease-in-out infinite alternate !important;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        transform-origin: 50% 100% !important; /* Maintain anchor point at bottom center */
     }
 
     @keyframes marker-highlight-pulse {
         0% { 
-            filter: drop-shadow(0 0 15px rgba(153, 238, 153, 0.8)) drop-shadow(0 0 25px rgba(153, 238, 153, 0.6)) brightness(1.2);
+            filter: drop-shadow(0 0 15px rgba(16, 185, 129, 0.8)) drop-shadow(0 0 25px rgba(16, 185, 129, 0.6)) brightness(1.3) saturate(1.4);
         }
         100% { 
-            filter: drop-shadow(0 0 25px rgba(153, 238, 153, 1)) drop-shadow(0 0 40px rgba(153, 238, 153, 0.8)) brightness(1.4);
+            filter: drop-shadow(0 0 25px rgba(16, 185, 129, 1)) drop-shadow(0 0 40px rgba(16, 185, 129, 0.8)) drop-shadow(0 0 60px rgba(255, 255, 255, 0.6)) brightness(1.5) saturate(1.6);
         }
     }
 
-    /* Line highlight animations */
+    /* Line highlight animations with better colors */
     .line-highlight-active {
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
     }
@@ -393,7 +399,7 @@ highlightStyleSheet.textContent = `
             stroke-opacity: 1;
         }
         100% { 
-            filter: drop-shadow(0 0 15px rgba(16, 185, 129, 1)) drop-shadow(0 0 25px rgba(16, 185, 129, 0.6));
+            filter: drop-shadow(0 0 15px rgba(16, 185, 129, 1)) drop-shadow(0 0 25px rgba(255, 255, 255, 0.8));
             stroke-opacity: 1;
         }
     }
@@ -409,12 +415,53 @@ highlightStyleSheet.textContent = `
             0 3px 12px rgba(153, 238, 153, 0.2) !important;
     }
 
+    /* Flag highlight animation for more dramatic effect */
+    .map-highlight-active .flag-fabric {
+        animation: flag-highlight-flutter 1.2s ease-in-out infinite !important;
+    }
+
+    @keyframes flag-highlight-flutter {
+        0%, 100% { 
+            transform: scaleX(1) scaleY(1); 
+        }
+        25% { 
+            transform: scaleX(0.9) scaleY(1.05) skewX(-4deg); 
+        }
+        75% { 
+            transform: scaleX(1.1) scaleY(0.95) skewX(3deg); 
+        }
+    }
+
+    /* Additional marker highlight for bounce effect */
+    .map-highlight-active .custom-marker,
+    .map-highlight-active .correct-location-marker {
+        animation: marker-highlight-bounce 2s ease-in-out infinite !important;
+    }
+
+    @keyframes marker-highlight-bounce {
+        0%, 100% { 
+            transform: scale(1.3) translateY(0px); 
+        }
+        50% { 
+            transform: scale(1.35) translateY(-3px); 
+        }
+    }
+
     /* Reduced motion accessibility */
     @media (prefers-reduced-motion: reduce) {
         .map-highlight-active,
-        .line-highlight-active {
+        .line-highlight-active,
+        .map-highlight-active .flag-fabric,
+        .map-highlight-active .custom-marker,
+        .map-highlight-active .correct-location-marker {
             animation: none !important;
             transition: none !important;
+        }
+        
+        /* Still provide some highlighting for accessibility */
+        .map-highlight-active {
+            filter: drop-shadow(0 0 20px rgba(16, 185, 129, 1)) brightness(1.4) !important;
+            transform: scale(1.2) !important;
         }
     }
 `;
