@@ -5,6 +5,7 @@ class FinalScoreMap {
         this.markers = [];
         this.roundResultStorage = null;
         this.isInitialized = false;
+        this.eventListeners = [];
         
         this.init();
     }
@@ -111,15 +112,37 @@ class FinalScoreMap {
         // Draw the line
         this.updateLinePath(overlay, start, end);
 
-        // Bind to map events for line updates during zoom/pan
-        const updateHandler = () => this.updateLinePath(overlay, start, end);
+        // Bind to map events for line updates during zoom/pan (enhanced version)
+        this.bindLineUpdates(overlay, start, end);
+    }
+
+    bindLineUpdates(overlay, start, end) {
+        const updateLine = () => {
+            requestAnimationFrame(() => {
+                this.updateLinePath(overlay, start, end);
+            });
+        };
         
-        this.map.on('zoom', updateHandler);
-        this.map.on('move', updateHandler);
-        this.map.on('viewreset', updateHandler);
+        const events = ['move', 'zoom', 'zoomstart', 'zoomend', 'viewreset', 'resize'];
         
-        // Store handlers for cleanup
-        overlay._updateHandler = updateHandler;
+        events.forEach(event => {
+            this.map.on(event, updateLine);
+            this.eventListeners.push({ event, handler: updateLine, overlay });
+        });
+
+        const handleZoomAnimation = () => {
+            if (this.map.isZooming && this.map.isZooming()) {
+                this.updateLinePath(overlay, start, end);
+                requestAnimationFrame(handleZoomAnimation);
+            }
+        };
+
+        const zoomStartHandler = () => {
+            requestAnimationFrame(handleZoomAnimation);
+        };
+
+        this.map.on('zoomstart', zoomStartHandler);
+        this.eventListeners.push({ event: 'zoomstart', handler: zoomStartHandler, overlay });
     }
 
     updateLinePath(overlay, start, end) {
@@ -249,16 +272,16 @@ class FinalScoreMap {
     }
 
     clearAll() {
+        // Clean up event listeners first
+        this.eventListeners.forEach(({ event, handler }) => {
+            this.map && this.map.off(event, handler);
+        });
+        this.eventListeners = [];
+
         this.markers.forEach(marker => {
             if (marker instanceof L.Marker && this.map) {
                 this.map.removeLayer(marker);
             } else if (marker && marker.parentNode) {
-                // Clean up line overlay handlers
-                if (marker._updateHandler) {
-                    this.map.off('zoom', marker._updateHandler);
-                    this.map.off('move', marker._updateHandler);
-                    this.map.off('viewreset', marker._updateHandler);
-                }
                 // Remove line overlay element
                 marker.parentNode.removeChild(marker);
             }

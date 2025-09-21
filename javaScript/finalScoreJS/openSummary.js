@@ -178,7 +178,7 @@ class SummaryHandler {
             }
         });
     }
-
+    
     animateOutElements() {
         const elementsToAnimate = [
             this.originalElements.headerSection,
@@ -186,12 +186,12 @@ class SummaryHandler {
             this.originalElements.buttonContainer,
             this.originalElements.particleCanvas
         ].filter(el => el);
-
+    
         if (elementsToAnimate.length === 0) {
             console.warn('No elements found to animate out');
             return;
         }
-
+    
         // Special handling for button container to animate individual buttons
         const buttonContainer = this.originalElements.buttonContainer;
         if (buttonContainer) {
@@ -202,28 +202,62 @@ class SummaryHandler {
                 }, index * (this.staggerDelay / 2));
             });
         }
-
+    
         // Animate each element out with stagger
         elementsToAnimate.forEach((element, index) => {
             setTimeout(() => {
                 this.animateElementOut(element);
             }, index * this.staggerDelay);
         });
+    
+        // Remove main container from DOM after animation completes to allow map interaction
+        const mainContainer = this.originalElements.mainContainer;
+        if (mainContainer) {
+            setTimeout(() => {
+                // Store the parent and next sibling for restoration
+                this.originalElements.mainContainerParent = mainContainer.parentNode;
+                this.originalElements.mainContainerNextSibling = mainContainer.nextSibling;
+                
+                // Remove from DOM to allow map interaction
+                mainContainer.remove();
+                console.log('Main container removed from DOM - map is now interactable');
+            }, this.animationDuration + 100);
+        }
     }
-
+    
     animateInElements() {
+        // Restore main container to DOM first
+        const mainContainer = this.originalElements.mainContainer;
+        const mainContainerParent = this.originalElements.mainContainerParent;
+        const mainContainerNextSibling = this.originalElements.mainContainerNextSibling;
+        
+        if (mainContainer && mainContainerParent) {
+            // Restore the main container to its original position in DOM
+            if (mainContainerNextSibling) {
+                mainContainerParent.insertBefore(mainContainer, mainContainerNextSibling);
+            } else {
+                mainContainerParent.appendChild(mainContainer);
+            }
+            
+            // Clear the stored references
+            delete this.originalElements.mainContainerParent;
+            delete this.originalElements.mainContainerNextSibling;
+            
+            console.log('Main container restored to DOM');
+        }
+    
         const elementsToAnimate = [
             this.originalElements.headerSection,
             this.originalElements.scoreSection,
             this.originalElements.buttonContainer,
             this.originalElements.particleCanvas
         ].filter(el => el);
-
+    
         if (elementsToAnimate.length === 0) {
             console.warn('No elements found to animate in');
             return;
         }
-
+    
         // Special handling for button container to animate individual buttons
         const buttonContainer = this.originalElements.buttonContainer;
         if (buttonContainer) {
@@ -236,7 +270,7 @@ class SummaryHandler {
                 }, index * (this.staggerDelay / 2));
             });
         }
-
+    
         // Animate each element in with reverse stagger
         elementsToAnimate.reverse().forEach((element, index) => {
             setTimeout(() => {
