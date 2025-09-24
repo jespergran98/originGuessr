@@ -542,14 +542,14 @@
     },
     {
       "title": "Codex Gigas",
-      "image": "https://upload.wikimedia.org/wikipedia/commons/e/e4/Devil_codex_Gigas.jpg",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/24/Codex_Gigas_facsimile.jpg/1280px-Codex_Gigas_facsimile.jpg",
       "lat": 49.7622,
       "lng": 13.3736,
       "year": 1229,
       "description": "The Codex Gigas (Devil's Bible) is the world's largest medieval manuscript.",
-      "author": "Kungl. biblioteket",
-      "authorLink": "https://www.kb.se",
-      "license": "The Royal Library",
+      "author": "Michal Maňas",
+      "authorLink": "https://www.wikidata.org/wiki/Q58300160",
+      "license": "CC BY 2.5",
       "isPlayable": true
     },
     {
@@ -1117,16 +1117,16 @@
       "isPlayable": true
     },
     {
-      "title": "Great Zimbabwe Wall",
-      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d2/ASC_Leiden_-_Rietveld_Collection_-_East_Africa_1975_-_05_-_033_-_A_wall_of_the_ruins_of_Great_Zimbabwe_-_Masvingo%2C_Zimbabwe.tif/lossy-page1-1280px-ASC_Leiden_-_Rietveld_Collection_-_East_Africa_1975_-_05_-_033_-_A_wall_of_the_ruins_of_Great_Zimbabwe_-_Masvingo%2C_Zimbabwe.tif.jpg",
-      "lat": -20.27,
-      "lng": 30.93,
-      "year": 1100,
-      "description": "Impressive dry-stone walls built without mortar, showcasing advanced medieval African masonry skills.",
-      "author": "Aart Rietveld",
-      "authorLink": "https://www.wikidata.org/wiki/Q42328204",
-      "license": "CC BY-SA 4.0",
-      "isPlayable": true
+    "title": "Conical Tower, Great Zimbabwe",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/Conical_Tower_-_Great_Enclosure_III_%2833736918448%29.jpg/1280px-Conical_Tower_-_Great_Enclosure_III_%2833736918448%29.jpg",
+    "lat": -20.27,
+    "lng": 30.93,
+    "year": 1300,
+    "description": "Striking conical tower of dry-stacked granite, symbolizing prestige in Shona kingdom, exemplifies mortar-free building prowess.",
+    "author": "Andrew Moore",
+    "authorLink": "https://www.flickr.com/people/84985982@N00",
+    "license": "CC BY-SA 2.0",
+    "isPlayable": true
     },
     {
       "title": "Hittite Lion Gate",
@@ -1478,14 +1478,14 @@
     },
     {
       "title": "Externsteine Carvings",
-      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ee/Externsteine_High_Resolution_v2_2015.jpg/2560px-Externsteine_High_Resolution_v2_2015.jpg",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0b/Externsteine_2012_011.jpg/2560px-Externsteine_2012_011.jpg",
       "lat": 51.86,
       "lng": 8.91,
       "year": 1115,
       "description": "medieval Christian reliefs carved into sacred Germanic sandstone pillars.",
-      "author": "Tuxyso",
-      "authorLink": null,
-      "license": "CC BY-SA 3.0",
+      "author": "Ronny Ueckermann",
+      "authorLink": "https://commons.wikimedia.org/wiki/User:Einsamer_Sch%C3%BCtze",
+      "license": "CC BY-SA 4.0",
       "isPlayable": true
     },
     {
@@ -2078,14 +2078,14 @@
     },
     {
       "title": "Epic of Gilgamesh Tablets",
-      "image": "https://upload.wikimedia.org/wikipedia/commons/7/7a/British_Museum_Flood_Tablet.jpg",
+      "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Tablet_XI_or_the_Flood_Tablet_of_the_Epic_of_Gilgamesh%2C_currently_housed_in_the_British_Museum_in_London.jpg/1280px-Tablet_XI_or_the_Flood_Tablet_of_the_Epic_of_Gilgamesh%2C_currently_housed_in_the_British_Museum_in_London.jpg",
       "lat": 33.3152,
       "lng": 44.3661,
       "year": -2100,
       "description": "Oldest literary work detailing Mesopotamian flood myth.",
-      "author": "Public Domain",
-      "authorLink": null,
-      "license": null,
+      "author": "Osama Shukir Muhammed Amin",
+      "authorLink": "https://commons.wikimedia.org/wiki/User:Neuroforever",
+      "license": "CC BY-SA 4.0",
       "isPlayable": true
     },
     {
