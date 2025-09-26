@@ -7,8 +7,6 @@ class TimelineSlider {
     this.sliderContainer = null;
     this.sliderHandle = null;
     this.yearDisplay = null;
-    this.containerRect = null;
-    this.handleWidth = 0;
     
     this.init();
   }
@@ -63,9 +61,6 @@ class TimelineSlider {
       return;
     }
 
-    // Calculate handle dimensions and container bounds
-    this.updateDimensions();
-
     // Set initial position and year display
     this.updateSliderPosition();
     this.updateYearDisplay();
@@ -82,22 +77,23 @@ class TimelineSlider {
     document.addEventListener('touchmove', (e) => this.handleDrag(e));
     document.addEventListener('touchend', () => this.stopDragging());
 
-    // Update dimensions on window resize
-    window.addEventListener('resize', () => {
-      this.updateDimensions();
-      this.updateSliderPosition();
-    });
-  }
-
-  updateDimensions() {
-    this.containerRect = this.sliderContainer.getBoundingClientRect();
-    this.handleWidth = this.sliderHandle.getBoundingClientRect().width;
+    // Update position on window resize and during animations
+    window.addEventListener('resize', () => this.updateSliderPosition());
+    
+    // Use ResizeObserver to handle mapBox expansion animations
+    if (window.ResizeObserver) {
+      const resizeObserver = new ResizeObserver(() => {
+        if (!this.isDragging) {
+          this.updateSliderPosition();
+        }
+      });
+      resizeObserver.observe(this.sliderContainer);
+    }
   }
 
   startDragging(e) {
     this.isDragging = true;
     this.sliderHandle.style.transition = 'none';
-    this.updateDimensions(); // Update dimensions when starting drag
     e.preventDefault();
   }
 
@@ -114,19 +110,12 @@ class TimelineSlider {
     e.preventDefault();
     
     const clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+    const containerRect = this.sliderContainer.getBoundingClientRect();
     
-    // Calculate position relative to container
-    const relativeX = clientX - this.containerRect.left;
-    
-    // Calculate the maximum allowed position (container width minus half handle width on each side)
-    const maxPosition = this.containerRect.width - (this.handleWidth / 2);
-    const minPosition = this.handleWidth / 2;
-    
-    // Constrain the position within bounds
-    const constrainedX = Math.max(minPosition, Math.min(maxPosition, relativeX));
-    
-    // Convert to percentage (0 to 1)
-    const percentage = (constrainedX - minPosition) / (maxPosition - minPosition);
+    // Calculate position as percentage of container width
+    const percentage = Math.max(0, Math.min(1, 
+      (clientX - containerRect.left) / containerRect.width
+    ));
     
     // Convert percentage to timeline index
     const newIndex = Math.round(percentage * (this.timeline.length - 1));
@@ -141,16 +130,10 @@ class TimelineSlider {
   handleContainerClick(e) {
     if (e.target === this.sliderHandle || this.isDragging) return;
 
-    this.updateDimensions();
-    
-    const relativeX = e.clientX - this.containerRect.left;
-    
-    // Calculate constraints same as in handleDrag
-    const maxPosition = this.containerRect.width - (this.handleWidth / 2);
-    const minPosition = this.handleWidth / 2;
-    
-    const constrainedX = Math.max(minPosition, Math.min(maxPosition, relativeX));
-    const percentage = (constrainedX - minPosition) / (maxPosition - minPosition);
+    const containerRect = this.sliderContainer.getBoundingClientRect();
+    const percentage = Math.max(0, Math.min(1,
+      (e.clientX - containerRect.left) / containerRect.width
+    ));
     
     this.currentIndex = Math.round(percentage * (this.timeline.length - 1));
     this.updateSliderPosition();
@@ -158,24 +141,13 @@ class TimelineSlider {
   }
 
   updateSliderPosition() {
-    if (!this.containerRect) {
-      this.updateDimensions();
-    }
-    
+    // Calculate position as pure percentage based on current index
     const percentage = this.currentIndex / (this.timeline.length - 1);
     
-    // Calculate the available range for the handle center
-    const maxPosition = this.containerRect.width - (this.handleWidth / 2);
-    const minPosition = this.handleWidth / 2;
-    const availableRange = maxPosition - minPosition;
-    
-    // Calculate the actual pixel position for the handle center
-    const centerPosition = minPosition + (percentage * availableRange);
-    
-    // Position the handle so its center is at the calculated position
-    // We use transform instead of left for better performance
-    const translateX = centerPosition - (this.handleWidth / 2);
-    this.sliderHandle.style.transform = `translateX(${translateX}px) translateY(-50%)`;
+    // Use percentage-based positioning - this stays consistent regardless of container size
+    // The handle's left edge will be positioned at this percentage, with translateY centering it vertically
+    this.sliderHandle.style.left = `${percentage * 100}%`;
+    this.sliderHandle.style.transform = `translateX(-50%) translateY(-50%)`;
   }
 
   updateYearDisplay() {
@@ -184,7 +156,6 @@ class TimelineSlider {
 
     if (year < 0) {
       const absYear = Math.abs(year);
-      // Display the exact value for BC years without rounding
       displayText = `${absYear.toLocaleString()} BC`;
     } else {
       displayText = `${year.toLocaleString()} AD`;

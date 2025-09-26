@@ -9,7 +9,6 @@
   border: none;
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
   z-index: 2;
-  /* Ensure the container has proper positioning context */
   overflow: visible;
 }
 
@@ -21,27 +20,22 @@
   border-radius: 50%;
   position: absolute;
   top: 50%;
-  /* Remove left positioning - handled by transform in JS */
+  /* Use percentage-based positioning with centering transforms */
   left: 0;
-  /* Use transform for positioning - better performance and more precise */
-  transform: translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   box-shadow: 
     0 4px 12px rgba(153, 238, 153, 0.4),
     0 0 0 0 rgba(153, 238, 153, 0.3);
   z-index: 1000;
-  /* Ensure the handle can't be selected */
   user-select: none;
   -webkit-user-select: none;
-  /* Prevent text selection during drag */
   -webkit-user-drag: none;
-  /* Ensure proper touch handling */
   touch-action: none;
 }
 
 .slider-handle:hover {
-  /* Keep the translateY(-50%) and add scale */
   box-shadow: 
     0 6px 20px rgba(153, 238, 153, 0.5),
     0 0 0 8px rgba(153, 238, 153, 0.1);
@@ -61,7 +55,7 @@
 }
 
 .slider-container:hover .slider-handle {
-  transform: translateY(-50%) scale(1.1);
+  transform: translateX(-50%) translateY(-50%) scale(1.1);
 }
 
 /* Year Display */
@@ -78,7 +72,6 @@
   position: relative;
   z-index: 2;
   text-shadow: 0 0 8px rgba(153, 238, 153, 0.3);
-  /* Prevent text selection */
   user-select: none;
   -webkit-user-select: none;
 }
@@ -103,7 +96,6 @@
     0 8px 32px rgba(0, 0, 0, 0.3),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
   overflow: hidden;
-  /* Ensure proper stacking context */
   contain: layout;
 }
 
