@@ -1,4 +1,89 @@
-/* Map Container */
+/* Game Control Elements */
+.slider-container {
+  height: clamp(8px, 1.25vh, 12px);
+  background: rgba(153, 238, 153, 0.1);
+  border-radius: 4px;
+  margin: clamp(0.25rem, 0.5vh, 0.5rem) 2% clamp(0.125rem, 0.25vh, 0.25rem) 2%;
+  position: relative;
+  flex-shrink: 0;
+  border: none;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+  z-index: 2;
+  /* Ensure the container has proper positioning context */
+  overflow: visible;
+}
+
+.slider-handle {
+  width: clamp(32px, 45px, 48px);
+  height: clamp(32px, 45px, 48px);
+  background: radial-gradient(circle at 30% 30%, var(--light-green), var(--light-green-hover));
+  border: 3px solid var(--dark-green);
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  /* Remove left positioning - handled by transform in JS */
+  left: 0;
+  /* Use transform for positioning - better performance and more precise */
+  transform: translateY(-50%);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 
+    0 4px 12px rgba(153, 238, 153, 0.4),
+    0 0 0 0 rgba(153, 238, 153, 0.3);
+  z-index: 1000;
+  /* Ensure the handle can't be selected */
+  user-select: none;
+  -webkit-user-select: none;
+  /* Prevent text selection during drag */
+  -webkit-user-drag: none;
+  /* Ensure proper touch handling */
+  touch-action: none;
+}
+
+.slider-handle:hover {
+  /* Keep the translateY(-50%) and add scale */
+  box-shadow: 
+    0 6px 20px rgba(153, 238, 153, 0.5),
+    0 0 0 8px rgba(153, 238, 153, 0.1);
+}
+
+/* Add active state for better feedback during drag */
+.slider-handle:active,
+.slider-handle.dragging {
+  box-shadow: 
+    0 8px 24px rgba(153, 238, 153, 0.6),
+    0 0 0 12px rgba(153, 238, 153, 0.15);
+}
+
+/* Ensure the container can handle clicks properly */
+.slider-container:hover {
+  cursor: pointer;
+}
+
+.slider-container:hover .slider-handle {
+  transform: translateY(-50%) scale(1.1);
+}
+
+/* Year Display */
+.year-display {
+  color: var(--light-green);
+  font-weight: 500;
+  font-size: clamp(1.2rem, 2.5vh, 1.8rem);
+  text-align: center;
+  flex-shrink: 0;
+  margin-bottom: clamp(0.125rem, 0.25vh, 0.25rem);
+  opacity: 0.95;
+  line-height: 1.3;
+  letter-spacing: 0.02em;
+  position: relative;
+  z-index: 2;
+  text-shadow: 0 0 8px rgba(153, 238, 153, 0.3);
+  /* Prevent text selection */
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* Make sure the mapBox doesn't interfere with slider interaction */
 .mapBox {
   position: absolute;
   right: 2vw;
@@ -18,6 +103,8 @@
     0 8px 32px rgba(0, 0, 0, 0.3),
     inset 0 1px 0 rgba(255, 255, 255, 0.1);
   overflow: hidden;
+  /* Ensure proper stacking context */
+  contain: layout;
 }
 
 .mapBox::before {
@@ -60,61 +147,6 @@
   background-color: #215c63;
   position: relative;
   z-index: 1;
-}
-
-/* Game Control Elements */
-.slider-container {
-  height: clamp(8px, 1.25vh, 12px);
-  background: rgba(153, 238, 153, 0.1);
-  border-radius: 4px;
-  margin: clamp(0.25rem, 0.5vh, 0.5rem) 2% clamp(0.125rem, 0.25vh, 0.25rem) 2%;
-  position: relative;
-  flex-shrink: 0;
-  border: none;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
-  z-index: 2;
-}
-
-.slider-handle {
-  width: clamp(32px, 45px, 48px);
-  height: clamp(32px, 45px, 48px);
-  background: radial-gradient(circle at 30% 30%, var(--light-green), var(--light-green-hover));
-  border: 3px solid var(--dark-green);
-  border-radius: 50%;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  box-shadow: 
-    0 4px 12px rgba(153, 238, 153, 0.4),
-    0 0 0 0 rgba(153, 238, 153, 0.3);
-  left: 0%;
-  margin-left: calc(-50% * clamp(32px, 45px, 48px) / clamp(32px, 45px, 48px));
-  z-index: 1000;
-}
-
-.slider-handle:hover {
-  transform: translateY(-50%) scale(1.2);
-  box-shadow: 
-    0 6px 20px rgba(153, 238, 153, 0.5),
-    0 0 0 8px rgba(153, 238, 153, 0.1);
-}
-
-/* Year Display */
-.year-display {
-  color: var(--light-green);
-  font-weight: 500;
-  font-size: clamp(1.2rem, 2.5vh, 1.8rem);
-  text-align: center;
-  flex-shrink: 0;
-  margin-bottom: clamp(0.125rem, 0.25vh, 0.25rem);
-  opacity: 0.95;
-  line-height: 1.3;
-  letter-spacing: 0.02em;
-  position: relative;
-  z-index: 2;
-  text-shadow: 0 0 8px rgba(153, 238, 153, 0.3);
 }
 
 /* Make Guess Button - Default State (before marker placement) */
